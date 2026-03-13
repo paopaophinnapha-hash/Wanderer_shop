@@ -81,3 +81,201 @@
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         .modal-header { text-align: center; margin-bottom: 20px; }
         .modal-header h2 { font-size: 20px; color: var(--main-dark); }
+        .info-tag { font-size: 11px; background: #f0f2ff; color: var(--main); padding: 4px 8px; border-radius: 5px; margin: 3px; display: inline-block; }
+        .detail-box { background: #f9f9f9; padding: 15px; border-radius: 15px; margin-bottom: 20px; }
+        .detail-box h4 { font-size: 14px; margin-bottom: 10px; color: #555; border-left: 3px solid var(--main); padding-left: 10px; }
+        .detail-box p { font-size: 13px; color: #666; margin-bottom: 5px; line-height: 1.5; }
+        .price-option {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 15px; border: 2px solid #eee; border-radius: 12px;
+            margin-bottom: 10px; text-decoration: none; color: inherit; transition: 0.3s;
+        }
+        .price-option:hover { border-color: var(--orange); background: #fffcf5; }
+        .opt-price { color: var(--orange); font-weight: 600; }
+        .close-btn { display: block; width: 100%; padding: 12px; background: #eee; border: none; border-radius: 12px; margin-top: 10px; cursor: pointer; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-box">
+            <img src="https://cdn-icons-png.flaticon.com/512/869/869045.png" style="width: 60%;" alt="Logo">
+        </div>
+        <h1>Wanderer_shop</h1>
+        <p>ยินดีต้อนรับร้านละมุดรับสินค้าอะไรดีคะ</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchPage('info', this)">ข้อมูลร้าน</button>
+        <button class="tab-btn" onclick="switchPage('shop', this)">เลือกซื้อสินค้า</button>
+    </div>
+
+    <div class="container">
+        <div id="shopInfo" class="shop-info-card">
+            <div class="info-item">
+                <h4 style="color: var(--main);">📍 ติดต่อเรา</h4>
+                <p>LINE: @997pfoig</p>
+                <p>เวลาทำการ: 11:00 - 00:00 น.</p>
+            </div>
+            <div class="info-item">
+                <h4 style="color: var(--main);">🛡️ การรับประกัน</h4>
+                <p>ดูแลตลอดการใช้งาน มีปัญหาเคลมได้ภายใน 24 ชม.</p>
+            </div>
+            <div class="info-item" style="border:none;">
+                <p style="font-size: 12px; color: #999;">ขอบคุณที่ไว้วางใจใช้บริการ Wanderer_shop</p>
+            </div>
+        </div>
+
+        <div class="product-grid" id="productGrid"></div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div id="modalData"></div>
+            <button class="close-btn" onclick="closeModal()">ปิดหน้าต่าง</button>
+        </div>
+    </div>
+
+    <script>
+        const products = {
+            'yt-premium': {
+                category: 'APP PREMIUM',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png',
+                title: 'YouTube Premium 30 วัน',
+                tags: ['เมลร้าน', 'เมลลูกค้า', 'ต่อเมล', 'เคลม', 'ไม่เคลม'],
+                features: {
+                    quality: 'ดูได้ตลอดไม่มีโฆษณาคั่น / ฟังเพลงตอนปิดจอ',
+                    device: 'ดูได้ 1 จอส่วนตัวในกลุ่มครอบครัว',
+                    warranty: 'ประกันตลอดการใช้งาน / เคลม-แก้ไขภายใน 24 ชม.',
+                    rules: 'ห้ามออกจากกลุ่ม / ห้ามเปลี่ยนประเทศในเมล'
+                },
+                options: [
+                    { name: 'เมลลูกค้า (ไม่เคลม)', price: '15', sold: '1.2k' },
+                    { name: 'เมลลูกค้า (เคลม)', price: '20', sold: '850' },
+                    { name: 'เมลร้าน (เคลม)', price: '30', sold: '300' }
+                ]
+            },
+            'netflix': {
+                category: 'APP PREMIUM',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg',
+                title: 'Netflix 4K เมลร้าน',
+                tags: ['จอส่วนตัว', 'จอเสริม', 'รับประกันตลอดการใช้งานตามกฎ'],
+                features: {
+                    quality: 'ชัดระดับ 4K จอส่วนตัว',
+                    device: 'จอส่วนตัวหารแอค 1คนต่อ 1จอค่ะ / แอคหาร 5 มีโอกาสชน',
+                    warranty: 'ดูแลเคลมตลอดการใช้งาน',
+                    rules: 'ห้ามเปลี่ยนรหัสผ่านและข้อมูลเมลโดยเด็ดขาด'
+                },
+                options: [
+                    { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 1 วัน (ไม่เคลมปิด)', price: '10', sold: '0' },
+                    { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 7 วัน (ไม่เคลมปิด)', price: '40', sold: '0' },
+                    { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 30 วัน (ไม่เคลมปิด)', price: '115', sold: '0' },
+                    { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 1 วัน (เคลมปิด)', price: '15', sold: '0' },
+                    { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 7 วัน (เคลมปิด)', price: '50', sold: '0' },
+                    { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 30 วัน (เคลมปิด)', price: '140', sold: '0' },
+                    { name: 'ทีวี/คอม 1 วัน (ไม่เคลมปิด)', price: '25', sold: '0' },
+                    { name: 'ทีวี/คอม 7 วัน (ไม่เคลมปิด)', price: '55', sold: '0' },
+                    { name: 'ทีวี/คอม 30 วัน (ไม่เคลมปิด)', price: '180', sold: '0' },
+                    { name: 'ทีวี/คอม 1 วัน (เคลมปิด)', price: '30', sold: '0' },
+                    { name: 'ทีวี/คอม 7 วัน (เคลมปิด)', price: '65', sold: '0' },
+                    { name: 'ทีวี/คอม 30 วัน (เคลมปิด)', price: '200', sold: '0' }
+                ]
+            },
+            'disney': {
+                category: 'APP PREMIUM',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg',
+                title: 'Disney+ Hotstar',
+                tags: ['ยกแอป', 'หาร 4-6', 'เบอร์ร้าน', 'พร้อมส่ง'],
+                features: {
+                    quality: 'Full HD / 4K (ตามอุปกรณ์)',
+                    device: 'ดูได้ 1 จอ (หาร 4 ไม่ชน / หาร 6 อาจชน)',
+                    warranty: 'ดูแลตลอดการใช้งาน | พร้อมส่ง 11:00-00:00',
+                    rules: 'ห้ามแชร์จอให้ผู้อื่นเกินจำนวนที่ซื้อ'
+                },
+                options: [
+                    { name: 'หาร 6 (อาจชน) 30 วัน', price: '90', sold: '1.5k' },
+                    { name: 'หาร 4 (ไม่ชน) 30 วัน', price: '125', sold: '900' },
+                    { name: 'ยกแอป (เบอร์ร้าน) 30 วัน', price: '360', sold: '200' }
+                ]
+            }
+        };
+
+        function switchPage(page, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const infoDiv = document.getElementById('shopInfo');
+            const gridDiv = document.getElementById('productGrid');
+
+            if (page === 'info') {
+                infoDiv.style.display = 'block';
+                gridDiv.style.display = 'none';
+            } else {
+                infoDiv.style.display = 'none';
+                gridDiv.style.display = 'grid';
+                renderProducts();
+            }
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+            for (let id in products) {
+                const p = products[id];
+                grid.innerHTML += `
+                    <div class="product-card" onclick="openModal('${id}')">
+                        <img src="${p.img}" alt="${p.title}">
+                        <h3>${p.title}</h3>
+                        <p class="price-hint">เริ่ม ${p.options[0].price}฿</p>
+                    </div>
+                `;
+            }
+        }
+
+        function openModal(id) {
+            const data = products[id];
+            let tagsHtml = data.tags.map(tag => `<span class="info-tag">${tag}</span>`).join('');
+            let optionsHtml = data.options.map(opt => `
+                <a href="https://line.me/R/oaMessage/@997pfoig/?สนใจ: ${data.title} - ${opt.name} ราคา ${opt.price} บาท" class="price-option">
+                    <div>
+                        <div class="opt-title">${opt.name}</div>
+                        <div class="opt-sold">ซื้อไปแล้ว ${opt.sold} ชิ้น</div>
+                    </div>
+                    <div class="opt-price">${opt.price}฿</div>
+                </a>
+            `).join('');
+
+            document.getElementById('modalData').innerHTML = `
+                <div class="modal-header">
+                    <h2>${data.title}</h2>
+                    <div>${tagsHtml}</div>
+                </div>
+                <div class="detail-box">
+                    <h4>✨ รายละเอียดสินค้า</h4>
+                    <p><b>ความคมชัด:</b> ${data.features.quality}</p>
+                    <p><b>จำนวนอุปกรณ์:</b> ${data.features.device}</p>
+                    <p><b>การเคลม/ประกัน:</b> ${data.features.warranty}</p>
+                    <p><b>ข้อห้าม:</b> ${data.features.rules}</p>
+                </div>
+                <div class="detail-box" style="background:transparent; padding:0;">
+                    <h4>💰 เลือกแพ็กเกจที่ต้องการ</h4>
+                    ${optionsHtml}
+                </div>
+            `;
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('modalOverlay');
+            if (event.target == modal) closeModal();
+        }
+
+        // เริ่มต้นด้วยการ Render สินค้าไว้รอ
+        renderProducts();
+    </script>
+</body>
+</html>
