@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium App Store - @997pfoig</title>
+    <style>
+        /* --- CSS การตกแต่งหน้าเว็บ --- */
+        body {
+            font-family: 'Kanit', sans-serif; /* แนะนำให้เพิ่ม Font Google ถ้าต้องการความสวยงาม */
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1d1d1f 0%, #434343 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        header h1 { margin: 0; font-size: 28px; }
+        header p { margin: 10px 0 0; opacity: 0.8; font-size: 14px; }
+
+        .container {
+            max-width: 1000px;
+            margin: -30px auto 50px;
+            padding: 0 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #eee;
+        }
+
+        .product-image {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        /* สีประจำแบรนด์ */
+        .bg-youtube { background: #ff0000; }
+        .bg-netflix { background: #e50914; }
+        .bg-spotify { background: #1db954; }
+
+        .product-info { padding: 25px; flex-grow: 1; }
+        .product-name { font-size: 20px; margin: 0 0 15px 0; color: #1d1d1f; }
+        
+        .product-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+            font-size: 14px;
+            color: #666;
+        }
+        .product-features li::before {
+            content: "✓";
+            color: #27ae60;
+            margin-right: 8px;
+            font-weight: bold;
+        }
+
+        .price-tag {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: baseline;
+        }
+        .price-tag small { font-size: 14px; font-weight: normal; margin-left: 5px; color: #999; }
+
+        /* ปุ่ม LINE สั่งซื้อ */
+        .btn-line {
+            display: block;
+            background-color: #06c755; /* สี LINE ล่าสุด */
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .btn-line:hover { background-color: #05a346; transform: scale(1.02); }
+
+        footer { text-align: center; padding: 40px; color: #888; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Premium App Store</h1>
+    <p>ID LINE: @997pfoig (ตอบกลับไว 24 ชม.)</p>
+</header>
+
+<div class="container">
+
+    <div class="product-card">
+        <div class="product-image bg-youtube">YouTube</div>
+        <div class="product-info">
+            <h2 class="product-name">YouTube Premium</h2>
+            <ul class="product-features">
+                <li>ไม่มีโฆษณาคั่น 100%</li>
+                <li>ฟังเพลงขณะปิดหน้าจอ</li>
+                <li>ดาวน์โหลดดูออฟไลน์ได้</li>
+                <li>ใช้เมลตัวเองต่อได้เลย</li>
+            </ul>
+            <div class="price-tag">39 ฿ <small>/ เดือน</small></div>
+            <a href="https://line.me/R/oaMessage/@997pfoig/?สนใจสั่งซื้อ: YouTube Premium (39.-)" class="btn-line">สั่งซื้อทาง LINE</a>
+        </div>
+    </div>
+
+    <div class="product-card">
+        <div class="product-image bg-netflix">Netflix</div>
+        <div class="product-info">
+            <h2 class="product-name">Netflix 4K UHD</h2>
+            <ul class="product-features">
+                <li>ภาพชัดระดับ Ultra HD</li>
+                <li>หน้าจอส่วนตัว มีรหัสล็อก</li>
+                <li>รับประกันตลอดอายุการใช้งาน</li>
+                <li>ดูได้ทุกอุปกรณ์</li>
+            </ul>
+            <div class="price-tag">99 ฿ <small>/ เดือน</small></div>
+            <a href="https://line.me/R/oaMessage/@997pfoig/?สนใจสั่งซื้อ: Netflix 4K (99.-)" class="btn-line">สั่งซื้อทาง LINE</a>
+        </div>
+    </div>
+
+    <div class="product-card">
+        <div class="product-image bg-spotify">Spotify</div>
+        <div class="product-info">
+            <h2 class="product-name">Spotify Premium</h2>
+            <ul class="product-features">
+                <li>ฟังเพลงไม่มีโฆษณา</li>
+                <li>กดข้ามเพลงได้ไม่จำกัด</li>
+                <li>เสียงคุณภาพสูงสุด</li>
+                <li>ฟังออฟไลน์ได้ทุกที่</li>
+            </ul>
+            <div class="price-tag">29 ฿ <small>/ เดือน</small></div>
+            <a href="https://line.me/R/oaMessage/@997pfoig/?สนใจสั่งซื้อ: Spotify Premium (29.-)" class="btn-line">สั่งซื้อทาง LINE</a>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <p>© 2024 Premium App Store | บริการรวดเร็ว มั่นใจ ได้ของจริง</p>
+    <p>LINE OA: @997pfoig</p>
+</footer>
+
+</body>
+</html>
