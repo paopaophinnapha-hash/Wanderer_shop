@@ -3,190 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wanderer_shop - แอปพรีเมียมครบวงจร</title>
+    <title>Wanderer_shop - Premium Services</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #8E94F2;
-            --secondary: #d1a1f1;
-            --dark: #2d3436;
-            --bg: #f8f9fd;
+            --main: #8E94F2;
+            --main-dark: #767ce0;
+            --bg: #f5f7ff;
             --white: #ffffff;
             --orange: #ff8c00;
-            --twitter: #1DA1F2;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Kanit', sans-serif; }
-        body { background: var(--bg); color: var(--dark); line-height: 1.6; }
+        body { background: var(--bg); color: #333; }
 
+        /* --- Header --- */
         header {
             background: linear-gradient(135deg, #a5c0f3 0%, #d1a1f1 100%);
-            padding: 40px 20px;
+            padding: 50px 20px;
             text-align: center;
             color: white;
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
         }
 
-        .logo-container {
-            width: 100px; height: 100px;
-            background: var(--white);
-            border-radius: 50%;
-            margin: 0 auto 15px;
+        .logo-box {
+            width: 100px; height: 100px; background: white;
+            border-radius: 50%; margin: 0 auto 15px;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        .container { max-width: 600px; margin: -20px auto 50px; padding: 0 15px; }
+        /* --- 1. Tab Menu --- */
+        .tabs {
+            display: flex; justify-content: center; gap: 10px;
+            margin: -25px 0 20px; padding: 0 15px;
+        }
 
-        .section-title { margin: 30px 0 15px; font-size: 18px; display: flex; align-items: center; gap: 8px; }
-
-        /* การ์ดตัวเลือกสินค้า */
-        .product-option-card {
-            background: var(--white);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 25px;
+        .tab-btn {
+            background: white; border: none; padding: 10px 20px;
+            border-radius: 12px; cursor: pointer; font-weight: 500;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s; color: #666;
         }
 
-        .option-item {
-            border: 1.5px solid #eee;
-            border-radius: 12px;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            text-decoration: none;
-            color: inherit;
-            transition: 0.3s;
-        }
+        .tab-btn.active { background: var(--main); color: white; }
 
-        .option-item:hover { border-color: var(--orange); background: #fffcf9; }
+        /* --- Product Grid --- */
+        .container { max-width: 600px; margin: 0 auto 50px; padding: 0 15px; }
         
-        .opt-label { font-size: 14px; font-weight: 500; }
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        .product-card {
+            background: white; border-radius: 18px; padding: 15px;
+            text-align: center; cursor: pointer; transition: 0.3s;
+            border: 1px solid #eee;
+        }
+
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
+        .product-card img { width: 60px; height: 60px; margin-bottom: 10px; }
+        .product-card h3 { font-size: 14px; margin-bottom: 5px; }
+        .product-card .price-hint { color: var(--orange); font-size: 12px; font-weight: 600; }
+
+        /* --- 2. Modal Popup --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); display: none; /* ซ่อนไว้เริ่มต้น */
+            justify-content: center; align-items: flex-end; z-index: 1000;
+        }
+
+        .modal-content {
+            background: white; width: 100%; max-width: 500px;
+            border-top-left-radius: 25px; border-top-right-radius: 25px;
+            padding: 30px 20px; animation: slideUp 0.3s ease-out;
+            max-height: 90vh; overflow-y: auto;
+        }
+
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        .modal-header { text-align: center; margin-bottom: 20px; }
+        .modal-header h2 { font-size: 20px; color: var(--main-dark); }
         
-        /* 1. เปลี่ยนแถบสถานะเป็น "ขายไปแล้ว" */
-        .opt-sold { 
-            font-size: 11px; 
-            background: #fff3e0; 
-            color: #e65100; 
-            padding: 3px 8px; 
-            border-radius: 20px; 
-            margin-top: 5px;
-            display: inline-block;
+        .info-tag { font-size: 12px; background: #f0f2ff; color: var(--main); padding: 4px 10px; border-radius: 5px; margin: 5px; display: inline-block; }
+
+        .detail-box { background: #f9f9f9; padding: 15px; border-radius: 15px; margin-bottom: 20px; }
+        .detail-box h4 { font-size: 14px; margin-bottom: 10px; color: #555; border-left: 3px solid var(--main); padding-left: 10px; }
+        .detail-box p { font-size: 13px; color: #666; margin-bottom: 5px; }
+
+        .price-option {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 15px; border: 2px solid #eee; border-radius: 12px;
+            margin-bottom: 10px; text-decoration: none; color: inherit; transition: 0.3s;
         }
 
-        .opt-price { color: var(--orange); font-weight: 600; font-size: 18px; }
+        .price-option:hover { border-color: var(--orange); background: #fffcf5; }
+        .price-option .opt-title { font-size: 14px; font-weight: 500; }
+        .price-option .opt-sold { font-size: 11px; color: #999; }
+        .price-option .opt-price { color: var(--orange); font-weight: 600; }
 
-        /* 2. ส่วนรีวิวลูกค้า */
-        .review-section {
-            background: var(--white);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        .close-btn { 
+            display: block; width: 100%; padding: 12px; background: #eee; 
+            border: none; border-radius: 12px; margin-top: 10px; cursor: pointer;
         }
-
-        .review-card {
-            background: #fdfdff;
-            border: 1px solid #f0f0f5;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        .review-text { font-size: 14px; color: #444; font-style: italic; }
-        .review-tag { color: var(--twitter); font-size: 12px; margin-top: 5px; display: block; }
-
-        .btn-review-tw {
-            display: block;
-            text-align: center;
-            background: var(--twitter);
-            color: white;
-            padding: 12px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            margin-top: 15px;
-        }
-
-        footer { text-align: center; padding: 30px; color: #888; font-size: 12px; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo-container">
-            <img src="https://via.placeholder.com/80?text=Shop" alt="Logo">
+        <div class="logo-box">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" style="width: 60%;" alt="Logo">
         </div>
-        <h1 style="font-size: 24px;">Wanderer_shop</h1>
-        <p style="font-size: 13px; opacity: 0.9;">ยินดีต้อนรับร้านละมุดรับสินค้าอะไรดีคะ</p>
+        <h1>Wanderer_shop</h1>
+        <p>[ยินดีต้อนรับร้านละมุดรับสินค้าอะไรดีคะ]</p>
     </header>
 
-    <div class="container">
-
-        <h2 class="section-title">🎬 Amazon Prime Video</h2>
-        <div class="product-option-card">
-            <div class="option-list">
-                <a href="https://line.me/R/oaMessage/@997pfoig/?สนใจ: Prime Video 7 วัน (หาร 6)" class="option-item">
-                    <div>
-                        <div class="opt-label">Prime 7 วัน (หาร 6 คน)</div>
-                        <div class="opt-sold">🔥 ขายไปแล้ว 1.2k+ ชิ้น</div>
-                    </div>
-                    <div class="opt-price">10.-</div>
-                </a>
-
-                <a href="https://line.me/R/oaMessage/@997pfoig/?สนใจ: Prime Video 30 วัน (หาร 4)" class="option-item">
-                    <div>
-                        <div class="opt-label">Prime 30 วัน (หาร 4 คน)</div>
-                        <div class="opt-sold">🔥 ขายไปแล้ว 850 ชิ้น</div>
-                    </div>
-                    <div class="opt-price">30.-</div>
-                </a>
-            </div>
-        </div>
-
-        <h2 class="section-title">📺 Netflix & YouTube</h2>
-        <div class="product-option-card">
-            <div class="option-list">
-                <a href="https://line.me/R/oaMessage/@997pfoig/?สนใจ: YouTube 30 วัน" class="option-item">
-                    <div>
-                        <div class="opt-label">YouTube 30 วัน (เมลลูกค้า)</div>
-                        <div class="opt-sold">🔥 ขายไปแล้ว 2.5k+ ชิ้น</div>
-                    </div>
-                    <div class="opt-price">35.-</div>
-                </a>
-            </div>
-        </div>
-
-        <h2 class="section-title">💬 รีวิวจากลูกค้า</h2>
-        <div class="review-section">
-            <div class="review-card">
-                <p class="review-text">"ส่งไวมากกก ไม่ถึง 5 นาทีได้รหัสแล้ว ดูได้ลื่นๆ เลยค่ะ"</p>
-                <span class="review-tag">#ค่าขนมละมุด</span>
-            </div>
-            <div class="review-card">
-                <p class="review-text">"แม่ค้าตอบดีมาก แนะนำวิธีแก้ให้จนดูได้ รักร้านนี้"</p>
-                <span class="review-tag">#ค่าขนมละมุด</span>
-            </div>
-
-            <a href="https://twitter.com/intent/tweet?text=ร้านส่งไวมาก แม่ค้าตอบดี @Wanderer_Shop&hashtags=ค่าขนมละมุด" class="btn-review-tw" target="_blank">
-                ✨ คลิกเพื่อรีวิวผ่าน Twitter (X)
-            </a>
-            <p style="font-size: 11px; text-align: center; color: #999; margin-top: 10px;">
-                ร่วมรีวิวผ่านแฮชแท็ก #ค่าขนมละมุด เพื่อรับสิทธิพิเศษในครั้งถัดไป
-            </p>
-        </div>
-
-        <footer>
-            <p>© 2026 Wanderer_shop | ID LINE: @997pfoig</p>
-        </footer>
+    <div class="tabs">
+        <button class="tab-btn active">ทั้งหมด</button>
+        <button class="tab-btn">Streaming</button>
+        <button class="tab-btn">Premium App</button>
     </div>
 
+    <div class="container">
+        <div class="product-grid">
+            <div class="product-card" onclick="openModal('yt-premium')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" alt="YouTube">
+                <h3>YouTube Premium</h3>
+                <p class="price-hint">เริ่ม 15฿</p>
+            </div>
+            <div class="product-card" onclick="alert('กำลังอัปเดตข้อมูล...')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix">
+                <h3>Netflix 4K</h3>
+                <p class="price-hint">เริ่ม 29฿</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div id="modalData">
+                </div>
+            <button class="close-btn" onclick="closeModal()">ปิดหน้าต่าง</button>
+        </div>
+    </div>
+
+    <script>
+        const products = {
+            'yt-premium': {
+                title: 'YouTube Premium 30 วัน',
+                tags: ['เมลร้าน', 'เมลลูกค้า', 'ต่อเมล', 'ไม่ต่อ', 'เคลม', 'ไม่เคลม'],
+                features: {
+                    quality: 'ดูได้ตลอดไม่มีโฆษณาคั่น / ฟังเพลงตอนปิดจอ',
+                    device: 'ดูได้ 1 จอส่วนตัวในกลุ่มครอบครัว',
+                    warranty: 'ประกันตลอดอายุการใช้งาน / เคลม-แก้ไขภายใน 24 ชม.',
+                    rules: 'ห้ามออกจากกลุ่ม / ห้ามเปลี่ยนประเทศในเมล'
+                },
+                options: [
+                    { name: 'เมลลูกค้า (ไม่เคลม)', price: '15', sold: '1.2k' },
+                    { name: 'เมลลูกค้า (เคลม)', price: '20', sold: '850' },
+                    { name: 'เมลร้าน (ไม่เคลม)', price: '25', sold: '500' },
+                    { name: 'เมลร้าน (เคลม)', price: '30', sold: '300' }
+                ]
+            }
+        };
+
+        function openModal(id) {
+            const data = products[id];
+            let tagsHtml = data.tags.map(tag => `<span class="info-tag">${tag}</span>`).join('');
+            let optionsHtml = data.options.map(opt => `
+                <a href="https://line.me/R/oaMessage/@997pfoig/?สนใจ: ${data.title} - ${opt.name}" class="price-option">
+                    <div>
+                        <div class="opt-title">${opt.name}</div>
+                        <div class="opt-sold">ซื้อไปแล้ว ${opt.sold} ชิ้น</div>
+                    </div>
+                    <div class="opt-price">${opt.price}฿</div>
+                </a>
+            `).join('');
+
+            document.getElementById('modalData').innerHTML = `
+                <div class="modal-header">
+                    <h2>${data.title}</h2>
+                    <div>${tagsHtml}</div>
+                </div>
+                <div class="detail-box">
+                    <h4>✨ รายละเอียดสินค้า</h4>
+                    <p><b>ความคมชัด:</b> ${data.features.quality}</p>
+                    <p><b>จำนวนอุปกรณ์:</b> ${data.features.device}</p>
+                    <p><b>การเคลม/ประกัน:</b> ${data.features.warranty}</p>
+                    <p><b>ข้อห้าม:</b> ${data.features.rules}</p>
+                </div>
+                <div class="detail-box" style="background:transparent; padding:0;">
+                    <h4>💰 เลือกแพ็กเกจ</h4>
+                    ${optionsHtml}
+                </div>
+            `;
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+        // ปิด Modal เมื่อคลิกพื้นหลัง
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('modalOverlay')) {
+                closeModal();
+            }
+        }
+    </script>
 </body>
 </html>
