@@ -1,171 +1,246 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium App Store - @997pfoig</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <style>
-        /* --- CSS การตกแต่งหน้าเว็บ --- */
-        body {
-            font-family: 'Kanit', sans-serif; /* ใช้งานฟอนต์ที่ Import มา */
-            margin: 0;
-            padding: 0;
-            background-color: #f0f2f5;
-            color: #333;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[Wanderer_shop] - Premium App Store</title>
 
-        header {
-            background: linear-gradient(135deg, #1d1d1f 0%, #434343 100%);
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
+<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-        header h1 { margin: 0; font-size: 28px; }
-        header p { margin: 10px 0 0; opacity: 0.8; font-size: 14px; }
+<style>
+:root{
+/* ปรับโทนสีใหม่ ม่วง-ฟ้า ตามโจทย์ */
+--bg:#F3F0FF;
+--main:#A855F7; /* ม่วง */
+--accent:#06B6D4; /* ฟ้า */
+--dark:#4C1D95;
+--white:#FFFFFF;
+--glow:rgba(168, 85, 247, 0.3);
+--gradient: linear-gradient(135deg, #A855F7 0%, #06B6D4 100%);
+}
 
-        .container {
-            max-width: 1000px;
-            margin: -30px auto 50px;
-            padding: 0 15px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Mitr',sans-serif;}
 
-        .product-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-            border: 1px solid #eee;
-        }
+body{
+background:var(--bg);
+display:flex;
+justify-content:center;
+}
 
-        .product-image {
-            height: 160px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
-            text-transform: uppercase;
-        }
+.container{
+max-width:500px;
+width:100%;
+padding:0px 0px 40px; /* ลด Padding บนเพื่อโชว์ Header เต็มใบ */
+}
 
-        /* สีประจำแบรนด์ */
-        .bg-youtube { background: #ff0000; }
-        .bg-netflix { background: #e50914; }
-        .bg-spotify { background: #1db954; }
+/* 4. เปลี่ยนสีพื้นหลัง Header เป็นโทน ม่วง ฟ้า */
+header.shop-header {
+    background: var(--gradient);
+    padding: 50px 20px;
+    text-align: center;
+    color: white;
+    border-radius: 0 0 40px 40px;
+    margin-bottom: 30px;
+}
 
-        .product-info { padding: 25px; flex-grow: 1; }
-        .product-name { font-size: 20px; margin: 0 0 15px 0; color: #1d1d1f; }
-        
-        .product-features {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 20px 0;
-            font-size: 14px;
-            color: #666;
-        }
-        .product-features li::before {
-            content: "✓";
-            color: #27ae60;
-            margin-right: 8px;
-            font-weight: bold;
-        }
+/* 3. ปรับชื่อร้านตัวหนาและใหญ่ขึ้น */
+header.shop-header h1 {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
 
-        .price-tag {
-            font-size: 24px;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: baseline;
-        }
-        .price-tag small { font-size: 14px; font-weight: normal; margin-left: 5px; color: #999; }
+.section{
+background:var(--white);
+border-radius:20px;
+padding:25px 20px;
+margin-bottom:20px;
+box-shadow:0 8px 25px rgba(0,0,0,0.08); /* 22. เพิ่มเงาเล็กน้อย */
+border:1.5px solid #eee;
+margin-left: 15px;
+margin-right: 15px;
+}
 
-        /* ปุ่ม LINE สั่งซื้อ */
-        .btn-line {
-            display: block;
-            background-color: #06c755; /* สี LINE ล่าสุด */
-            color: white;
-            text-align: center;
-            padding: 15px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-        .btn-line:hover { background-color: #05a346; transform: scale(1.02); }
+.placeholder-img {
+    background: #e5e7eb;
+    border-radius: 15px;
+    width: 100%;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
+    margin-bottom: 15px;
+    border: 2px dashed #ccc;
+}
 
-        footer { text-align: center; padding: 40px; color: #888; font-size: 13px; }
-    </style>
+/* 8. ทำให้ปุ่มติดต่อเด่นขึ้น */
+.btn-contact {
+    background: var(--gradient);
+    color: white;
+    padding: 18px;
+    font-size: 18px;
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px var(--glow);
+    border-radius: 50px;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.step {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 20px; /* 18. เรียงแนวตั้งชัดเจน */
+}
+
+/* 17. ทำให้แต่ละ Step มีเลขวงกลมเด่นขึ้น */
+.step-num {
+    background: var(--gradient);
+    color: #fff;
+    min-width: 30px; height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 15px;
+    background: #f9fafb;
+    border-radius: 12px;
+    margin-bottom: 8px;
+}
+
+/* 25. ทำให้แพ็กเกจที่ 2 ดูเด่นกว่า */
+.price-row.featured {
+    border: 2px solid var(--main);
+    background: #FAF5FF;
+    transform: scale(1.02);
+}
+
+.review-box {
+    background: #f8fafc;
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    border-left: 4px solid var(--accent);
+}
+
+.footer { text-align: center; padding: 20px; }
+.socials a {
+    display: inline-block;
+    padding: 10px 20px;
+    background: white;
+    border-radius: 20px;
+    text-decoration: none;
+    color: var(--dark);
+    margin: 5px;
+    border: 1px solid #ddd;
+}
+</style>
 </head>
+
 <body>
-
-<header>
-    <h1>Premium App Store</h1>
-    <p>ID LINE: @997pfoig (ตอบกลับไว 24 ชม.)</p>
-</header>
-
 <div class="container">
 
-    <div class="product-card">
-        <div class="product-image bg-youtube">YouTube</div>
-        <div class="product-info">
-            <h2 class="product-name">YouTube Premium</h2>
-            <ul class="product-features">
-                <li>ไม่มีโฆษณาคั่น 100%</li>
-                <li>ฟังเพลงขณะปิดหน้าจอ</li>
-                <li>ดาวน์โหลดดูออฟไลน์ได้</li>
-                <li>ใช้เมลตัวเองต่อได้เลย</li>
-            </ul>
-            <div class="price-tag">39 ฿ <small>/ เดือน</small></div>
-            <a href="https://line.me/R/oaMessage/@997pfoig/?%E0%B8%AA%E0%B8%99%E0%B9%83%E0%B8%88%E0%B8%AA%E0%B8%B1%E0%B9%88%E0%B8%87%E0%B8%84%E0%B8%B7%E0%B8%AD%20YouTube%20Premium%20(39.-)" class="btn-line">สั่งซื้อทาง LINE</a>
-        </div>
-    </div>
+<header class="shop-header">
+    <h1>[Wanderer_shop]</h1>
+    <p>[ยินดีต้อนรับร้านละมุดรับสินค้าอะไรดีคะ]</p>
+</header>
 
-    <div class="product-card">
-        <div class="product-image bg-netflix">Netflix</div>
-        <div class="product-info">
-            <h2 class="product-name">Netflix 4K UHD</h2>
-            <ul class="product-features">
-                <li>ภาพชัดระดับ Ultra HD</li>
-                <li>หน้าจอส่วนตัว มีรหัสล็อก</li>
-                <li>รับประกันตลอดอายุการใช้งาน</li>
-                <li>ดูได้ทุกอุปกรณ์</li>
-            </ul>
-            <div class="price-tag">99 ฿ <small>/ เดือน</small></div>
-            <a href="https://line.me/R/oaMessage/@997pfoig/?%E0%B8%AA%E0%B8%99%E0%B9%83%E0%B8%88%E0%B8%AA%E0%B8%B1%E0%B9%88%E0%B8%87%E0%B8%84%E0%B8%B7%E0%B8%AD%20Netflix%204K%20(99.-)" class="btn-line">สั่งซื้อทาง LINE</a>
+<div class="section">
+    <div style="display: flex; gap: 15px; align-items: center;">
+        <div style="flex: 1;">
+            <h2 style="font-size: 20px;">[ร้าน Wanderer ยินดีให้บริการ]</h2>
+            <p style="font-size: 14px; margin: 10px 0;">[รับจัดหาแอปพรีเมียมราคาประหยัด เติมไว ปลอดภัย 100%]</p>
         </div>
+        <div style="width: 100px; height: 100px; background: #eee; border-radius: 10px; border: 2px dashed #ccc; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #aaa;">IMAGE</div>
     </div>
-
-    <div class="product-card">
-        <div class="product-image bg-spotify">Spotify</div>
-        <div class="product-info">
-            <h2 class="product-name">Spotify Premium</h2>
-            <ul class="product-features">
-                <li>ฟังเพลงไม่มีโฆษณา</li>
-                <li>กดข้ามเพลงได้ไม่จำกัด</li>
-                <li>เสียงคุณภาพสูงสุด</li>
-                <li>ฟังออฟไลน์ได้ทุกที่</li>
-            </ul>
-            <div class="price-tag">29 ฿ <small>/ เดือน</small></div>
-            <a href="https://line.me/R/oaMessage/@997pfoig/?%E0%B8%AA%E0%B8%99%E0%B9%83%E0%B8%88%E0%B8%AA%E0%B8%B1%E0%B9%88%E0%B8%87%E0%B8%84%E0%B8%B7%E0%B8%AD%20Spotify%20Premium%20(29.-)" class="btn-line">สั่งซื้อทาง LINE</a>
-        </div>
-    </div>
-
+    
+    <a href="https://line.me/R/oaMessage/@997pfoig" class="btn-contact" style="margin-top: 20px;">[ทักแชทสั่งซื้อที่นี่]</a>
+    <p style="text-align: center; font-size: 12px; margin-top: 10px; color: var(--main);">[ตอบไวภายใน 5 นาที!]</p>
 </div>
 
-<footer>
-    <p>© 2024 Premium App Store | บริการรวดเร็ว มั่นใจ ได้ของจริง</p>
-    <p>LINE OA: @997pfoig</p>
-</footer>
+<div class="section">
+    <h3>เกี่ยวกับเรา</h3>
+    <div class="placeholder-img">ABOUT IMAGE</div>
+    <p style="line-height: 1.8; margin-bottom: 15px;">
+        [มีแอพพรี /เติมเกม /เติมเหรียญนิยาย /ส่งของขวัญไลน์]
+    </p>
+    <ul style="list-style: none; font-size: 14px; color: #555;">
+        <li style="margin-bottom: 8px;">✨ ราคาถูกกว่าสมัครเองแน่นอน</li>
+        <li style="margin-bottom: 8px;">🚀 จัดส่งสินค้ารวดเร็วทันใจ</li>
+        <li style="margin-bottom: 8px;">🛡️ มีประกันดูแลตลอดการใช้งาน</li>
+    </ul>
+</div>
 
+<div class="section">
+    <h3 style="margin-bottom: 20px;">ขั้นตอนการสั่งซื้อ</h3>
+    <div class="step"><div class="step-num">1</div><div>[เลือกสินค้าที่ต้องการบนหน้าเว็บ]</div></div>
+    <div class="step"><div class="step-num">2</div><div>[แคปภาพหรือแจ้งชื่อสินค้าทางไลน์]</div></div>
+    <div class="step"><div class="step-num">3</div><div>[ชำระเงินผ่านวอลเล็ตหรือธนาคาร]</div></div>
+    <div class="step"><div class="step-num">4</div><div>[ส่งสลิปยืนยันการโอนเงิน]</div></div>
+    <div class="step"><div class="step-num">5</div><div>[รอรับรหัสหรือดึงเข้าตระกูลได้เลย]</div></div>
+</div>
+
+<div class="section">
+    <h3>หมวดหมู่บริการ</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
+        <div style="text-align: center; padding: 10px; border: 1px solid #f0f0f0; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+            <div style="height: 60px; background: #eee; border-radius: 10px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; font-size: 10px;">IMG</div>
+            <span style="font-size: 13px;">[แอปดูหนัง]</span>
+        </div>
+        <div style="text-align: center; padding: 10px; border: 1px solid #f0f0f0; border-radius: 15px;">
+            <div style="height: 60px; background: #eee; border-radius: 10px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; font-size: 10px;">IMG</div>
+            <span style="font-size: 13px;">[แอปฟังเพลง]</span>
+        </div>
+        <div style="text-align: center; padding: 10px; border: 1px solid #f0f0f0; border-radius: 15px;">
+            <div style="height: 60px; background: #eee; border-radius: 10px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; font-size: 10px;">IMG</div>
+            <span style="font-size: 13px;">[เติมเกม/นิยาย]</span>
+        </div>
+        <div style="text-align: center; padding: 10px; border: 1px solid #f0f0f0; border-radius: 15px;">
+            <div style="height: 60px; background: #eee; border-radius: 10px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; font-size: 10px;">IMG</div>
+            <span style="font-size: 13px;">[ของขวัญไลน์]</span>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h3>ตารางราคาแนะนำ</h3>
+    <div style="margin-top: 15px;">
+        <div class="price-row"><span>YouTube Premium (1 เดือน)</span><strong style="color:var(--main)">39฿</strong></div>
+        <div class="price-row featured"><span>Netflix 1 วัน (ไม่เคลม)</span><strong style="color:var(--main)">15฿</strong></div>
+        <div class="price-row"><span>Netflix 1 วัน (ทีวี/เคลม)</span><strong style="color:var(--main)">25฿</strong></div>
+        <div class="price-row"><span>Spotify Premium (1 เดือน)</span><strong style="color:var(--main)">29฿</strong></div>
+    </div>
+    <p style="font-size: 11px; color: #999; text-align: center; margin-top: 10px;">* ราคาสามารถเปลี่ยนแปลงได้ตามโปรโมชั่น</p>
+</div>
+
+<div class="section">
+    <h3>รีวิวจากลูกค้า</h3>
+    <div class="review-box">"ได้รับเมลไวมากครับ พ่อค้าพูดจาดี แนะนำเลย" - K. Earth</div>
+    <div class="review-box">"ใช้งานได้จริง ไม่มีปัญหา ดูยาวๆ เลยค่ะ" - K. Som</div>
+    <div class="review-box">"เติมเหรียญนิยายราคาถูกกว่าแอปเยอะมาก คุ้ม!" - K. Mew</div>
+    <p style="font-size: 13px; color: var(--accent); text-align: center; font-weight: 500;">🛡️ รับประกันสินค้าตลอดอายุการใช้งาน มีปัญหาเปลี่ยนใหม่ทันที</p>
+</div>
+
+<div class="footer">
+    <div class="socials">
+        <a href="https://line.me/R/oaMessage/@997pfoig">Line: @997pfoig</a>
+        <a href="#">Facebook: Wanderer Shop</a>
+    </div>
+    <p class="small">
+        © 2026 [Wanderer_shop] | [บริการแอปพรีเมียมและเติมเกมครบวงจร]
+    </p>
+</div>
+
+</div>
 </body>
 </html>
