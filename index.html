@@ -3,180 +3,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wanderer_shop - Netflix Premium</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Wanderer_shop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --main: #8E94F2;
-            --main-dark: #767ce0;
-            --bg: #f5f7ff;
-            --white: #ffffff;
-            --orange: #ff8c00;
+            --purple: #8E94F2;
+            --blue: #A5C0F3;
+            --bg: #F8F9FF;
+            --white: #FFFFFF;
+            --shadow: rgba(0, 0, 0, 0.1);
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Kanit', sans-serif; }
-        body { background: var(--bg); color: #333; }
+        body { background-color: var(--bg); color: #333; }
+
+        /* HEADER */
         header {
-            background: linear-gradient(135deg, #a5c0f3 0%, #d1a1f1 100%);
-            padding: 50px 20px; text-align: center; color: white;
-            border-bottom-left-radius: 40px; border-bottom-right-radius: 40px;
+            background: linear-gradient(135deg, var(--purple) 0%, var(--blue) 100%);
+            padding: 60px 20px;
+            text-align: center;
+            color: white;
+            border-bottom-left-radius: 50px;
+            border-bottom-right-radius: 50px;
         }
-        .logo-box {
-            width: 100px; height: 100px; background: white;
-            border-radius: 50%; margin: 0 auto 15px;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        header h1 { font-size: 32px; font-weight: 600; margin-bottom: 10px; }
+        header p { font-size: 16px; opacity: 0.9; }
+
+        /* TABS */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: -25px 0 30px;
         }
-        .tabs { display: flex; justify-content: center; gap: 10px; margin: -25px 0 20px; padding: 0 15px; }
         .tab-btn {
-            background: white; border: none; padding: 12px 18px;
-            border-radius: 12px; cursor: pointer; font-weight: 500;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s; color: #666;
+            background: var(--white);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 500;
+            box-shadow: 0 4px 15px var(--shadow);
+            transition: 0.3s;
         }
-        .tab-btn.active { background: var(--main); color: white; }
-        .container { max-width: 600px; margin: 0 auto 50px; padding: 0 15px; }
-        .shop-info-card { background: white; padding: 25px; border-radius: 20px; text-align: center; display: block; }
-        .info-item { margin-bottom: 15px; padding: 10px; border-bottom: 1px solid #eee; }
-        .product-grid { display: none; grid-template-columns: 1fr; gap: 15px; }
-        .product-card {
-            background: white; border-radius: 18px; padding: 20px;
-            text-align: center; cursor: pointer; transition: 0.3s; border: 1px solid #eee;
+        .tab-btn.active { background: var(--purple); color: white; }
+
+        .container { max-width: 600px; margin: 0 auto; padding: 0 20px; }
+
+        /* PAGE 1: ข้อมูลร้าน (SHOWCASE) */
+        #infoPage { display: block; }
+        .info-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px var(--shadow);
+            text-align: center;
+            margin-bottom: 20px;
         }
-        .product-card img { width: 80px; margin-bottom: 10px; }
+        .contact-box { margin-top: 20px; text-align: left; }
+        .contact-item { padding: 10px; border-bottom: 1px solid #eee; }
+
+        /* PAGE 2: สินค้า */
+        #shopPage { display: none; }
+        .category-label { margin: 20px 0 10px; font-weight: 600; color: var(--purple); }
+        .category-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .cat-box {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 10px var(--shadow);
+            cursor: pointer;
+        }
+        .placeholder-img {
+            width: 50px; height: 50px; background: #eee;
+            margin: 0 auto 10px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999;
+        }
+
+        /* MODAL */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: flex-end; z-index: 1000;
+            background: rgba(0,0,0,0.6); display: none;
+            justify-content: center; align-items: flex-end; z-index: 1000;
         }
         .modal-content {
-            background: white; width: 100%; max-width: 500px;
-            border-top-left-radius: 25px; border-top-right-radius: 25px;
-            padding: 30px 20px; max-height: 85vh; overflow-y: auto;
+            background: var(--white); width: 100%; max-width: 500px;
+            border-top-left-radius: 30px; border-top-right-radius: 30px;
+            padding: 30px 20px; max-height: 90vh; overflow-y: auto;
         }
-        .info-tag { font-size: 11px; background: #f0f2ff; color: var(--main); padding: 4px 8px; border-radius: 5px; margin: 3px; display: inline-block; }
-        .detail-box { background: #f9f9f9; padding: 15px; border-radius: 15px; margin-bottom: 20px; text-align: left; }
+        .detail-box { background: #F9FAFF; padding: 20px; border-radius: 20px; margin: 15px 0; }
+        .detail-box h4 { border-left: 4px solid var(--purple); padding-left: 10px; margin-bottom: 10px; }
+        
         .price-option {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 15px; border: 2px solid #eee; border-radius: 12px;
+            padding: 15px; border: 2px solid #F0F0F0; border-radius: 15px;
             margin-bottom: 10px; text-decoration: none; color: inherit;
         }
-        .price-option:hover { border-color: var(--orange); background: #fffcf5; }
-        .opt-price { color: var(--orange); font-weight: 600; }
-        .close-btn { width: 100%; padding: 12px; background: #eee; border: none; border-radius: 12px; cursor: pointer; margin-top: 10px; }
+        .price-option:hover { border-color: var(--purple); }
+        .close-btn { width: 100%; padding: 15px; border: none; background: #eee; border-radius: 15px; margin-top: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo-box">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" style="width: 70%;" alt="Logo">
-        </div>
-        <h1>Wanderer_shop</h1>
-        <p>ยินดีต้อนรับร้านละมุดค่ะ</p>
+        <h1>[Wanderer_shop]</h1>
+        <p>[ยินดีต้อนรับร้านละมุดรับสินค้าอะไรดีคะ]</p>
     </header>
 
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchPage('info', this)">ข้อมูลร้าน</button>
-        <button class="tab-btn" onclick="switchPage('shop', this)">เลือกซื้อสินค้า</button>
+        <button class="tab-btn active" onclick="switchTab('info', this)">ข้อมูลร้าน</button>
+        <button class="tab-btn" onclick="switchTab('shop', this)">สินค้า</button>
     </div>
 
     <div class="container">
-        <div id="shopInfo" class="shop-info-card">
-            <div class="info-item">
-                <h4 style="color: var(--main);">📍 ติดต่อเรา</h4>
-                <p>LINE: @997pfoig</p>
-                <p>เวลาทำการ: 11:00 - 00:00 น.</p>
-            </div>
-            <div class="info-item">
-                <h4 style="color: var(--main);">🛡️ การรับประกัน</h4>
-                <p>ดูแลตลอดการใช้งาน มีปัญหาเคลมได้ภายใน 24 ชม.</p>
+        <div id="infoPage">
+            <div class="info-card">
+                <h3>ยินดีให้บริการค่ะ ✨</h3>
+                <div class="contact-box">
+                    <div class="contact-item"><b>Line:</b> [ระบุไอดีไลน์]</div>
+                    <div class="contact-item"><b>Facebook:</b> [ระบุชื่อเฟซบุ๊ก]</div>
+                    <div class="contact-item"><b>เวลาทำการ:</b> 11:00 - 00:00 น.</div>
+                </div>
+                <p style="margin-top: 15px; font-size: 13px; color: #888;">เลื่อนดูรีวิวและความเชื่อมั่นได้ที่นี่</p>
             </div>
         </div>
 
-        <div class="product-grid" id="productGrid">
-            <div class="product-card" onclick="openModal()">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix">
-                <h3>Netflix 4K Premium</h3>
-                <p style="color: var(--orange);">คลิกเพื่อดูราคา (เริ่ม 10฿)</p>
+        <div id="shopPage">
+            <div class="category-label">หมวดหมู่สินค้า / บริการ</div>
+            <div class="category-grid">
+                <div class="cat-box" onclick="openProduct()">
+                    <div class="placeholder-img">IMG</div>
+                    <b>แอพพรี</b>
+                </div>
+                <div class="cat-box">
+                    <div class="placeholder-img">IMG</div>
+                    <b>หมวดหมู่ใหม่ 1</b>
+                </div>
+                <div class="cat-box">
+                    <div class="placeholder-img">IMG</div>
+                    <b>หมวดหมู่ใหม่ 2</b>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-overlay" id="modal">
         <div class="modal-content">
-            <div id="modalData">
-                <h2 style="text-align:center; margin-bottom:10px;">Netflix 4K (เมลร้าน)</h2>
-                <div style="text-align:center; margin-bottom:15px;">
-                    <span class="info-tag">จอส่วนตัว</span>
-                    <span class="info-tag">4K Ultra HD</span>
-                    <span class="info-tag">ประกันตลอดอายุการใช้งาน</span>
-                </div>
-                
-                <div class="detail-box">
-                    <p>📌 <b>เงื่อนไข:</b> ห้ามเปลี่ยนรหัส/เมลเด็ดขาด</p>
-                    <p>📌 <b>การเคลม:</b> แจ้งผ่านไลน์ได้ตลอด 24 ชม.</p>
-                </div>
-
-                <div id="priceList">
-                    </div>
+            <h2 id="m-title">YouTube Premium 30 วัน</h2>
+            <p style="color: var(--purple); font-weight: 600;">ราคา: 15฿ - 30฿</p>
+            
+            <div class="detail-box">
+                <h4>ประเภทสินค้า</h4>
+                <p>เมลร้าน / เมลลูกค้า / ต่อเมล / ไม่ต่อ / เคลม / ไม่เคลม</p>
             </div>
+
+            <div class="detail-box">
+                <h4>รายละเอียด/เงื่อนไข</h4>
+                <p><b>ความคมชัด:</b> ดูได้ตลอดไม่มีโฆษณาคั่น</p>
+                <p><b>จำนวนอุปกรณ์:</b> ดูได้ 1 จอส่วนตัว / ล็อกโปรไฟล์ได้</p>
+                <p><b>การเคลม/ประกัน:</b> ประกันตลอดอายุการใช้งาน / เคลม-แก้ไขภายใน 24 ชม.</p>
+                <p><b>ข้อห้าม:</b> ห้ามเปลี่ยนรหัส / ห้ามแชร์คนอื่น / ห้ามเปลี่ยนโปรไฟล์</p>
+            </div>
+
+            <h4>ตัวเลือกราคา</h4>
+            <a href="#" class="price-option">
+                <div>
+                    <b>30 วัน</b><br>
+                    <small style="color: #999;">ซื้อไปแล้ว 1.2k ชิ้น</small>
+                </div>
+                <b style="color: var(--purple);">20 บาท</b>
+            </a>
+            <a href="#" class="price-option">
+                <div>
+                    <b>30 วัน (พิเศษ)</b><br>
+                    <small style="color: #999;">ซื้อไปแล้ว 850 ชิ้น</small>
+                </div>
+                <b style="color: var(--purple);">30 บาท</b>
+            </a>
+
             <button class="close-btn" onclick="closeModal()">ปิดหน้าต่าง</button>
         </div>
     </div>
 
     <script>
-        const netflixOptions = [
-            { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 1 วัน (ไม่เคลมปิด)', price: '10' },
-            { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 7 วัน (ไม่เคลมปิด)', price: '40' },
-            { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 30 วัน (ไม่เคลมปิด)', price: '115' },
-            { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 1 วัน (เคลมปิด)', price: '15' },
-            { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 7 วัน (เคลมปิด)', price: '50' },
-            { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 30 วัน (เคลมปิด)', price: '140' },
-            { name: 'ทีวี/คอม 1 วัน (ไม่เคลมปิด)', price: '25' },
-            { name: 'ทีวี/คอม 7 วัน (ไม่เคลมปิด)', price: '55' },
-            { name: 'ทีวี/คอม 30 วัน (ไม่เคลมปิด)', price: '180' },
-            { name: 'ทีวี/คอม 1 วัน (เคลมปิด)', price: '30' },
-            { name: 'ทีวี/คอม 7 วัน (เคลมปิด)', price: '65' },
-            { name: 'ทีวี/คอม 30 วัน (เคลมปิด)', price: '200' }
-        ];
-
-        function switchPage(page, btn) {
-            const tabs = document.querySelectorAll('.tab-btn');
-            tabs.forEach(t => t.classList.remove('active'));
+        function switchTab(type, btn) {
+            // สลับปุ่ม
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            const info = document.getElementById('shopInfo');
-            const shop = document.getElementById('productGrid');
-
-            if (page === 'info') {
-                info.style.display = 'block';
-                shop.style.display = 'none';
+            // สลับหน้า
+            if(type === 'info') {
+                document.getElementById('infoPage').style.display = 'block';
+                document.getElementById('shopPage').style.display = 'none';
             } else {
-                info.style.display = 'none';
-                shop.style.display = 'grid';
+                document.getElementById('infoPage').style.display = 'none';
+                document.getElementById('shopPage').style.display = 'block';
             }
         }
 
-        function openModal() {
-            const list = document.getElementById('priceList');
-            list.innerHTML = '';
-            
-            netflixOptions.forEach(opt => {
-                const link = `https://line.me/R/oaMessage/@997pfoig/?สนใจซื้อ: Netflix - ${opt.name} ราคา ${opt.price} บาท`;
-                list.innerHTML += `
-                    <a href="${link}" class="price-option">
-                        <span>${opt.name}</span>
-                        <span class="opt-price">${opt.price}฿</span>
-                    </a>
-                `;
-            });
-            document.getElementById('modalOverlay').style.display = 'flex';
+        function openProduct() {
+            document.getElementById('modal').style.display = 'flex';
         }
 
         function closeModal() {
-            document.getElementById('modalOverlay').style.display = 'none';
+            document.getElementById('modal').style.display = 'none';
         }
 
+        // ปิด Modal เมื่อคลิกพื้นหลัง
         window.onclick = function(event) {
-            if (event.target == document.getElementById('modalOverlay')) closeModal();
+            if (event.target == document.getElementById('modal')) {
+                closeModal();
+            }
         }
     </script>
 </body>
+</html>
