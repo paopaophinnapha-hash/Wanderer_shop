@@ -1,270 +1,192 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wanderer_shop - Official Store</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderer_shop - แอปพรีเมียมครบวงจร</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8E94F2;
+            --secondary: #d1a1f1;
+            --dark: #2d3436;
+            --bg: #f8f9fd;
+            --white: #ffffff;
+            --orange: #ff8c00;
+            --twitter: #1DA1F2;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap" rel="stylesheet">
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Kanit', sans-serif; }
+        body { background: var(--bg); color: var(--dark); line-height: 1.6; }
 
-<style>
-:root{
-/* ปรับโทนสีใหม่ตามโจทย์: ม่วง-ฟ้า */
---bg:#F0F4FF;
---main:#8E94F2; /* ม่วงฟ้า */
---dark:#5E64D1;
---secondary:#B9D9EB; /* ฟ้าอ่อน */
---white:#FFFFFF;
---glow:rgba(142, 148, 242, 0.3);
---gradient: linear-gradient(135deg, #a5c0f3 0%, #d1a1f1 100%); /* ม่วง ฟ้า */
-}
+        header {
+            background: linear-gradient(135deg, #a5c0f3 0%, #d1a1f1 100%);
+            padding: 40px 20px;
+            text-align: center;
+            color: white;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+        }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Mitr',sans-serif;}
+        .logo-container {
+            width: 100px; height: 100px;
+            background: var(--white);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
 
-body{
-background:var(--bg);
-display:flex;
-justify-content:center;
-}
+        .container { max-width: 600px; margin: -20px auto 50px; padding: 0 15px; }
 
-.container{
-max-width:500px;
-width:100%;
-padding:20px 15px 40px;
-}
+        .section-title { margin: 30px 0 15px; font-size: 18px; display: flex; align-items: center; gap: 8px; }
 
-/* ปรับ Header ตามโจทย์ */
-.header-section {
-    background: var(--gradient) !important;
-    border: none !important;
-    color: white !important;
-}
+        /* การ์ดตัวเลือกสินค้า */
+        .product-option-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
 
-.section{
-background:var(--white);
-border-radius:20px;
-padding:25px 20px;
-margin-bottom:20px;
-box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-border: 1px solid rgba(142, 148, 242, 0.2);
-}
+        .option-item {
+            border: 1.5px solid #eee;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: inherit;
+            transition: 0.3s;
+        }
 
-.section-shadow {
-    box-shadow: 0 4px 6px rgba(0,0,0,0.07);
-}
+        .option-item:hover { border-color: var(--orange); background: #fffcf9; }
+        
+        .opt-label { font-size: 14px; font-weight: 500; }
+        
+        /* 1. เปลี่ยนแถบสถานะเป็น "ขายไปแล้ว" */
+        .opt-sold { 
+            font-size: 11px; 
+            background: #fff3e0; 
+            color: #e65100; 
+            padding: 3px 8px; 
+            border-radius: 20px; 
+            margin-top: 5px;
+            display: inline-block;
+        }
 
-h1,h2,h3{color:var(--dark);}
-.center{text-align:center;}
+        .opt-price { color: var(--orange); font-weight: 600; font-size: 18px; }
 
-/* 3. ปรับชื่อร้านใหญ่และหนาขึ้น */
-.shop-name {
-    font-size: 32px;
-    font-weight: 600;
-    margin: 0;
-    color: #fff;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-}
+        /* 2. ส่วนรีวิวลูกค้า */
+        .review-section {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
 
-.logo{
-width:130px;height:130px;
-border-radius:25px; /* ปรับเป็นทรงเหลี่ยมมน */
-overflow:hidden;
-margin:0 auto 20px;
-background: #eee; /* Placeholder */
-border: 4px solid #fff;
-}
+        .review-card {
+            background: #fdfdff;
+            border: 1px solid #f0f0f5;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            position: relative;
+        }
 
-.logo img{width:100%;height:100%;object-fit:cover;}
+        .review-text { font-size: 14px; color: #444; font-style: italic; }
+        .review-tag { color: var(--twitter); font-size: 12px; margin-top: 5px; display: block; }
 
-.placeholder-img {
-    background: #eef2f7;
-    border: 2px dashed #cbd5e0;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #a0aec0;
-    font-size: 12px;
-    margin: 10px 0;
-}
+        .btn-review-tw {
+            display: block;
+            text-align: center;
+            background: var(--twitter);
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 15px;
+        }
 
-.btn{
-display:block;
-text-align:center;
-padding:14px;
-border-radius:15px;
-text-decoration:none;
-margin-top:15px;
-font-weight:500;
-transition: all 0.3s;
-}
-
-/* 8. ปรับปุ่มติดต่อให้เด่นขึ้น */
-.btn-main{
-background: #5E64D1;
-color:#fff;
-transform: scale(1.05);
-box-shadow: 0 4px 15px rgba(94, 100, 209, 0.4);
-border: 2px solid #fff;
-}
-
-.btn-outline{
-background:rgba(255,255,255,0.2);
-border:1px solid #fff;
-color:#fff;
-}
-
-/* 17. วงกลม Step เด่นขึ้น */
-.step{
-display:flex;
-align-items:flex-start;
-gap:15px;
-margin-bottom:20px;
-}
-
-.step-num{
-background:var(--main);
-color:#fff;
-min-width:32px; height:32px;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight: bold;
-box-shadow: 0 3px 8px var(--glow);
-}
-
-.price-row{
-display:flex;
-justify-content:space-between;
-align-items: center;
-margin-bottom:10px;
-background:#f9faff;
-padding:12px 15px;
-border-radius:12px;
-border-left: 4px solid var(--main);
-}
-
-/* 25. แพ็กเกจที่ 2 เด่นกว่า */
-.price-row.featured {
-    background: #fff5ff;
-    border-left: 4px solid #d1a1f1;
-    transform: scale(1.03);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-.price-tag{
-background:var(--dark);
-color:#fff;
-padding:4px 12px;
-border-radius:10px;
-font-size:14px;
-}
-
-.review-box {
-    background: #fff;
-    border-radius: 15px;
-    padding: 15px;
-    margin-bottom: 10px;
-    border: 1px solid #eee;
-    font-size: 14px;
-}
-
-.footer{text-align:center;margin-top:30px;}
-
-.socials{
-display:flex;
-gap:8px;
-justify-content:center;
-margin-top:15px;
-}
-
-.socials a{
-flex:1;
-padding:10px;
-border-radius:12px;
-background:#fff;
-text-decoration:none;
-color:var(--dark);
-font-size:13px;
-border:1px solid var(--secondary);
-}
-</style>
+        footer { text-align: center; padding: 30px; color: #888; font-size: 12px; }
+    </style>
 </head>
-
 <body>
-<div class="container">
 
-<div class="section center header-section">
-    <div class="logo">
-        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#666;">[ใส่โลโก้ร้าน]</div>
+    <header>
+        <div class="logo-container">
+            <img src="https://via.placeholder.com/80?text=Shop" alt="Logo">
+        </div>
+        <h1 style="font-size: 24px;">Wanderer_shop</h1>
+        <p style="font-size: 13px; opacity: 0.9;">ยินดีต้อนรับร้านละมุดรับสินค้าอะไรดีคะ</p>
+    </header>
+
+    <div class="container">
+
+        <h2 class="section-title">🎬 Amazon Prime Video</h2>
+        <div class="product-option-card">
+            <div class="option-list">
+                <a href="https://line.me/R/oaMessage/@997pfoig/?สนใจ: Prime Video 7 วัน (หาร 6)" class="option-item">
+                    <div>
+                        <div class="opt-label">Prime 7 วัน (หาร 6 คน)</div>
+                        <div class="opt-sold">🔥 ขายไปแล้ว 1.2k+ ชิ้น</div>
+                    </div>
+                    <div class="opt-price">10.-</div>
+                </a>
+
+                <a href="https://line.me/R/oaMessage/@997pfoig/?สนใจ: Prime Video 30 วัน (หาร 4)" class="option-item">
+                    <div>
+                        <div class="opt-label">Prime 30 วัน (หาร 4 คน)</div>
+                        <div class="opt-sold">🔥 ขายไปแล้ว 850 ชิ้น</div>
+                    </div>
+                    <div class="opt-price">30.-</div>
+                </a>
+            </div>
+        </div>
+
+        <h2 class="section-title">📺 Netflix & YouTube</h2>
+        <div class="product-option-card">
+            <div class="option-list">
+                <a href="https://line.me/R/oaMessage/@997pfoig/?สนใจ: YouTube 30 วัน" class="option-item">
+                    <div>
+                        <div class="opt-label">YouTube 30 วัน (เมลลูกค้า)</div>
+                        <div class="opt-sold">🔥 ขายไปแล้ว 2.5k+ ชิ้น</div>
+                    </div>
+                    <div class="opt-price">35.-</div>
+                </a>
+            </div>
+        </div>
+
+        <h2 class="section-title">💬 รีวิวจากลูกค้า</h2>
+        <div class="review-section">
+            <div class="review-card">
+                <p class="review-text">"ส่งไวมากกก ไม่ถึง 5 นาทีได้รหัสแล้ว ดูได้ลื่นๆ เลยค่ะ"</p>
+                <span class="review-tag">#ค่าขนมละมุด</span>
+            </div>
+            <div class="review-card">
+                <p class="review-text">"แม่ค้าตอบดีมาก แนะนำวิธีแก้ให้จนดูได้ รักร้านนี้"</p>
+                <span class="review-tag">#ค่าขนมละมุด</span>
+            </div>
+
+            <a href="https://twitter.com/intent/tweet?text=ร้านส่งไวมาก แม่ค้าตอบดี @Wanderer_Shop&hashtags=ค่าขนมละมุด" class="btn-review-tw" target="_blank">
+                ✨ คลิกเพื่อรีวิวผ่าน Twitter (X)
+            </a>
+            <p style="font-size: 11px; text-align: center; color: #999; margin-top: 10px;">
+                ร่วมรีวิวผ่านแฮชแท็ก #ค่าขนมละมุด เพื่อรับสิทธิพิเศษในครั้งถัดไป
+            </p>
+        </div>
+
+        <footer>
+            <p>© 2026 Wanderer_shop | ID LINE: @997pfoig</p>
+        </footer>
     </div>
-    <h1 class="shop-name">[Wanderer_shop]</h1>
-    <p style="margin:10px 0 20px;">[ยินดีต้อนรับร้านละมุดรับสินค้าอะไรดีคะ]</p>
-    
-    <hr style="opacity:0.2; margin-bottom:20px;">
-    
-    <h2 style="color:#fff; font-size:20px;">[บริการแอปพรีเมียม & เติมเกม]</h2>
-    <p style="font-size:14px; opacity:0.9;">[สะดวก รวดเร็ว มั่นใจ ได้ของชัวร์ 100%]</p>
-    
-    <a href="https://line.me/R/oaMessage/@997pfoig" class="btn btn-main">[จิ้มตรงนี้เพื่อสั่งซื้อสินค้า]</a>
-    <p style="font-size:11px; margin-top:8px;">[ตอบไวมาก ทักได้ตลอด 24 ชม. ค่ะ]</p>
-</div>
 
-<div class="section section-shadow">
-    <h3>[รู้จักกับเรา]</h3>
-    <div class="placeholder-img" style="height:100px;">[รูปภาพประกอบร้าน]</div>
-    <p style="line-height:1.8; margin:15px 0;">
-        [มีแอพพรี /เติมเกม /เติมเหรียญนิยาย /ส่งของขวัญไลน์]
-    </p>
-    <ul style="font-size:14px; color:#555; padding-left:20px; line-height:2;">
-        <li>✅ ราคาถูกกว่าสมัครเองแน่นอน</li>
-        <li>✅ ประกันสินค้าตลอดการใช้งาน</li>
-        <li>✅ ระบบเติมไว ไม่ต้องรอนาน</li>
-    </ul>
-</div>
-
-<div class="section">
-    <h3 style="margin-bottom:20px;">📝 ขั้นตอนการสั่งซื้อ</h3>
-    <div class="step"><div class="step-num">1</div><div>[เลือกสินค้าที่ต้องการบนหน้าเว็บ]</div></div>
-    <div class="step"><div class="step-num">2</div><div>[แคปภาพหรือจดชื่อสินค้าที่สนใจ]</div></div>
-    <div class="step"><div class="step-num">3</div><div>[กดปุ่มติดต่อเพื่อส่งข้อมูลให้แอดมิน]</div></div>
-    <div class="step"><div class="step-num">4</div><div>[ชำระเงินและส่งสลิปยืนยัน]</div></div>
-    <div class="step"><div class="step-num">5</div><div>[รอรับรหัสหรือรอแอดมินดำเนินการทันที]</div></div>
-</div>
-
-<div class="section">
-    <h3 style="margin-bottom:15px;">📂 หมวดหมู่บริการ</h3>
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-        <div class="center" style="padding:15px; border-radius:15px; background:#f0f4ff; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
-            <div class="placeholder-img" style="height:60px;">[รูปแอป]</div>
-            <span style="font-size:14px;">[แอปพรีเมียม]</span>
-        </div>
-        <div class="center" style="padding:15px; border-radius:15px; background:#f0f4ff; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
-            <div class="placeholder-img" style="height:60px;">[รูปเกม]</div>
-            <span style="font-size:14px;">[เติมเกม/เหรียญ]</span>
-        </div>
-        <div class="center" style="padding:15px; border-radius:15px; background:#f0f4ff; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
-            <div class="placeholder-img" style="height:60px;">[รูปเหรียญ]</div>
-            <span style="font-size:14px;">[เหรียญนิยาย]</span>
-        </div>
-        <div class="center" style="padding:15px; border-radius:15px; background:#f0f4ff; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
-            <div class="placeholder-img" style="height:60px;">[รูปของขวัญ]</div>
-            <span style="font-size:14px;">[ของขวัญไลน์]</span>
-        </div>
-    </div>
-</div>
-
-<div class="section">
-    <h3 style="margin-bottom:15px;">💰 ตารางราคาอัปเดต</h3>
-    <div class="price-row"><span>Netflix 1 วัน (ไม่เคลม)</span><span class="price-tag">15฿</span></div>
-    <div class="price-row featured"><span>Netflix 1 วัน (TV เคลมปิด)</span><span class="price-tag">29฿</span></div>
-    <div class="price-row"><span>YouTube 30 วัน (เมลลูกค้า)</span><span class="price-tag">35฿</span></div>
-    <div class="price-row"><span>YouTube 30 วัน (เมลร้าน)</span><span class="price-tag">39฿</span></div>
-    
-    <p style="font-size:11px; text-align:center; color:#999; margin-top:10px;">*ราคาสามารถเปลี่ยนแปลงได้ตามโปรโมชั่น*</p>
-</div>
-
-<div class="section" style="background: #fdfdff;">
-    <h3>⭐️ รีวิวจากลูกค้า</h3>
-    <div class="review-box">
+</body>
+</html>
