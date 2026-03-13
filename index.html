@@ -17,7 +17,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Kanit', sans-serif; }
         body { background: var(--bg); color: #333; }
 
-        /* --- Header --- */
         header {
             background: linear-gradient(135deg, #a5c0f3 0%, #d1a1f1 100%);
             padding: 50px 20px;
@@ -34,24 +33,30 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        /* --- 1. Tab Menu --- */
         .tabs {
             display: flex; justify-content: center; gap: 10px;
             margin: -25px 0 20px; padding: 0 15px;
         }
 
         .tab-btn {
-            background: white; border: none; padding: 10px 15px;
+            background: white; border: none; padding: 12px 18px;
             border-radius: 12px; cursor: pointer; font-weight: 500;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            transition: 0.3s; color: #666; font-size: 13px;
+            transition: 0.3s; color: #666; font-size: 14px;
         }
 
         .tab-btn.active { background: var(--main); color: white; }
 
-        /* --- Product Grid --- */
         .container { max-width: 600px; margin: 0 auto 50px; padding: 0 15px; }
         
+        /* Shop Info Section */
+        .shop-info-card {
+            background: white; padding: 25px; border-radius: 20px;
+            text-align: center; display: none;
+        }
+        .info-item { margin-bottom: 15px; padding: 10px; border-bottom: 1px solid #eee; }
+
+        /* Product Grid */
         .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
         .product-card {
@@ -59,52 +64,38 @@
             text-align: center; cursor: pointer; transition: 0.3s;
             border: 1px solid #eee;
         }
-
         .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
         .product-card img { width: 50px; height: 50px; object-fit: contain; margin-bottom: 10px; }
         .product-card h3 { font-size: 14px; margin-bottom: 5px; }
         .product-card .price-hint { color: var(--orange); font-size: 12px; font-weight: 600; }
 
-        /* --- 2. Modal Popup --- */
+        /* Modal Popup */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5); display: none;
             justify-content: center; align-items: flex-end; z-index: 1000;
         }
-
         .modal-content {
             background: white; width: 100%; max-width: 500px;
             border-top-left-radius: 25px; border-top-right-radius: 25px;
             padding: 30px 20px; animation: slideUp 0.3s ease-out;
             max-height: 90vh; overflow-y: auto;
         }
-
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
         .modal-header { text-align: center; margin-bottom: 20px; }
         .modal-header h2 { font-size: 20px; color: var(--main-dark); }
-        
         .info-tag { font-size: 11px; background: #f0f2ff; color: var(--main); padding: 4px 8px; border-radius: 5px; margin: 3px; display: inline-block; }
-
         .detail-box { background: #f9f9f9; padding: 15px; border-radius: 15px; margin-bottom: 20px; }
         .detail-box h4 { font-size: 14px; margin-bottom: 10px; color: #555; border-left: 3px solid var(--main); padding-left: 10px; }
         .detail-box p { font-size: 13px; color: #666; margin-bottom: 5px; line-height: 1.5; }
-
         .price-option {
             display: flex; justify-content: space-between; align-items: center;
             padding: 12px 15px; border: 2px solid #eee; border-radius: 12px;
             margin-bottom: 10px; text-decoration: none; color: inherit; transition: 0.3s;
         }
-
         .price-option:hover { border-color: var(--orange); background: #fffcf5; }
-        .price-option .opt-title { font-size: 14px; font-weight: 500; }
-        .price-option .opt-sold { font-size: 11px; color: #999; }
-        .price-option .opt-price { color: var(--orange); font-weight: 600; }
-
-        .close-btn { 
-            display: block; width: 100%; padding: 12px; background: #eee; 
-            border: none; border-radius: 12px; margin-top: 10px; cursor: pointer; font-weight: 500;
-        }
+        .opt-price { color: var(--orange); font-weight: 600; }
+        .close-btn { display: block; width: 100%; padding: 12px; background: #eee; border: none; border-radius: 12px; margin-top: 10px; cursor: pointer; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -118,13 +109,27 @@
     </header>
 
     <div class="tabs">
-        <button class="tab-btn active" onclick="filterTab('all', this)">ทั้งหมด</button>
-        <button class="tab-btn" onclick="filterTab('APP PREMIUM', this)">APP PREMIUM</button>
-        <button class="tab-btn" onclick="filterTab('เติมเกม', this)">เติมเกม</button>
+        <button class="tab-btn active" onclick="switchPage('info', this)">ข้อมูลร้าน</button>
+        <button class="tab-btn" onclick="switchPage('shop', this)">เลือกซื้อสินค้า</button>
     </div>
 
     <div class="container">
-        <div class="product-grid" id="productGrid">
+        <div id="shopInfo" class="shop-info-card" style="display: block;">
+            <div class="info-item">
+                <h4 style="color: var(--main);">📍 ติดต่อเรา</h4>
+                <p>LINE: @997pfoig</p>
+                <p>เวลาทำการ: 11:00 - 00:00 น.</p>
+            </div>
+            <div class="info-item">
+                <h4 style="color: var(--main);">🛡️ การรับประกัน</h4>
+                <p>ดูแลตลอดการใช้งาน มีปัญหาเคลมได้ภายใน 24 ชม.</p>
+            </div>
+            <div class="info-item" style="border:none;">
+                <p style="font-size: 12px; color: #999;">ขอบคุณที่ไว้วางใจใช้บริการ Wanderer_shop</p>
+            </div>
+        </div>
+
+        <div class="product-grid" id="productGrid" style="display: none;">
             </div>
     </div>
 
@@ -160,13 +165,13 @@
                 title: 'Netflix 4K เมลร้าน',
                 tags: ['จอส่วนตัว', 'จอเสริม', 'รับประกันตลอดการใช้งานตามกฎ'],
                 features: {
-                    quality: 'ชัดระดับ 4K ', 'จอส่วนตัว'
-                    device: 'จอส่วนตัวหารแอค 1คนต่อ 1จอค่ะ ', ' แอคหาร 5 มีโอกาสชน '
+                    quality: 'ชัดระดับ 4K จอส่วนตัว',
+                    device: 'จอส่วนตัวหารแอค 1คนต่อ 1จอค่ะ / แอคหาร 5 มีโอกาสชน',
                     warranty: 'ดูแลเคลมตลอดการใช้งาน',
                     rules: 'ห้ามเปลี่ยนรหัสผ่านและข้อมูลเมลโดยเด็ดขาด'
                 },
                 options: [
-                    { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 1 วัน (ไม่เคลมปิด)', price: '10', sold: '0' },
+                     { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 1 วัน (ไม่เคลมปิด)', price: '10', sold: '0' },
                     { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 7 วัน (ไม่เคลมปิด)', price: '40', sold: '0' },
                     { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 30 วัน (ไม่เคลมปิด)', price: '115', sold: '0' },
                     { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 1 วัน (เคลมปิด)', price: '15', sold: '0' },
@@ -177,7 +182,7 @@
                     { name: 'ทีวี/คอม 30 วัน (ไม่เคลมปิด)', price: '180', sold: '0' },
                     { name: 'ทีวี/คอม 1 วัน (เคลมปิด)', price: '30', sold: '0' },
                     { name: 'ทีวี/คอม 7 วัน (เคลมปิด)', price: '65', sold: '0' },
-                    { name: 'ทีวี/คอม 30 วัน (เคลมปิด)', price: '200', sold: '0' },
+                    { name: 'ทีวี/คอม 30 วัน (เคลมปิด)', price: '200', sold: '0' }
                 ]
             },
             'disney': {
@@ -196,83 +201,36 @@
                     { name: 'หาร 4 (ไม่ชน) 30 วัน', price: '125', sold: '900' },
                     { name: 'ยกแอป (เบอร์ร้าน) 30 วัน', price: '360', sold: '200' }
                 ]
-            },
-            'wetv': {
-                category: 'APP PREMIUM',
-                img: 'https://upload.wikimedia.org/wikipedia/commons/c/c5/WeTV_logo.png',
-                title: 'WeTV VIP',
-                tags: ['จอแชร์', 'จอส่วนตัว', '7-90 วัน'],
-                features: {
-                    quality: 'Full HD (ไม่มีโฆษณาคั่น)',
-                    device: 'ดูได้ 1 จอส่วนตัว / ล็อกโปรไฟล์ได้',
-                    warranty: 'ดูแลตลอดการใช้งานตามระยะเวลาที่ซื้อ',
-                    rules: 'ห้ามเปลี่ยนรหัสผ่าน'
-                },
-                options: [
-                    { name: 'หาร 4 (30 วัน)', price: '30', sold: '400' },
-                    { name: 'จอส่วนตัว (30 วัน)', price: '95', sold: '250' },
-                    { name: 'จอส่วนตัว (90 วัน)', price: '250', sold: '100' }
-                ]
-            },
-            'iqiyi': {
-                category: 'APP PREMIUM',
-                img: 'https://upload.wikimedia.org/wikipedia/commons/c/c5/IQIYI_logo.png',
-                title: 'iQIYI VIP',
-                tags: ['Standard', 'Premium', 'รายปี'],
-                features: {
-                    quality: 'Full HD / 4K (ไม่มีโฆษณาคั่น)',
-                    device: 'ดูได้ 1 จอ (Standard ดูบนทีวีไม่ได้)',
-                    warranty: 'ประกันตลอดอายุการใช้งาน',
-                    rules: 'ห้ามนำรหัสไปแชร์ต่อให้ผู้อื่น'
-                },
-                options: [
-                    { name: 'Standard หาร 4 (30 วัน)', price: '30', sold: '800' },
-                    { name: 'VIP ไม่ชน (30 วัน)', price: '60', sold: '500' },
-                    { name: 'Standard รายปี (หาร 4)', price: '215', sold: '150' }
-                ]
-            },
-            'hbo': {
-                category: 'APP PREMIUM',
-                img: 'https://upload.wikimedia.org/wikipedia/commons/d/de/HBO_logo.svg',
-                title: 'HBO MAX / Go',
-                tags: ['4K Ultimate', 'Full HD', 'ยกแอป'],
-                features: {
-                    quality: 'Full HD 1080P / Ultimate 4K',
-                    device: 'ดูพร้อมกันได้ 2-4 อุปกรณ์ (ตามแพ็ก)',
-                    warranty: 'ดูแลตลอดการใช้งาน (รอคิว 5-40 นาที)',
-                    rules: 'ห้ามเปลี่ยนโปรไฟล์ผู้อื่น'
-                },
-                options: [
-                    { name: 'Full HD หาร 3 (30 วัน)', price: '85', sold: '300' },
-                    { name: 'Ultimate 4K หาร 4 (30 วัน)', price: '135', sold: '250' },
-                    { name: 'ยกแอป 4K (30 วัน)', price: '395', sold: '50' }
-                ]
             }
         };
 
-        // ฟังก์ชันสร้างการ์ดสินค้า
-        function renderProducts(category = 'all') {
-            const grid = document.getElementById('productGrid');
-            grid.innerHTML = '';
+        function switchPage(page, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
             
-            for (let id in products) {
-                const p = products[id];
-                if (category === 'all' || p.category === category) {
-                    grid.innerHTML += `
-                        <div class="product-card" onclick="openModal('${id}')">
-                            <img src="${p.img}" alt="${p.title}">
-                            <h3>${p.title}</h3>
-                            <p class="price-hint">เริ่ม ${p.options[0].price}฿</p>
-                        </div>
-                    `;
-                }
+            if (page === 'info') {
+                document.getElementById('shopInfo').style.display = 'block';
+                document.getElementById('productGrid').style.display = 'none';
+            } else {
+                document.getElementById('shopInfo').style.display = 'none';
+                document.getElementById('productGrid').style.display = 'grid';
+                renderProducts();
             }
         }
 
-        function filterTab(cat, btn) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderProducts(cat);
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+            for (let id in products) {
+                const p = products[id];
+                grid.innerHTML += `
+                    <div class="product-card" onclick="openModal('${id}')">
+                        <img src="${p.img}" alt="${p.title}">
+                        <h3>${p.title}</h3>
+                        <p class="price-hint">เริ่ม ${p.options[0].price}฿</p>
+                    </div>
+                `;
+            }
         }
 
         function openModal(id) {
@@ -313,13 +271,8 @@
         }
 
         window.onclick = function(event) {
-            if (event.target == document.getElementById('modalOverlay')) {
-                closeModal();
-            }
+            if (event.target == document.getElementById('modalOverlay')) closeModal();
         }
-
-        // เริ่มต้นโหลดสินค้าทั้งหมด
-        renderProducts('all');
     </script>
 </body>
 </html>
