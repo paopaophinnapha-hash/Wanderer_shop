@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wanderer_shop - Premium Services</title>
+    <title>Wanderer_shop - Netflix Premium</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -13,96 +13,64 @@
             --white: #ffffff;
             --orange: #ff8c00;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Kanit', sans-serif; }
         body { background: var(--bg); color: #333; }
-
         header {
             background: linear-gradient(135deg, #a5c0f3 0%, #d1a1f1 100%);
-            padding: 50px 20px;
-            text-align: center;
-            color: white;
-            border-bottom-left-radius: 40px;
-            border-bottom-right-radius: 40px;
+            padding: 50px 20px; text-align: center; color: white;
+            border-bottom-left-radius: 40px; border-bottom-right-radius: 40px;
         }
-
         .logo-box {
             width: 100px; height: 100px; background: white;
             border-radius: 50%; margin: 0 auto 15px;
             display: flex; align-items: center; justify-content: center;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
-
-        .tabs {
-            display: flex; justify-content: center; gap: 10px;
-            margin: -25px 0 20px; padding: 0 15px;
-        }
-
+        .tabs { display: flex; justify-content: center; gap: 10px; margin: -25px 0 20px; padding: 0 15px; }
         .tab-btn {
             background: white; border: none; padding: 12px 18px;
             border-radius: 12px; cursor: pointer; font-weight: 500;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            transition: 0.3s; color: #666; font-size: 14px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s; color: #666;
         }
-
         .tab-btn.active { background: var(--main); color: white; }
-
         .container { max-width: 600px; margin: 0 auto 50px; padding: 0 15px; }
-        
-        .shop-info-card {
-            background: white; padding: 25px; border-radius: 20px;
-            text-align: center; display: block;
-        }
+        .shop-info-card { background: white; padding: 25px; border-radius: 20px; text-align: center; display: block; }
         .info-item { margin-bottom: 15px; padding: 10px; border-bottom: 1px solid #eee; }
-
-        .product-grid { display: none; grid-template-columns: 1fr 1fr; gap: 15px; }
-
+        .product-grid { display: none; grid-template-columns: 1fr; gap: 15px; }
         .product-card {
-            background: white; border-radius: 18px; padding: 15px;
-            text-align: center; cursor: pointer; transition: 0.3s;
-            border: 1px solid #eee;
+            background: white; border-radius: 18px; padding: 20px;
+            text-align: center; cursor: pointer; transition: 0.3s; border: 1px solid #eee;
         }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
-        .product-card img { width: 50px; height: 50px; object-fit: contain; margin-bottom: 10px; }
-        .product-card h3 { font-size: 14px; margin-bottom: 5px; }
-        .product-card .price-hint { color: var(--orange); font-size: 12px; font-weight: 600; }
-
+        .product-card img { width: 80px; margin-bottom: 10px; }
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); display: none;
-            justify-content: center; align-items: flex-end; z-index: 1000;
+            background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: flex-end; z-index: 1000;
         }
         .modal-content {
             background: white; width: 100%; max-width: 500px;
             border-top-left-radius: 25px; border-top-right-radius: 25px;
-            padding: 30px 20px; animation: slideUp 0.3s ease-out;
-            max-height: 90vh; overflow-y: auto;
+            padding: 30px 20px; max-height: 85vh; overflow-y: auto;
         }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .modal-header { text-align: center; margin-bottom: 20px; }
-        .modal-header h2 { font-size: 20px; color: var(--main-dark); }
         .info-tag { font-size: 11px; background: #f0f2ff; color: var(--main); padding: 4px 8px; border-radius: 5px; margin: 3px; display: inline-block; }
-        .detail-box { background: #f9f9f9; padding: 15px; border-radius: 15px; margin-bottom: 20px; }
-        .detail-box h4 { font-size: 14px; margin-bottom: 10px; color: #555; border-left: 3px solid var(--main); padding-left: 10px; }
-        .detail-box p { font-size: 13px; color: #666; margin-bottom: 5px; line-height: 1.5; }
+        .detail-box { background: #f9f9f9; padding: 15px; border-radius: 15px; margin-bottom: 20px; text-align: left; }
         .price-option {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 15px; border: 2px solid #eee; border-radius: 12px;
-            margin-bottom: 10px; text-decoration: none; color: inherit; transition: 0.3s;
+            padding: 15px; border: 2px solid #eee; border-radius: 12px;
+            margin-bottom: 10px; text-decoration: none; color: inherit;
         }
         .price-option:hover { border-color: var(--orange); background: #fffcf5; }
         .opt-price { color: var(--orange); font-weight: 600; }
-        .close-btn { display: block; width: 100%; padding: 12px; background: #eee; border: none; border-radius: 12px; margin-top: 10px; cursor: pointer; font-weight: 500; }
+        .close-btn { width: 100%; padding: 12px; background: #eee; border: none; border-radius: 12px; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo-box">
-            <img src="https://cdn-icons-png.flaticon.com/512/869/869045.png" style="width: 60%;" alt="Logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" style="width: 70%;" alt="Logo">
         </div>
         <h1>Wanderer_shop</h1>
-        <p>ยินดีต้อนรับร้านละมุดรับสินค้าอะไรดีคะ</p>
+        <p>ยินดีต้อนรับร้านละมุดค่ะ</p>
     </header>
 
     <div class="tabs">
@@ -121,147 +89,85 @@
                 <h4 style="color: var(--main);">🛡️ การรับประกัน</h4>
                 <p>ดูแลตลอดการใช้งาน มีปัญหาเคลมได้ภายใน 24 ชม.</p>
             </div>
-            <div class="info-item" style="border:none;">
-                <p style="font-size: 12px; color: #999;">ขอบคุณที่ไว้วางใจใช้บริการ Wanderer_shop</p>
-            </div>
         </div>
 
-        <div class="product-grid" id="productGrid"></div>
+        <div class="product-grid" id="productGrid">
+            <div class="product-card" onclick="openModal()">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix">
+                <h3>Netflix 4K Premium</h3>
+                <p style="color: var(--orange);">คลิกเพื่อดูราคา (เริ่ม 10฿)</p>
+            </div>
+        </div>
     </div>
 
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
-            <div id="modalData"></div>
+            <div id="modalData">
+                <h2 style="text-align:center; margin-bottom:10px;">Netflix 4K (เมลร้าน)</h2>
+                <div style="text-align:center; margin-bottom:15px;">
+                    <span class="info-tag">จอส่วนตัว</span>
+                    <span class="info-tag">4K Ultra HD</span>
+                    <span class="info-tag">ประกันตลอดอายุการใช้งาน</span>
+                </div>
+                
+                <div class="detail-box">
+                    <p>📌 <b>เงื่อนไข:</b> ห้ามเปลี่ยนรหัส/เมลเด็ดขาด</p>
+                    <p>📌 <b>การเคลม:</b> แจ้งผ่านไลน์ได้ตลอด 24 ชม.</p>
+                </div>
+
+                <div id="priceList">
+                    </div>
+            </div>
             <button class="close-btn" onclick="closeModal()">ปิดหน้าต่าง</button>
         </div>
     </div>
 
     <script>
-        const products = {
-            'yt-premium': {
-                category: 'APP PREMIUM',
-                img: 'https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png',
-                title: 'YouTube Premium 30 วัน',
-                tags: ['เมลร้าน', 'เมลลูกค้า', 'ต่อเมล', 'เคลม', 'ไม่เคลม'],
-                features: {
-                    quality: 'ดูได้ตลอดไม่มีโฆษณาคั่น / ฟังเพลงตอนปิดจอ',
-                    device: 'ดูได้ 1 จอส่วนตัวในกลุ่มครอบครัว',
-                    warranty: 'ประกันตลอดการใช้งาน / เคลม-แก้ไขภายใน 24 ชม.',
-                    rules: 'ห้ามออกจากกลุ่ม / ห้ามเปลี่ยนประเทศในเมล'
-                },
-                options: [
-                    { name: 'เมลลูกค้า (ไม่เคลม)', price: '15', sold: '1.2k' },
-                    { name: 'เมลลูกค้า (เคลม)', price: '20', sold: '850' },
-                    { name: 'เมลร้าน (เคลม)', price: '30', sold: '300' }
-                ]
-            },
-            'netflix': {
-                category: 'APP PREMIUM',
-                img: 'https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg',
-                title: 'Netflix 4K เมลร้าน',
-                tags: ['จอส่วนตัว', 'จอเสริม', 'รับประกันตลอดการใช้งานตามกฎ'],
-                features: {
-                    quality: 'ชัดระดับ 4K จอส่วนตัว',
-                    device: 'จอส่วนตัวหารแอค 1คนต่อ 1จอค่ะ / แอคหาร 5 มีโอกาสชน',
-                    warranty: 'ดูแลเคลมตลอดการใช้งาน',
-                    rules: 'ห้ามเปลี่ยนรหัสผ่านและข้อมูลเมลโดยเด็ดขาด'
-                },
-                options: [
-                    { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 1 วัน (ไม่เคลมปิด)', price: '10', sold: '0' },
-                    { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 7 วัน (ไม่เคลมปิด)', price: '40', sold: '0' },
-                    { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 30 วัน (ไม่เคลมปิด)', price: '115', sold: '0' },
-                    { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 1 วัน (เคลมปิด)', price: '15', sold: '0' },
-                    { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 7 วัน (เคลมปิด)', price: '50', sold: '0' },
-                    { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 30 วัน (เคลมปิด)', price: '140', sold: '0' },
-                    { name: 'ทีวี/คอม 1 วัน (ไม่เคลมปิด)', price: '25', sold: '0' },
-                    { name: 'ทีวี/คอม 7 วัน (ไม่เคลมปิด)', price: '55', sold: '0' },
-                    { name: 'ทีวี/คอม 30 วัน (ไม่เคลมปิด)', price: '180', sold: '0' },
-                    { name: 'ทีวี/คอม 1 วัน (เคลมปิด)', price: '30', sold: '0' },
-                    { name: 'ทีวี/คอม 7 วัน (เคลมปิด)', price: '65', sold: '0' },
-                    { name: 'ทีวี/คอม 30 วัน (เคลมปิด)', price: '200', sold: '0' }
-                ]
-            },
-            'disney': {
-                category: 'APP PREMIUM',
-                img: 'https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg',
-                title: 'Disney+ Hotstar',
-                tags: ['ยกแอป', 'หาร 4-6', 'เบอร์ร้าน', 'พร้อมส่ง'],
-                features: {
-                    quality: 'Full HD / 4K (ตามอุปกรณ์)',
-                    device: 'ดูได้ 1 จอ (หาร 4 ไม่ชน / หาร 6 อาจชน)',
-                    warranty: 'ดูแลตลอดการใช้งาน | พร้อมส่ง 11:00-00:00',
-                    rules: 'ห้ามแชร์จอให้ผู้อื่นเกินจำนวนที่ซื้อ'
-                },
-                options: [
-                    { name: 'หาร 6 (อาจชน) 30 วัน', price: '90', sold: '1.5k' },
-                    { name: 'หาร 4 (ไม่ชน) 30 วัน', price: '125', sold: '900' },
-                    { name: 'ยกแอป (เบอร์ร้าน) 30 วัน', price: '360', sold: '200' }
-                ]
-            }
-        };
+        const netflixOptions = [
+            { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 1 วัน (ไม่เคลมปิด)', price: '10' },
+            { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 7 วัน (ไม่เคลมปิด)', price: '40' },
+            { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 30 วัน (ไม่เคลมปิด)', price: '115' },
+            { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 1 วัน (เคลมปิด)', price: '15' },
+            { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 7 วัน (เคลมปิด)', price: '50' },
+            { name: 'มือถือ/ไอแพด/โน๊ตบุ๊ค 30 วัน (เคลมปิด)', price: '140' },
+            { name: 'ทีวี/คอม 1 วัน (ไม่เคลมปิด)', price: '25' },
+            { name: 'ทีวี/คอม 7 วัน (ไม่เคลมปิด)', price: '55' },
+            { name: 'ทีวี/คอม 30 วัน (ไม่เคลมปิด)', price: '180' },
+            { name: 'ทีวี/คอม 1 วัน (เคลมปิด)', price: '30' },
+            { name: 'ทีวี/คอม 7 วัน (เคลมปิด)', price: '65' },
+            { name: 'ทีวี/คอม 30 วัน (เคลมปิด)', price: '200' }
+        ];
 
         function switchPage(page, btn) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(t => t.classList.remove('active'));
             btn.classList.add('active');
-            
-            const infoDiv = document.getElementById('shopInfo');
-            const gridDiv = document.getElementById('productGrid');
+
+            const info = document.getElementById('shopInfo');
+            const shop = document.getElementById('productGrid');
 
             if (page === 'info') {
-                infoDiv.style.display = 'block';
-                gridDiv.style.display = 'none';
+                info.style.display = 'block';
+                shop.style.display = 'none';
             } else {
-                infoDiv.style.display = 'none';
-                gridDiv.style.display = 'grid';
-                renderProducts();
+                info.style.display = 'none';
+                shop.style.display = 'grid';
             }
         }
 
-        function renderProducts() {
-            const grid = document.getElementById('productGrid');
-            grid.innerHTML = '';
-            for (let id in products) {
-                const p = products[id];
-                grid.innerHTML += `
-                    <div class="product-card" onclick="openModal('${id}')">
-                        <img src="${p.img}" alt="${p.title}">
-                        <h3>${p.title}</h3>
-                        <p class="price-hint">เริ่ม ${p.options[0].price}฿</p>
-                    </div>
+        function openModal() {
+            const list = document.getElementById('priceList');
+            list.innerHTML = '';
+            
+            netflixOptions.forEach(opt => {
+                const link = `https://line.me/R/oaMessage/@997pfoig/?สนใจซื้อ: Netflix - ${opt.name} ราคา ${opt.price} บาท`;
+                list.innerHTML += `
+                    <a href="${link}" class="price-option">
+                        <span>${opt.name}</span>
+                        <span class="opt-price">${opt.price}฿</span>
+                    </a>
                 `;
-            }
-        }
-
-        function openModal(id) {
-            const data = products[id];
-            let tagsHtml = data.tags.map(tag => `<span class="info-tag">${tag}</span>`).join('');
-            let optionsHtml = data.options.map(opt => `
-                <a href="https://line.me/R/oaMessage/@997pfoig/?สนใจ: ${data.title} - ${opt.name} ราคา ${opt.price} บาท" class="price-option">
-                    <div>
-                        <div class="opt-title">${opt.name}</div>
-                        <div class="opt-sold">ซื้อไปแล้ว ${opt.sold} ชิ้น</div>
-                    </div>
-                    <div class="opt-price">${opt.price}฿</div>
-                </a>
-            `).join('');
-
-            document.getElementById('modalData').innerHTML = `
-                <div class="modal-header">
-                    <h2>${data.title}</h2>
-                    <div>${tagsHtml}</div>
-                </div>
-                <div class="detail-box">
-                    <h4>✨ รายละเอียดสินค้า</h4>
-                    <p><b>ความคมชัด:</b> ${data.features.quality}</p>
-                    <p><b>จำนวนอุปกรณ์:</b> ${data.features.device}</p>
-                    <p><b>การเคลม/ประกัน:</b> ${data.features.warranty}</p>
-                    <p><b>ข้อห้าม:</b> ${data.features.rules}</p>
-                </div>
-                <div class="detail-box" style="background:transparent; padding:0;">
-                    <h4>💰 เลือกแพ็กเกจที่ต้องการ</h4>
-                    ${optionsHtml}
-                </div>
-            `;
+            });
             document.getElementById('modalOverlay').style.display = 'flex';
         }
 
@@ -270,12 +176,7 @@
         }
 
         window.onclick = function(event) {
-            const modal = document.getElementById('modalOverlay');
-            if (event.target == modal) closeModal();
+            if (event.target == document.getElementById('modalOverlay')) closeModal();
         }
-
-        // เริ่มต้นด้วยการ Render สินค้าไว้รอ
-        renderProducts();
     </script>
 </body>
-</html>
