@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>[Wanderer_shop] - Premium App Store</title>
+<title>Wanderer_shop - Official Store</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
-/* ปรับโทนสีใหม่ ม่วง-ฟ้า ตามโจทย์ */
---bg:#F3F0FF;
---main:#A855F7; /* ม่วง */
---accent:#06B6D4; /* ฟ้า */
---dark:#4C1D95;
+/* ปรับโทนสีใหม่ตามโจทย์: ม่วง-ฟ้า */
+--bg:#F0F4FF;
+--main:#8E94F2; /* ม่วงฟ้า */
+--dark:#5E64D1;
+--secondary:#B9D9EB; /* ฟ้าอ่อน */
 --white:#FFFFFF;
---glow:rgba(168, 85, 247, 0.3);
---gradient: linear-gradient(135deg, #A855F7 0%, #06B6D4 100%);
+--glow:rgba(142, 148, 242, 0.3);
+--gradient: linear-gradient(135deg, #a5c0f3 0%, #d1a1f1 100%); /* ม่วง ฟ้า */
 }
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Mitr',sans-serif;}
@@ -30,24 +30,14 @@ justify-content:center;
 .container{
 max-width:500px;
 width:100%;
-padding:0px 0px 40px; /* ลด Padding บนเพื่อโชว์ Header เต็มใบ */
+padding:20px 15px 40px;
 }
 
-/* 4. เปลี่ยนสีพื้นหลัง Header เป็นโทน ม่วง ฟ้า */
-header.shop-header {
-    background: var(--gradient);
-    padding: 50px 20px;
-    text-align: center;
-    color: white;
-    border-radius: 0 0 40px 40px;
-    margin-bottom: 30px;
-}
-
-/* 3. ปรับชื่อร้านตัวหนาและใหญ่ขึ้น */
-header.shop-header h1 {
-    font-size: 32px;
-    font-weight: 600;
-    margin-bottom: 5px;
+/* ปรับ Header ตามโจทย์ */
+.header-section {
+    background: var(--gradient) !important;
+    border: none !important;
+    color: white !important;
 }
 
 .section{
@@ -55,94 +45,149 @@ background:var(--white);
 border-radius:20px;
 padding:25px 20px;
 margin-bottom:20px;
-box-shadow:0 8px 25px rgba(0,0,0,0.08); /* 22. เพิ่มเงาเล็กน้อย */
-border:1.5px solid #eee;
-margin-left: 15px;
-margin-right: 15px;
+box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+border: 1px solid rgba(142, 148, 242, 0.2);
 }
+
+.section-shadow {
+    box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+}
+
+h1,h2,h3{color:var(--dark);}
+.center{text-align:center;}
+
+/* 3. ปรับชื่อร้านใหญ่และหนาขึ้น */
+.shop-name {
+    font-size: 32px;
+    font-weight: 600;
+    margin: 0;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo{
+width:130px;height:130px;
+border-radius:25px; /* ปรับเป็นทรงเหลี่ยมมน */
+overflow:hidden;
+margin:0 auto 20px;
+background: #eee; /* Placeholder */
+border: 4px solid #fff;
+}
+
+.logo img{width:100%;height:100%;object-fit:cover;}
 
 .placeholder-img {
-    background: #e5e7eb;
-    border-radius: 15px;
-    width: 100%;
-    height: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #9ca3af;
-    margin-bottom: 15px;
-    border: 2px dashed #ccc;
-}
-
-/* 8. ทำให้ปุ่มติดต่อเด่นขึ้น */
-.btn-contact {
-    background: var(--gradient);
-    color: white;
-    padding: 18px;
-    font-size: 18px;
-    transform: scale(1.05);
-    box-shadow: 0 10px 20px var(--glow);
-    border-radius: 50px;
-    display: block;
-    text-align: center;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.step {
-    display: flex;
-    align-items: flex-start;
-    gap: 15px;
-    margin-bottom: 20px; /* 18. เรียงแนวตั้งชัดเจน */
-}
-
-/* 17. ทำให้แต่ละ Step มีเลขวงกลมเด่นขึ้น */
-.step-num {
-    background: var(--gradient);
-    color: #fff;
-    min-width: 30px; height: 30px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-}
-
-.price-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 12px 15px;
-    background: #f9fafb;
+    background: #eef2f7;
+    border: 2px dashed #cbd5e0;
     border-radius: 12px;
-    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a0aec0;
+    font-size: 12px;
+    margin: 10px 0;
 }
 
-/* 25. ทำให้แพ็กเกจที่ 2 ดูเด่นกว่า */
+.btn{
+display:block;
+text-align:center;
+padding:14px;
+border-radius:15px;
+text-decoration:none;
+margin-top:15px;
+font-weight:500;
+transition: all 0.3s;
+}
+
+/* 8. ปรับปุ่มติดต่อให้เด่นขึ้น */
+.btn-main{
+background: #5E64D1;
+color:#fff;
+transform: scale(1.05);
+box-shadow: 0 4px 15px rgba(94, 100, 209, 0.4);
+border: 2px solid #fff;
+}
+
+.btn-outline{
+background:rgba(255,255,255,0.2);
+border:1px solid #fff;
+color:#fff;
+}
+
+/* 17. วงกลม Step เด่นขึ้น */
+.step{
+display:flex;
+align-items:flex-start;
+gap:15px;
+margin-bottom:20px;
+}
+
+.step-num{
+background:var(--main);
+color:#fff;
+min-width:32px; height:32px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight: bold;
+box-shadow: 0 3px 8px var(--glow);
+}
+
+.price-row{
+display:flex;
+justify-content:space-between;
+align-items: center;
+margin-bottom:10px;
+background:#f9faff;
+padding:12px 15px;
+border-radius:12px;
+border-left: 4px solid var(--main);
+}
+
+/* 25. แพ็กเกจที่ 2 เด่นกว่า */
 .price-row.featured {
-    border: 2px solid var(--main);
-    background: #FAF5FF;
-    transform: scale(1.02);
+    background: #fff5ff;
+    border-left: 4px solid #d1a1f1;
+    transform: scale(1.03);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.price-tag{
+background:var(--dark);
+color:#fff;
+padding:4px 12px;
+border-radius:10px;
+font-size:14px;
 }
 
 .review-box {
-    background: #f8fafc;
+    background: #fff;
     border-radius: 15px;
     padding: 15px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #eee;
     font-size: 14px;
-    border-left: 4px solid var(--accent);
 }
 
-.footer { text-align: center; padding: 20px; }
-.socials a {
-    display: inline-block;
-    padding: 10px 20px;
-    background: white;
-    border-radius: 20px;
-    text-decoration: none;
-    color: var(--dark);
-    margin: 5px;
-    border: 1px solid #ddd;
+.footer{text-align:center;margin-top:30px;}
+
+.socials{
+display:flex;
+gap:8px;
+justify-content:center;
+margin-top:15px;
+}
+
+.socials a{
+flex:1;
+padding:10px;
+border-radius:12px;
+background:#fff;
+text-decoration:none;
+color:var(--dark);
+font-size:13px;
+border:1px solid var(--secondary);
 }
 </style>
 </head>
@@ -150,97 +195,76 @@ margin-right: 15px;
 <body>
 <div class="container">
 
-<header class="shop-header">
-    <h1>[Wanderer_shop]</h1>
-    <p>[ยินดีต้อนรับร้านละมุดรับสินค้าอะไรดีคะ]</p>
-</header>
-
-<div class="section">
-    <div style="display: flex; gap: 15px; align-items: center;">
-        <div style="flex: 1;">
-            <h2 style="font-size: 20px;">[ร้าน Wanderer ยินดีให้บริการ]</h2>
-            <p style="font-size: 14px; margin: 10px 0;">[รับจัดหาแอปพรีเมียมราคาประหยัด เติมไว ปลอดภัย 100%]</p>
-        </div>
-        <div style="width: 100px; height: 100px; background: #eee; border-radius: 10px; border: 2px dashed #ccc; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #aaa;">IMAGE</div>
+<div class="section center header-section">
+    <div class="logo">
+        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#666;">[ใส่โลโก้ร้าน]</div>
     </div>
+    <h1 class="shop-name">[Wanderer_shop]</h1>
+    <p style="margin:10px 0 20px;">[ยินดีต้อนรับร้านละมุดรับสินค้าอะไรดีคะ]</p>
     
-    <a href="https://line.me/R/oaMessage/@997pfoig" class="btn-contact" style="margin-top: 20px;">[ทักแชทสั่งซื้อที่นี่]</a>
-    <p style="text-align: center; font-size: 12px; margin-top: 10px; color: var(--main);">[ตอบไวภายใน 5 นาที!]</p>
+    <hr style="opacity:0.2; margin-bottom:20px;">
+    
+    <h2 style="color:#fff; font-size:20px;">[บริการแอปพรีเมียม & เติมเกม]</h2>
+    <p style="font-size:14px; opacity:0.9;">[สะดวก รวดเร็ว มั่นใจ ได้ของชัวร์ 100%]</p>
+    
+    <a href="https://line.me/R/oaMessage/@997pfoig" class="btn btn-main">[จิ้มตรงนี้เพื่อสั่งซื้อสินค้า]</a>
+    <p style="font-size:11px; margin-top:8px;">[ตอบไวมาก ทักได้ตลอด 24 ชม. ค่ะ]</p>
 </div>
 
-<div class="section">
-    <h3>เกี่ยวกับเรา</h3>
-    <div class="placeholder-img">ABOUT IMAGE</div>
-    <p style="line-height: 1.8; margin-bottom: 15px;">
+<div class="section section-shadow">
+    <h3>[รู้จักกับเรา]</h3>
+    <div class="placeholder-img" style="height:100px;">[รูปภาพประกอบร้าน]</div>
+    <p style="line-height:1.8; margin:15px 0;">
         [มีแอพพรี /เติมเกม /เติมเหรียญนิยาย /ส่งของขวัญไลน์]
     </p>
-    <ul style="list-style: none; font-size: 14px; color: #555;">
-        <li style="margin-bottom: 8px;">✨ ราคาถูกกว่าสมัครเองแน่นอน</li>
-        <li style="margin-bottom: 8px;">🚀 จัดส่งสินค้ารวดเร็วทันใจ</li>
-        <li style="margin-bottom: 8px;">🛡️ มีประกันดูแลตลอดการใช้งาน</li>
+    <ul style="font-size:14px; color:#555; padding-left:20px; line-height:2;">
+        <li>✅ ราคาถูกกว่าสมัครเองแน่นอน</li>
+        <li>✅ ประกันสินค้าตลอดการใช้งาน</li>
+        <li>✅ ระบบเติมไว ไม่ต้องรอนาน</li>
     </ul>
 </div>
 
 <div class="section">
-    <h3 style="margin-bottom: 20px;">ขั้นตอนการสั่งซื้อ</h3>
+    <h3 style="margin-bottom:20px;">📝 ขั้นตอนการสั่งซื้อ</h3>
     <div class="step"><div class="step-num">1</div><div>[เลือกสินค้าที่ต้องการบนหน้าเว็บ]</div></div>
-    <div class="step"><div class="step-num">2</div><div>[แคปภาพหรือแจ้งชื่อสินค้าทางไลน์]</div></div>
-    <div class="step"><div class="step-num">3</div><div>[ชำระเงินผ่านวอลเล็ตหรือธนาคาร]</div></div>
-    <div class="step"><div class="step-num">4</div><div>[ส่งสลิปยืนยันการโอนเงิน]</div></div>
-    <div class="step"><div class="step-num">5</div><div>[รอรับรหัสหรือดึงเข้าตระกูลได้เลย]</div></div>
+    <div class="step"><div class="step-num">2</div><div>[แคปภาพหรือจดชื่อสินค้าที่สนใจ]</div></div>
+    <div class="step"><div class="step-num">3</div><div>[กดปุ่มติดต่อเพื่อส่งข้อมูลให้แอดมิน]</div></div>
+    <div class="step"><div class="step-num">4</div><div>[ชำระเงินและส่งสลิปยืนยัน]</div></div>
+    <div class="step"><div class="step-num">5</div><div>[รอรับรหัสหรือรอแอดมินดำเนินการทันที]</div></div>
 </div>
 
 <div class="section">
-    <h3>หมวดหมู่บริการ</h3>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
-        <div style="text-align: center; padding: 10px; border: 1px solid #f0f0f0; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
-            <div style="height: 60px; background: #eee; border-radius: 10px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; font-size: 10px;">IMG</div>
-            <span style="font-size: 13px;">[แอปดูหนัง]</span>
+    <h3 style="margin-bottom:15px;">📂 หมวดหมู่บริการ</h3>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+        <div class="center" style="padding:15px; border-radius:15px; background:#f0f4ff; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+            <div class="placeholder-img" style="height:60px;">[รูปแอป]</div>
+            <span style="font-size:14px;">[แอปพรีเมียม]</span>
         </div>
-        <div style="text-align: center; padding: 10px; border: 1px solid #f0f0f0; border-radius: 15px;">
-            <div style="height: 60px; background: #eee; border-radius: 10px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; font-size: 10px;">IMG</div>
-            <span style="font-size: 13px;">[แอปฟังเพลง]</span>
+        <div class="center" style="padding:15px; border-radius:15px; background:#f0f4ff; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+            <div class="placeholder-img" style="height:60px;">[รูปเกม]</div>
+            <span style="font-size:14px;">[เติมเกม/เหรียญ]</span>
         </div>
-        <div style="text-align: center; padding: 10px; border: 1px solid #f0f0f0; border-radius: 15px;">
-            <div style="height: 60px; background: #eee; border-radius: 10px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; font-size: 10px;">IMG</div>
-            <span style="font-size: 13px;">[เติมเกม/นิยาย]</span>
+        <div class="center" style="padding:15px; border-radius:15px; background:#f0f4ff; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+            <div class="placeholder-img" style="height:60px;">[รูปเหรียญ]</div>
+            <span style="font-size:14px;">[เหรียญนิยาย]</span>
         </div>
-        <div style="text-align: center; padding: 10px; border: 1px solid #f0f0f0; border-radius: 15px;">
-            <div style="height: 60px; background: #eee; border-radius: 10px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; font-size: 10px;">IMG</div>
-            <span style="font-size: 13px;">[ของขวัญไลน์]</span>
+        <div class="center" style="padding:15px; border-radius:15px; background:#f0f4ff; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+            <div class="placeholder-img" style="height:60px;">[รูปของขวัญ]</div>
+            <span style="font-size:14px;">[ของขวัญไลน์]</span>
         </div>
     </div>
 </div>
 
 <div class="section">
-    <h3>ตารางราคาแนะนำ</h3>
-    <div style="margin-top: 15px;">
-        <div class="price-row"><span>YouTube Premium (1 เดือน)</span><strong style="color:var(--main)">39฿</strong></div>
-        <div class="price-row featured"><span>Netflix 1 วัน (ไม่เคลม)</span><strong style="color:var(--main)">15฿</strong></div>
-        <div class="price-row"><span>Netflix 1 วัน (ทีวี/เคลม)</span><strong style="color:var(--main)">25฿</strong></div>
-        <div class="price-row"><span>Spotify Premium (1 เดือน)</span><strong style="color:var(--main)">29฿</strong></div>
-    </div>
-    <p style="font-size: 11px; color: #999; text-align: center; margin-top: 10px;">* ราคาสามารถเปลี่ยนแปลงได้ตามโปรโมชั่น</p>
+    <h3 style="margin-bottom:15px;">💰 ตารางราคาอัปเดต</h3>
+    <div class="price-row"><span>Netflix 1 วัน (ไม่เคลม)</span><span class="price-tag">15฿</span></div>
+    <div class="price-row featured"><span>Netflix 1 วัน (TV เคลมปิด)</span><span class="price-tag">29฿</span></div>
+    <div class="price-row"><span>YouTube 30 วัน (เมลลูกค้า)</span><span class="price-tag">35฿</span></div>
+    <div class="price-row"><span>YouTube 30 วัน (เมลร้าน)</span><span class="price-tag">39฿</span></div>
+    
+    <p style="font-size:11px; text-align:center; color:#999; margin-top:10px;">*ราคาสามารถเปลี่ยนแปลงได้ตามโปรโมชั่น*</p>
 </div>
 
-<div class="section">
-    <h3>รีวิวจากลูกค้า</h3>
-    <div class="review-box">"ได้รับเมลไวมากครับ พ่อค้าพูดจาดี แนะนำเลย" - K. Earth</div>
-    <div class="review-box">"ใช้งานได้จริง ไม่มีปัญหา ดูยาวๆ เลยค่ะ" - K. Som</div>
-    <div class="review-box">"เติมเหรียญนิยายราคาถูกกว่าแอปเยอะมาก คุ้ม!" - K. Mew</div>
-    <p style="font-size: 13px; color: var(--accent); text-align: center; font-weight: 500;">🛡️ รับประกันสินค้าตลอดอายุการใช้งาน มีปัญหาเปลี่ยนใหม่ทันที</p>
-</div>
-
-<div class="footer">
-    <div class="socials">
-        <a href="https://line.me/R/oaMessage/@997pfoig">Line: @997pfoig</a>
-        <a href="#">Facebook: Wanderer Shop</a>
-    </div>
-    <p class="small">
-        © 2026 [Wanderer_shop] | [บริการแอปพรีเมียมและเติมเกมครบวงจร]
-    </p>
-</div>
-
-</div>
-</body>
-</html>
+<div class="section" style="background: #fdfdff;">
+    <h3>⭐️ รีวิวจากลูกค้า</h3>
+    <div class="review-box">
