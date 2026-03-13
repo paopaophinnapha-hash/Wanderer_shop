@@ -11,109 +11,132 @@
             --blue: #A5C0F3;
             --bg: #F8F9FF;
             --white: #FFFFFF;
-            --shadow: rgba(0, 0, 0, 0.1);
+            --orange: #FF8C00;
+            --shadow: rgba(0, 0, 0, 0.08);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Kanit', sans-serif; }
-        body { background-color: var(--bg); color: #333; }
+        body { background-color: var(--bg); color: #333; line-height: 1.6; }
 
         /* HEADER */
         header {
             background: linear-gradient(135deg, var(--purple) 0%, var(--blue) 100%);
-            padding: 60px 20px;
+            padding: 50px 20px 70px;
             text-align: center;
             color: white;
-            border-bottom-left-radius: 50px;
-            border-bottom-right-radius: 50px;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
         }
-        header h1 { font-size: 32px; font-weight: 600; margin-bottom: 10px; }
-        header p { font-size: 16px; opacity: 0.9; }
+        header h1 { font-size: 36px; font-weight: 600; margin-bottom: 8px; text-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        header p { font-size: 15px; opacity: 0.95; font-weight: 300; }
 
         /* TABS */
         .tabs {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin: -25px 0 30px;
+            gap: 12px;
+            margin: -30px 0 25px;
+            padding: 0 15px;
         }
         .tab-btn {
             background: var(--white);
             border: none;
-            padding: 12px 25px;
+            padding: 12px 30px;
             border-radius: 15px;
             cursor: pointer;
             font-weight: 500;
             box-shadow: 0 4px 15px var(--shadow);
-            transition: 0.3s;
+            transition: 0.3s ease;
+            color: #666;
         }
         .tab-btn.active { background: var(--purple); color: white; }
 
-        .container { max-width: 600px; margin: 0 auto; padding: 0 20px; }
+        .container { max-width: 550px; margin: 0 auto 50px; padding: 0 18px; }
 
-        /* PAGE 1: ข้อมูลร้าน (SHOWCASE) */
+        /* PAGE 1: ข้อมูลร้าน */
         #infoPage { display: block; }
         .info-card {
             background: var(--white);
             padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 5px 15px var(--shadow);
+            border-radius: 25px;
+            box-shadow: 0 8px 25px var(--shadow);
             text-align: center;
-            margin-bottom: 20px;
         }
-        .contact-box { margin-top: 20px; text-align: left; }
-        .contact-item { padding: 10px; border-bottom: 1px solid #eee; }
+        .contact-box { margin-top: 20px; text-align: left; background: #F9FAFF; border-radius: 15px; padding: 15px; }
+        .contact-item { padding: 12px; display: flex; justify-content: space-between; border-bottom: 1px solid #eee; }
+        .contact-item:last-child { border-bottom: none; }
+        .contact-item b { color: var(--purple); }
 
         /* PAGE 2: สินค้า */
         #shopPage { display: none; }
-        .category-label { margin: 20px 0 10px; font-weight: 600; color: var(--purple); }
+        .category-label { margin: 10px 0 15px; font-size: 18px; font-weight: 600; color: #444; display: flex; align-items: center; gap: 8px; }
+        .category-label::before { content: ''; width: 5px; height: 18px; background: var(--purple); border-radius: 10px; }
+        
         .category-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         .cat-box {
             background: var(--white);
-            padding: 20px;
-            border-radius: 15px;
+            padding: 25px 15px;
+            border-radius: 20px;
             text-align: center;
-            box-shadow: 0 4px 10px var(--shadow);
+            box-shadow: 0 5px 15px var(--shadow);
             cursor: pointer;
+            transition: 0.3s;
+            border: 1px solid transparent;
         }
+        .cat-box:hover { transform: translateY(-5px); border-color: var(--purple); }
         .placeholder-img {
-            width: 50px; height: 50px; background: #eee;
-            margin: 0 auto 10px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999;
+            width: 60px; height: 60px; background: #f0f2ff;
+            margin: 0 auto 12px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--purple);
+            border: 2px dashed var(--blue);
         }
 
-        /* MODAL */
+        /* MODAL (Bottom Sheet Style) */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); display: none;
+            background: rgba(0,0,0,0.5); display: none;
             justify-content: center; align-items: flex-end; z-index: 1000;
         }
         .modal-content {
             background: var(--white); width: 100%; max-width: 500px;
-            border-top-left-radius: 30px; border-top-right-radius: 30px;
-            padding: 30px 20px; max-height: 90vh; overflow-y: auto;
+            border-top-left-radius: 35px; border-top-right-radius: 35px;
+            padding: 35px 25px; max-height: 85vh; overflow-y: auto;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .detail-box { background: #F9FAFF; padding: 20px; border-radius: 20px; margin: 15px 0; }
-        .detail-box h4 { border-left: 4px solid var(--purple); padding-left: 10px; margin-bottom: 10px; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        .m-header { text-align: center; margin-bottom: 20px; }
+        .m-header h2 { font-size: 22px; margin-bottom: 5px; }
+        .m-price-range { color: var(--orange); font-size: 18px; font-weight: 600; }
         
+        .section-title { font-size: 15px; font-weight: 600; color: var(--purple); margin: 15px 0 10px; display: flex; align-items: center; gap: 8px; }
+        .detail-box { background: #F8F9FF; padding: 18px; border-radius: 18px; margin-bottom: 20px; }
+        .detail-box p { font-size: 14px; margin-bottom: 6px; display: flex; gap: 8px; }
+        .detail-box p b { min-width: 100px; color: #555; }
+
         .price-option {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 15px; border: 2px solid #F0F0F0; border-radius: 15px;
-            margin-bottom: 10px; text-decoration: none; color: inherit;
+            padding: 18px; border: 2px solid #F0F2F5; border-radius: 18px;
+            margin-bottom: 12px; text-decoration: none; color: inherit; transition: 0.2s;
         }
-        .price-option:hover { border-color: var(--purple); }
-        .close-btn { width: 100%; padding: 15px; border: none; background: #eee; border-radius: 15px; margin-top: 10px; cursor: pointer; }
+        .price-option:hover { border-color: var(--purple); background: #fcfcff; }
+        .opt-info b { font-size: 16px; color: #333; }
+        .opt-info small { display: block; color: #999; font-size: 12px; margin-top: 2px; }
+        .opt-price { color: var(--purple); font-weight: 600; font-size: 18px; }
+
+        .close-btn { width: 100%; padding: 15px; border: none; background: #F0F0F0; border-radius: 18px; margin-top: 15px; cursor: pointer; font-weight: 500; color: #666; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>[Wanderer_shop]</h1>
-        <p>[ยินดีต้อนรับร้านละมุดรับสินค้าอะไรดีคะ]</p>
+        <h1>Wanderer_shop</h1>
+        <p>ยินดีต้อนรับร้านละมุดรับสินค้าอะไรดีคะ</p>
     </header>
 
     <div class="tabs">
@@ -124,13 +147,19 @@
     <div class="container">
         <div id="infoPage">
             <div class="info-card">
-                <h3>ยินดีให้บริการค่ะ ✨</h3>
+                <h3 style="color: var(--purple);">Showcase & Contact</h3>
+                <p style="font-size: 14px; color: #777; margin-top: 5px;">ช่องทางการติดต่อและรายละเอียดร้านค้า</p>
+                
                 <div class="contact-box">
-                    <div class="contact-item"><b>Line:</b> [ระบุไอดีไลน์]</div>
-                    <div class="contact-item"><b>Facebook:</b> [ระบุชื่อเฟซบุ๊ก]</div>
-                    <div class="contact-item"><b>เวลาทำการ:</b> 11:00 - 00:00 น.</div>
+                    <div class="contact-item"><b>Line</b> <span>@997pfoig</span></div>
+                    <div class="contact-item"><b>Facebook</b> <span>Wanderer Shop</span></div>
+                    <div class="contact-item"><b>เวลาทำการ</b> <span>11:00 - 00:00 น.</span></div>
+                    <div class="contact-item"><b>การรับประกัน</b> <span>เคลมไวใน 24 ชม.</span></div>
                 </div>
-                <p style="margin-top: 15px; font-size: 13px; color: #888;">เลื่อนดูรีวิวและความเชื่อมั่นได้ที่นี่</p>
+                
+                <div style="margin-top: 20px; padding: 15px; border: 2px dashed #eee; border-radius: 15px;">
+                    <p style="font-size: 13px; color: #999;">พื้นที่แสดงรีวิวลูกค้า (Coming Soon)</p>
+                </div>
             </div>
         </div>
 
@@ -138,15 +167,15 @@
             <div class="category-label">หมวดหมู่สินค้า / บริการ</div>
             <div class="category-grid">
                 <div class="cat-box" onclick="openProduct()">
-                    <div class="placeholder-img">IMG</div>
+                    <div class="placeholder-img">APP</div>
                     <b>แอพพรี</b>
                 </div>
                 <div class="cat-box">
-                    <div class="placeholder-img">IMG</div>
+                    <div class="placeholder-img">NEW</div>
                     <b>หมวดหมู่ใหม่ 1</b>
                 </div>
                 <div class="cat-box">
-                    <div class="placeholder-img">IMG</div>
+                    <div class="placeholder-img">NEW</div>
                     <b>หมวดหมู่ใหม่ 2</b>
                 </div>
             </div>
@@ -155,36 +184,40 @@
 
     <div class="modal-overlay" id="modal">
         <div class="modal-content">
-            <h2 id="m-title">YouTube Premium 30 วัน</h2>
-            <p style="color: var(--purple); font-weight: 600;">ราคา: 15฿ - 30฿</p>
+            <div class="m-header">
+                <h2>YouTube Premium 30 วัน</h2>
+                <div class="m-price-range">15฿ - 30฿</div>
+            </div>
             
+            <div class="section-title">📦 ข้อมูลสินค้าพื้นฐาน</div>
             <div class="detail-box">
-                <h4>ประเภทสินค้า</h4>
-                <p>เมลร้าน / เมลลูกค้า / ต่อเมล / ไม่ต่อ / เคลม / ไม่เคลม</p>
+                <p><b>ประเภทสินค้า:</b> เมลร้าน / เมลลูกค้า / ต่อเมล / เคลม / ไม่เคลม</p>
             </div>
 
+            <div class="section-title">✨ รายละเอียด/เงื่อนไข (Key Features)</div>
             <div class="detail-box">
-                <h4>รายละเอียด/เงื่อนไข</h4>
-                <p><b>ความคมชัด:</b> ดูได้ตลอดไม่มีโฆษณาคั่น</p>
-                <p><b>จำนวนอุปกรณ์:</b> ดูได้ 1 จอส่วนตัว / ล็อกโปรไฟล์ได้</p>
-                <p><b>การเคลม/ประกัน:</b> ประกันตลอดอายุการใช้งาน / เคลม-แก้ไขภายใน 24 ชม.</p>
-                <p><b>ข้อห้าม:</b> ห้ามเปลี่ยนรหัส / ห้ามแชร์คนอื่น / ห้ามเปลี่ยนโปรไฟล์</p>
+                <p><b>ความคมชัด:</b> ดูได้ตลอดไม่มีโฆษณาคั่น / ฟังเพลงปิดจอ</p>
+                <p><b>จำนวนอุปกรณ์:</b> ดูได้ 1 จอส่วนตัวในกลุ่มครอบครัว</p>
+                <p><b>การเคลม/ประกัน:</b> ประกันตลอดอายุการใช้งาน / เคลมภายใน 24 ชม.</p>
+                <p><b>ข้อห้าม:</b> ห้ามออกจากกลุ่ม / ห้ามเปลี่ยนประเทศเมล</p>
             </div>
 
-            <h4>ตัวเลือกราคา</h4>
-            <a href="#" class="price-option">
-                <div>
-                    <b>30 วัน</b><br>
-                    <small style="color: #999;">ซื้อไปแล้ว 1.2k ชิ้น</small>
+            <div class="section-title">💰 ตัวเลือกราคา (Price Options)</div>
+            
+            <a href="https://line.me/R/oaMessage/@997pfoig/?สนใจ YouTube 30 วัน (20.-)" class="price-option">
+                <div class="opt-info">
+                    <b>30 วัน - ปกติ</b>
+                    <small>ซื้อไปแล้ว 1.2k ชิ้น</small>
                 </div>
-                <b style="color: var(--purple);">20 บาท</b>
+                <div class="opt-price">20 บาท</div>
             </a>
-            <a href="#" class="price-option">
-                <div>
-                    <b>30 วัน (พิเศษ)</b><br>
-                    <small style="color: #999;">ซื้อไปแล้ว 850 ชิ้น</small>
+
+            <a href="https://line.me/R/oaMessage/@997pfoig/?สนใจ YouTube 30 วัน (30.-)" class="price-option">
+                <div class="opt-info">
+                    <b>30 วัน - พรีเมียมเมลร้าน</b>
+                    <small>ซื้อไปแล้ว 850 ชิ้น</small>
                 </div>
-                <b style="color: var(--purple);">30 บาท</b>
+                <div class="opt-price) ">30 บาท</div>
             </a>
 
             <button class="close-btn" onclick="closeModal()">ปิดหน้าต่าง</button>
@@ -193,11 +226,9 @@
 
     <script>
         function switchTab(type, btn) {
-            // สลับปุ่ม
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            // สลับหน้า
             if(type === 'info') {
                 document.getElementById('infoPage').style.display = 'block';
                 document.getElementById('shopPage').style.display = 'none';
@@ -209,13 +240,14 @@
 
         function openProduct() {
             document.getElementById('modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // กันเลื่อนหน้าหลัง
         }
 
         function closeModal() {
             document.getElementById('modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
 
-        // ปิด Modal เมื่อคลิกพื้นหลัง
         window.onclick = function(event) {
             if (event.target == document.getElementById('modal')) {
                 closeModal();
