@@ -9,8 +9,8 @@
 :root {
   --primary: #a29bfe; /* ม่วงพาสเทล */
   --secondary: #81ecec; /* ฟ้าพาสเทล */
-  --bg-main: #ffffff; /* พื้นหลังขาว */
-  --bg-card: #f9f9ff; /* การ์ดพาสเทลเทาอ่อน */
+  --bg-main: #f4f6f9; /* พื้นหลังเทาอ่อนๆ ให้การ์ดดูโดดเด่น */
+  --bg-card: #ffffff; /* การ์ดสีขาว */
   --text-dark: #2d3436;
   --text-muted: #636e72;
   --accent: #6c5ce7;
@@ -26,7 +26,7 @@ body {
 /* --- HEADER & LOGO --- */
 .hero {
   background: linear-gradient(135deg, #efedff 0%, #e0fcff 100%);
-  padding: 50px 20px 60px;
+  padding: 50px 20px 70px;
   text-align: center;
   border-bottom-left-radius: 40px;
   border-bottom-right-radius: 40px;
@@ -34,100 +34,116 @@ body {
   box-shadow: 0 10px 30px rgba(162, 155, 254, 0.15);
 }
 .logo-container {
-  width: 100px; height: 100px;
+  width: 110px; height: 110px;
   background: #fff;
-  border-radius: 30px;
+  border-radius: 50%; /* เปลี่ยนเป็นวงกลม */
   margin: 0 auto 15px;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-  overflow: hidden; border: 3px solid #fff;
-  cursor: pointer; /* สำหรับกดเข้า Admin */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  overflow: hidden; border: 4px solid #fff;
+  cursor: pointer;
 }
 .logo-container img { width: 100%; height: 100%; object-fit: cover; }
 
-.hero-title { font-family: 'Mitr', sans-serif; font-size: 28px; color: var(--accent); margin-bottom: 5px; }
+.hero-title { font-family: 'Mitr', sans-serif; font-size: 28px; color: var(--accent); margin-bottom: 5px; font-weight: 600;}
 .hero-sub { font-size: 14px; color: var(--text-muted); }
 
 /* --- TABS --- */
 .tab-container {
   display: flex; background: #fff; border-radius: 20px;
-  padding: 5px; width: 250px; margin: -25px auto 30px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  padding: 5px; width: 280px; margin: -25px auto 30px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  position: relative; z-index: 10;
 }
 .tab-btn {
-  flex: 1; padding: 10px; border-radius: 15px; border: none;
+  flex: 1; padding: 12px; border-radius: 15px; border: none;
   font-family: inherit; font-size: 14px; font-weight: 500;
   background: transparent; color: var(--text-muted); cursor: pointer;
+  transition: all 0.3s;
 }
-.tab-btn.active { background: var(--primary); color: #fff; }
+.tab-btn.active { background: var(--primary); color: #fff; box-shadow: 0 4px 15px rgba(162,155,254,0.4); }
 
 /* --- GRID & ICONS --- */
 .content { max-width: 600px; margin: 0 auto; padding: 0 20px; }
 .app-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;
 }
 .app-card {
+  background: var(--bg-card);
+  border-radius: 20px; padding: 15px 10px;
   text-align: center; cursor: pointer; transition: transform 0.2s;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.04);
 }
-.app-card:active { transform: scale(0.9); }
+.app-card:active { transform: scale(0.95); }
 .app-icon-wrap {
-  width: 75px; height: 75px; background: var(--bg-card);
-  border-radius: 22px; margin: 0 auto 10px;
+  width: 65px; height: 65px;
+  margin: 0 auto 10px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 32px; border: 2px solid #fff;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+  font-size: 32px;
+  border-radius: 18px;
   overflow: hidden;
 }
-.app-icon-wrap img { width: 100%; height: 100%; object-fit: cover; }
-.app-name { font-size: 13px; font-weight: 500; color: var(--text-dark); }
+.app-icon-wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 18px; }
+.app-name { font-size: 13px; font-weight: 600; color: var(--text-dark); }
 
 /* --- MODAL (Selection) --- */
 .modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
   display: none; justify-content: center; align-items: flex-end; z-index: 2000;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(5px);
 }
 .modal-box {
   background: #fff; width: 100%; max-width: 500px;
   border-top-left-radius: 30px; border-top-right-radius: 30px;
-  padding: 30px 20px; animation: slideUp 0.3s ease-out;
+  padding: 30px 25px; animation: slideUp 0.3s ease-out;
+  max-height: 85vh; overflow-y: auto;
 }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-.modal-title { font-size: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-.pkg-list { display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto; }
+.modal-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+.modal-icon { width: 60px; height: 60px; border-radius: 15px; object-fit: cover; }
+.modal-title-wrap { flex: 1; }
+.modal-title { font-size: 20px; font-weight: 600; color: var(--text-dark); }
+.modal-desc { font-size: 13px; color: var(--text-muted); line-height: 1.4; margin-top: 4px; }
+.close-modal { font-size: 24px; color: #aaa; cursor: pointer; font-weight: bold; }
+
+.pkg-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
 .pkg-item {
-  padding: 15px; border: 2px solid #f0f0f5; border-radius: 18px;
+  padding: 15px 20px; border: 2px solid #f0f0f5; border-radius: 18px;
   display: flex; justify-content: space-between; align-items: center;
-  transition: 0.2s; cursor: pointer;
+  transition: 0.2s; cursor: pointer; background: #fff;
 }
 .pkg-item:hover { border-color: var(--primary); background: #fafdff; }
-.pkg-item.selected { border-color: var(--primary); background: #f6f5ff; }
+.pkg-item.selected { border-color: var(--primary); background: #f6f5ff; box-shadow: 0 4px 15px rgba(162,155,254,0.2); }
 
 /* --- ADMIN PANEL --- */
-.admin-section { display: none; background: #fff; padding: 20px; border-radius: 20px; margin-top: 20px; border: 2px dashed var(--primary); }
-.admin-input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 10px; font-family: inherit; }
-.btn-add { background: var(--accent); color: #fff; border: none; padding: 12px; border-radius: 10px; width: 100%; cursor: pointer; margin-bottom: 20px; }
-.admin-item-row { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; font-size: 14px; }
+.admin-section { display: none; background: #fff; padding: 25px; border-radius: 20px; margin-top: 20px; border: 2px dashed var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+.admin-label { font-size: 13px; font-weight: 600; margin-bottom: 5px; display: block; color: var(--accent); }
+.admin-input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 10px; font-family: inherit; font-size: 14px; background: #fafafa;}
+.admin-file { border: 1px dashed #aaa; padding: 10px; border-radius: 10px; margin-bottom: 15px; width: 100%; font-size: 13px; background: #fff;}
+.btn-add { background: var(--accent); color: #fff; border: none; padding: 14px; border-radius: 15px; width: 100%; cursor: pointer; margin-bottom: 20px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);}
+.admin-item-row { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; align-items: center;}
+.img-preview { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; margin-right: 10px;}
 
 /* --- BOTTOM BAR --- */
 .bottom-bar {
   position: fixed; bottom: 20px; left: 20px; right: 20px;
-  background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
   border-radius: 25px; padding: 15px 20px;
   display: flex; justify-content: space-between; align-items: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  transform: translateY(150%); transition: 0.3s; z-index: 1000;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  transform: translateY(150%); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000;
+  border: 1px solid rgba(162,155,254,0.3);
 }
 .bottom-bar.active { transform: translateY(0); }
-.bb-btn { background: var(--accent); color: #fff; border: none; padding: 12px 25px; border-radius: 18px; font-weight: 600; cursor: pointer; }
+.bb-btn { background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; border: none; padding: 12px 25px; border-radius: 18px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 15px rgba(162,155,254,0.4); }
 </style>
 </head>
 <body>
 
 <div class="hero">
-  <div class="logo-container" id="mainLogo" onclick="adminClick()">
-    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=wanderer" alt="Shop Logo" id="logoImg">
+  <div class="logo-container" onclick="adminClick()">
+    <img id="logoImg" src="https://api.dicebear.com/7.x/bottts/svg?seed=wanderer" alt="Shop Logo">
   </div>
   <div class="hero-title" id="displayShopName">Wanderer_shop</div>
   <div class="hero-sub" id="displayShopSub">ยินดีต้อนรับร้านละมุดรับสินค้าอะไรดีคะ</div>
@@ -140,65 +156,158 @@ body {
 
 <div class="content">
   <div id="page-shop">
-    <div class="app-grid" id="appGrid">
-      </div>
+    <div class="app-grid" id="appGrid"></div>
   </div>
 
   <div id="page-info" style="display:none;">
-    <div style="background:var(--bg-card); padding:25px; border-radius:25px; text-align:center;">
-      <p style="color:var(--accent); font-weight:600; margin-bottom:10px;">ช่องทางติดต่อ</p>
-      <p id="infoLine">Line: @997pfoig</p>
-      <p id="infoTime">เวลาทำการ: 11:00 - 00:00 น.</p>
-      <div style="margin-top:15px; font-size:12px; color:var(--text-muted);">ดูแลตลอดการใช้งาน เคลม/แก้ไขภายใน 24ชม.</div>
+    <div style="background:var(--bg-card); padding:25px; border-radius:25px; text-align:center; box-shadow: 0 5px 20px rgba(0,0,0,0.04);">
+      <p style="color:var(--accent); font-weight:600; margin-bottom:10px; font-size: 18px;">ช่องทางการติดต่อ</p>
+      <p id="infoLine" style="margin-bottom: 5px;">Line: @997pfoig</p>
+      <p id="infoTime" style="margin-bottom: 5px;">เวลาทำการ: 11:00 - 00:00 น.</p>
+      <hr style="margin: 15px 0; border: 0; border-top: 1px dashed #ddd;">
+      <p style="font-size:14px; color:var(--text-dark); font-weight: 500;">การรับประกัน</p>
+      <p style="font-size:13px; color:var(--text-muted); margin-top: 5px;">เคลมไวภายใน 24 ชม.</p>
     </div>
   </div>
 
   <div id="adminPanel" class="admin-section">
-    <h3 style="margin-bottom:15px;">ตั้งค่าหลังบ้าน ⚙️</h3>
-    <p style="font-size:12px; margin-bottom:5px;">ชื่อร้าน / สโลแกน</p>
-    <input type="text" id="editName" class="admin-input" placeholder="ชื่อร้าน">
-    <input type="text" id="editSub" class="admin-input" placeholder="สโลแกน">
-    <input type="text" id="editLogo" class="admin-input" placeholder="URL รูปโลโก้">
+    <h3 style="margin-bottom:20px; color: var(--accent); text-align: center;">⚙️ ระบบจัดการหลังบ้าน</h3>
     
-    <hr style="margin:20px 0; opacity:0.2;">
+    <label class="admin-label">ชื่อร้าน</label>
+    <input type="text" id="editName" class="admin-input">
     
-    <h4 style="margin-bottom:10px;">เพิ่ม/แก้ไขแอป</h4>
-    <input type="text" id="newAppName" class="admin-input" placeholder="ชื่อแอป (เช่น Netflix)">
-    <input type="text" id="newAppIcon" class="admin-input" placeholder="URL ไอคอน หรือ Emoji">
-    <textarea id="newAppPkgs" class="admin-input" placeholder="ราคา|วัน|คำอธิบาย (บรรทัดละ 1 ชุด)" rows="4"></textarea>
-    <small style="display:block; margin-bottom:10px; color:red;">ตัวอย่าง: 15|1 วัน|ดูในมือถือเท่านั้น</small>
-    <button class="btn-add" onclick="saveNewApp()">บันทึกแอป</button>
+    <label class="admin-label">สโลแกนร้าน</label>
+    <input type="text" id="editSub" class="admin-input">
     
-    <div id="adminItemList"></div>
-    <button onclick="exitAdmin()" style="width:100%; background:#eee; border:none; padding:10px; border-radius:10px;">ปิดโหมดแก้ไข</button>
+    <label class="admin-label">เปลี่ยนรูปโลโก้ร้าน (เลือกไฟล์)</label>
+    <input type="file" id="editLogoFile" class="admin-file" accept="image/*" onchange="handleLogoUpload(event)">
+    
+    <button class="btn-add" onclick="saveStoreInfo()" style="background:#00cec9;">บันทึกข้อมูลร้าน</button>
+
+    <hr style="margin:25px 0; border:0; border-top: 2px dashed #ddd;">
+    
+    <h3 style="margin-bottom:15px; color: var(--accent);">📦 เพิ่ม/แก้ไข สินค้า</h3>
+    
+    <label class="admin-label">1. ชื่อแอป (เช่น Netflix)</label>
+    <input type="text" id="newAppName" class="admin-input" placeholder="กรอกชื่อแอป...">
+    
+    <label class="admin-label">2. รายละเอียดแอป</label>
+    <input type="text" id="newAppDesc" class="admin-input" placeholder="เช่น แอคเคาท์จอส่วนตัว ดูได้ 1 จอ...">
+    
+    <label class="admin-label">3. รูปภาพแอป (เลือกไฟล์)</label>
+    <input type="file" id="newAppImageFile" class="admin-file" accept="image/*" onchange="handleAppImageUpload(event)">
+    <input type="hidden" id="newAppImageBase64">
+    
+    <label class="admin-label">4. แพ็กเกจ (ราคา | วันใช้งาน)</label>
+    <textarea id="newAppPkgs" class="admin-input" placeholder="ตัวอย่าง:&#10;15 | 1 วัน&#10;140 | 30 วัน" rows="4"></textarea>
+    <small style="display:block; margin-top:-10px; margin-bottom:15px; color:#e17055;">* พิมพ์ ราคา นำหน้า ตามด้วยเครื่องหมาย | และ วันใช้งาน (บรรทัดละ 1 แพ็กเกจ)</small>
+    
+    <button class="btn-add" onclick="saveNewApp()">เพิ่มสินค้า / บันทึกแอป</button>
+    
+    <div id="adminItemList" style="margin-top: 20px; background: #fafafa; padding: 10px; border-radius: 15px;"></div>
+    
+    <button onclick="exitAdmin()" style="width:100%; background:#dfe6e9; color:#2d3436; border:none; padding:12px; border-radius:15px; margin-top:15px; font-weight:600; cursor:pointer;">ปิดโหมดหลังบ้าน</button>
   </div>
 </div>
 
 <div class="modal-overlay" id="purchaseModal" onclick="closeModal()">
   <div class="modal-box" onclick="event.stopPropagation()">
-    <div class="modal-title" id="mAppTitle">📦 เลือกแพ็กเกจ</div>
+    <div class="modal-header">
+      <img id="mAppIcon" class="modal-icon" src="" alt="icon" style="display:none;">
+      <div class="modal-title-wrap">
+        <div class="modal-title" id="mAppTitle">ชื่อแอป</div>
+        <div class="modal-desc" id="mAppDesc">รายละเอียด...</div>
+      </div>
+      <div class="close-modal" onclick="closeModal()">×</div>
+    </div>
+    
+    <div style="font-size: 14px; font-weight: 600; color: var(--accent); margin-top: 10px;">เลือกแพ็กเกจ:</div>
     <div class="pkg-list" id="mPkgList"></div>
+    
     <button class="btn-add" style="margin-top:20px;" onclick="addToCart()">เพิ่มลงตะกร้า</button>
   </div>
 </div>
 
 <div class="bottom-bar" id="bottomBar">
-  <div id="cartInfo">เลือก 1 รายการ</div>
+  <div id="cartInfo" style="font-size: 13px;">เลือก 1 รายการ</div>
   <button class="bb-btn" onclick="sendOrder()">สั่งผ่านไลน์ ✨</button>
 </div>
 
 <script>
-// --- DATA SYSTEM (LocalStorage) ---
-let shopData = JSON.parse(localStorage.getItem('wanderer_shop_v2')) || {
-  profile: { name: "Wanderer_shop", sub: "ยินดีต้อนรับร้านละมุดรับสินค้าอะไรดีคะ", logo: "https://api.dicebear.com/7.x/bottts/svg?seed=wanderer" },
+// --- เปลี่ยนชื่อ Key เป็น v3 เพื่อเคลียร์ค่าเก่าที่พัง ---
+const STORAGE_KEY = 'wanderer_shop_v3';
+
+// ค่าเริ่มต้น
+const defaultData = {
+  profile: { 
+    name: "Wanderer_shop", 
+    sub: "ยินดีต้อนรับร้านละมุดรับสินค้าอะไรดีคะ", 
+    logo: "https://api.dicebear.com/7.x/bottts/svg?seed=wanderer" 
+  },
   apps: [
-    { name: "Netflix", icon: "🍿", pkgs: [{p: "15", d: "1 วัน", n: "จอเคลม"}, {p: "140", d: "30 วัน", n: "จอเคลม"}] },
-    { name: "YouTube", icon: "🎬", pkgs: [{p: "25", d: "30 วัน", n: "ครอบครัว"}] }
+    { 
+      name: "Netflix", 
+      icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1024px-Netflix_2015_logo.svg.png", 
+      desc: "จอส่วนตัว ความชัด 4K ดูได้ 1 อุปกรณ์",
+      pkgs: [{price: "15", day: "1 วัน"}, {price: "140", day: "30 วัน"}] 
+    },
+    { 
+      name: "YouTube Premium", 
+      icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1024px-YouTube_full-color_icon_%282017%29.svg.png", 
+      desc: "ดูวิดีโอไม่มีโฆษณาคั่น ฟังเพลงปิดจอได้",
+      pkgs: [{price: "25", day: "30 วัน (เมลร้าน)"}, {price: "45", day: "30 วัน (เมลลูกค้า)"}] 
+    }
   ]
 };
 
+let shopData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultData;
 let currentCart = null;
 let clickCount = 0;
+
+// --- Image Compression & Base64 Converter ---
+// บีบอัดรูปก่อนเซฟลง LocalStorage จะได้ไม่เต็ม
+function compressImage(file, callback) {
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      const MAX_WIDTH = 250; // ย่อขนาดให้ไม่กินพื้นที่
+      const scaleSize = MAX_WIDTH / img.width;
+      canvas.width = MAX_WIDTH;
+      canvas.height = img.height * scaleSize;
+      
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      // แปลงกลับเป็น Base64 คุณภาพ 80%
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+      callback(dataUrl);
+    }
+    img.src = event.target.result;
+  }
+  reader.readAsDataURL(file);
+}
+
+// --- ฟังก์ชันอัปโหลดรูป ---
+function handleLogoUpload(event) {
+  const file = event.target.files[0];
+  if(file) {
+    compressImage(file, function(base64Img) {
+      shopData.profile.logo = base64Img;
+      alert("อัปโหลดโลโก้สำเร็จ! (อย่าลืมกดบันทึกข้อมูลร้าน)");
+    });
+  }
+}
+
+function handleAppImageUpload(event) {
+  const file = event.target.files[0];
+  if(file) {
+    compressImage(file, function(base64Img) {
+      document.getElementById('newAppImageBase64').value = base64Img;
+      alert("อัปโหลดรูปสินค้าสำเร็จ!");
+    });
+  }
+}
 
 // --- INITIALIZE ---
 function init() {
@@ -212,11 +321,10 @@ function renderShop() {
   const grid = document.getElementById('appGrid');
   grid.innerHTML = '';
   shopData.apps.forEach((app, index) => {
+    let iconHtml = app.icon.length > 10 ? `<img src="${app.icon}">` : app.icon; // เช็คว่าเป็นรูปหรือ Emoji
     grid.innerHTML += `
       <div class="app-card" onclick="openApp(${index})">
-        <div class="app-icon-wrap">
-          ${app.icon.startsWith('http') ? `<img src="${app.icon}">` : app.icon}
-        </div>
+        <div class="app-icon-wrap">${iconHtml}</div>
         <div class="app-name">${app.name}</div>
       </div>
     `;
@@ -231,17 +339,157 @@ function switchTab(t) {
   document.getElementById('page-info').style.display = t === 'info' ? 'block' : 'none';
 }
 
-// --- PURCHASE LOGIC ---
+// --- MODAL & PURCHASE ---
 let selectedAppIndex = -1;
 let selectedPkgIndex = -1;
 
 function openApp(index) {
   selectedAppIndex = index;
   const app = shopData.apps[index];
+  
+  // Set UI
   document.getElementById('mAppTitle').innerText = app.name;
+  document.getElementById('mAppDesc').innerText = app.desc || "";
+  
+  const iconImg = document.getElementById('mAppIcon');
+  if(app.icon.length > 10) {
+    iconImg.src = app.icon;
+    iconImg.style.display = 'block';
+  } else {
+    iconImg.style.display = 'none'; // ซ่อนถ้ารูปเป็นแค่ Emoji
+  }
+
   const list = document.getElementById('mPkgList');
   list.innerHTML = '';
   
   app.pkgs.forEach((pkg, pIdx) => {
     list.innerHTML += `
-      <div class="pkg-item" id="pkg-${pIdx}" onclick
+      <div class="pkg-item" id="pkg-${pIdx}" onclick="selectPkg(${pIdx})">
+        <div style="font-weight: 500;">${pkg.day}</div>
+        <div style="color:var(--accent); font-weight:600; font-size: 16px;">฿${pkg.price}</div>
+      </div>
+    `;
+  });
+  
+  document.getElementById('purchaseModal').style.display = 'flex';
+}
+
+function selectPkg(pIdx) {
+  selectedPkgIndex = pIdx;
+  document.querySelectorAll('.pkg-item').forEach(el => el.classList.remove('selected'));
+  document.getElementById(`pkg-${pIdx}`).classList.add('selected');
+}
+
+function addToCart() {
+  if(selectedPkgIndex === -1) return alert('กรุณาเลือกแพ็กเกจ');
+  const app = shopData.apps[selectedAppIndex];
+  const pkg = app.pkgs[selectedPkgIndex];
+  currentCart = { app: app.name, ...pkg };
+  
+  document.getElementById('cartInfo').innerHTML = `
+    <span style="color:var(--text-muted)">สินค้า:</span> <b style="color:var(--text-dark)">${currentCart.app}</b><br>
+    <span style="color:var(--text-muted)">แพ็กเกจ:</span> <b>${currentCart.day}</b> (฿${currentCart.price})
+  `;
+  document.getElementById('bottomBar').classList.add('active');
+  closeModal();
+}
+
+function closeModal() {
+  document.getElementById('purchaseModal').style.display = 'none';
+  selectedPkgIndex = -1;
+}
+
+function sendOrder() {
+  const text = `สั่งซื้อสินค้า: ${currentCart.app}\nแพ็กเกจ: ${currentCart.day}\nราคา: ${currentCart.price} บาท`;
+  window.location.href = `https://lin.ee/Vt7DR6S?text=${encodeURIComponent(text)}`;
+}
+
+// --- ADMIN SYSTEM ---
+function adminClick() {
+  clickCount++;
+  if(clickCount >= 5) {
+    document.getElementById('adminPanel').style.display = 'block';
+    document.getElementById('editName').value = shopData.profile.name;
+    document.getElementById('editSub').value = shopData.profile.sub;
+    renderAdminList();
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    clickCount = 0;
+  }
+}
+
+function saveStoreInfo() {
+  shopData.profile.name = document.getElementById('editName').value;
+  shopData.profile.sub = document.getElementById('editSub').value;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(shopData));
+  alert('บันทึกข้อมูลร้านสำเร็จ!');
+  location.reload();
+}
+
+function saveNewApp() {
+  const name = document.getElementById('newAppName').value;
+  const desc = document.getElementById('newAppDesc').value;
+  const base64Icon = document.getElementById('newAppImageBase64').value;
+  const rawPkgs = document.getElementById('newAppPkgs').value;
+  
+  if(!name || !rawPkgs) return alert('กรุณากรอกชื่อแอปและแพ็กเกจให้ครบ');
+  
+  // แปลงข้อความแพ็กเกจ เป็น Array
+  const pkgLines = rawPkgs.split('\n');
+  const pkgs = [];
+  pkgLines.forEach(line => {
+    if(line.includes('|')) {
+      const parts = line.split('|');
+      pkgs.push({ price: parts[0].trim(), day: parts[1].trim() });
+    }
+  });
+
+  if(pkgs.length === 0) return alert('รูปแบบแพ็กเกจผิดพลาด (ต้องมี | คั่นระหว่าง ราคา กับ วัน)');
+
+  // ใช้รูประบบชั่วคราวถ้าไม่ได้อัปโหลด
+  const finalIcon = base64Icon || "📦";
+
+  shopData.apps.push({ name: name, desc: desc, icon: finalIcon, pkgs: pkgs });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(shopData));
+  
+  alert('เพิ่มสินค้าสำเร็จ!');
+  location.reload();
+}
+
+function renderAdminList() {
+  const list = document.getElementById('adminItemList');
+  list.innerHTML = '<p style="margin-bottom:10px; font-weight:600;">สินค้าที่มีอยู่ (กดเพื่อลบ):</p>';
+  shopData.apps.forEach((app, i) => {
+    let imgPreview = app.icon.length > 10 ? `<img src="${app.icon}" class="img-preview">` : `<div class="img-preview" style="background:#ddd; display:flex; align-items:center; justify-content:center; font-size:20px;">${app.icon}</div>`;
+    list.innerHTML += `
+      <div class="admin-item-row">
+        <div style="display:flex; align-items:center;">
+          ${imgPreview}
+          <div>
+            <b>${app.name}</b><br>
+            <span style="font-size:11px; color:#888;">มี ${app.pkgs.length} แพ็กเกจ</span>
+          </div>
+        </div>
+        <button onclick="deleteApp(${i})" style="color:#d63031; border:none; background:#ff767520; padding:8px 15px; border-radius:10px; cursor:pointer; font-weight:bold;">ลบ</button>
+      </div>
+    `;
+  });
+}
+
+function deleteApp(i) {
+  if(confirm("ต้องการลบสินค้านี้ใช่หรือไม่?")) {
+    shopData.apps.splice(i, 1);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(shopData));
+    renderAdminList();
+    renderShop();
+  }
+}
+
+function exitAdmin() { 
+  document.getElementById('adminPanel').style.display = 'none'; 
+}
+
+// Start
+init();
+</script>
+</body>
+</html>
