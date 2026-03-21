@@ -14,6 +14,8 @@
   --bg-card: #ffffff;
   --text-muted: #6b7280;
   --text-dark: #1f2937;
+  --glow: rgba(176,38,255,0.6);
+  --white: #ffffff;
 }
 html { scroll-behavior: smooth; }
 body {
@@ -27,10 +29,42 @@ body {
 .bg-glow-1 { position: fixed; top: -100px; left: -100px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(176,38,255,0.1) 0%, rgba(0,0,0,0) 70%); z-index: -1; pointer-events: none; }
 .bg-glow-2 { position: fixed; bottom: 20%; right: -150px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(0,210,255,0.08) 0%, rgba(0,0,0,0) 70%); z-index: -1; pointer-events: none; }
 
-/* --- HERO & TABS --- */
+/* Logo */
+.logo-wrapper {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.logo {
+  width: 150px; height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 6px 20px var(--glow);
+  border: 4px solid var(--white);
+  position: relative;
+  z-index: 2;
+  background: #fff;
+}
+.logo img { width: 100%; height: 100%; object-fit: cover; }
+.logo-deco {
+  position: absolute;
+  font-size: 28px;
+  animation: pulse 3s infinite ease-in-out;
+}
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.6; }
+}
+
+/* HERO & TABS */
 .hero {
   background: linear-gradient(135deg, rgba(176,38,255,0.6) 0%, rgba(0,210,255,0.4) 100%);
-  padding: 40px 20px 55px; text-align: center; position: relative;
+  padding: 30px 20px 55px; text-align: center; position: relative;
   margin-bottom: 40px; box-shadow: 0 4px 20px rgba(176,38,255,0.15);
   border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;
 }
@@ -46,20 +80,20 @@ body {
 .tab-btn { flex: 1; padding: 10px 20px; border-radius: 25px; border: none; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; background: transparent; color: var(--text-muted); }
 .tab-btn.active { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; box-shadow: 0 2px 10px rgba(176,38,255,0.3); }
 
-/* --- CONTENT --- */
+/* CONTENT */
 .content { max-width: 600px; margin: 0 auto; padding: 0 20px 50px; position: relative; z-index: 5; }
 .tab-content { display: none; animation: fadeIn 0.3s ease; }
 .tab-content.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-/* --- INFO TAB --- */
+/* INFO TAB */
 .info-card { background: var(--bg-card); border-radius: 20px; padding: 30px 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 .info-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px dashed rgba(0,0,0,0.1); font-size: 14px; }
 .info-row:last-of-type { border-bottom: none; }
 .info-row span:first-child { color: var(--primary); font-weight: 600; }
 .info-row span:last-child { color: var(--text-dark); font-weight: 500; text-align: right; }
 
-/* --- CATEGORIES --- */
+/* CATEGORIES */
 .sh { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding: 0 5px; }
 .sh-line { width: 4px; height: 22px; background: linear-gradient(180deg, var(--primary), var(--secondary)); border-radius: 4px; }
 .sh h2 { font-size: 18px; font-weight: 700; color: var(--text-dark); }
@@ -67,12 +101,12 @@ body {
 .category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
 .category-card { background: var(--bg-card); border-radius: 16px; padding: 24px 16px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.02); transition: transform 0.2s; }
 .category-card:active { transform: scale(0.96); }
-.cat-icon-wrapper { width: 65px; height: 65px; border-radius: 18px; display: flex; justify-content: center; align-items: center; margin: 0 auto 12px; background: #f8f9fa; border: 1px solid rgba(0,0,0,0.05);}
-.cat-icon-wrapper img { width: 45px; height: 45px; border-radius: 10px; object-fit: cover; }
+.cat-icon-wrapper { width: 65px; height: 65px; border-radius: 18px; display: flex; justify-content: center; align-items: center; margin: 0 auto 12px; background: #f8f9fa; border: 1px solid rgba(0,0,0,0.05); overflow: hidden;}
+.cat-icon-wrapper img { width: 100%; height: 100%; object-fit: cover; }
 .cat-icon-wrapper span { font-size: 32px; }
 .cat-title { font-size: 15px; font-weight: 600; color: var(--text-dark); }
 
-/* --- PRODUCTS VIEW --- */
+/* PRODUCTS VIEW */
 #productsView { display: none; }
 .back-btn { background: #fff; border: 1px solid rgba(0,0,0,0.1); color: var(--text-dark); border-radius: 20px; padding: 6px 16px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 20px; }
 .back-btn::before { content: '←'; font-size: 16px; color: var(--primary); }
@@ -92,19 +126,20 @@ body {
 .card-price-amount { font-size: 18px; font-weight: 700; color: var(--primary); }
 .card-price-unit { font-size: 13px; font-weight: 500; color: var(--text-muted); margin-left: 2px;}
 
-/* --- ADMIN TAB --- */
+/* ADMIN TAB */
 .admin-card { background: var(--bg-card); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);}
 .admin-form { display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px;}
-.admin-input { background: #f8f9fa; border: 1px solid #e5e7eb; color: var(--text-dark); padding: 12px; border-radius: 8px; font-family: inherit; font-size: 14px;}
+.admin-input { background: #f8f9fa; border: 1px solid #e5e7eb; color: var(--text-dark); padding: 12px; border-radius: 8px; font-family: inherit; font-size: 14px; width: 100%;}
 .admin-input:focus { outline: none; border-color: var(--primary); background: #fff;}
-.admin-btn { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; font-family: inherit;}
+.admin-btn { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; font-family: inherit; text-align: center; display: inline-block;}
 .admin-btn.danger { background: #ef4444; }
 .admin-btn.warning { background: #6b7280; margin-top: 10px; }
 .admin-btn.edit { background: #f59e0b; padding: 6px 12px; font-size: 12px;}
 .admin-list-item { display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #e5e7eb;}
 .admin-actions { display: flex; gap: 5px; }
+.upload-btn-wrapper { display: flex; gap: 10px; }
 
-/* --- BOTTOM BAR & MODAL --- */
+/* BOTTOM BAR & MODAL */
 .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-top: 1px solid rgba(0,0,0,0.08); padding: 15px 24px; display: flex; justify-content: space-between; align-items: center; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 -5px 20px rgba(0,0,0,0.05); z-index: 1000; }
 .bottom-bar.active { transform: translateY(0); }
 .bb-info { display: flex; flex-direction: column; }
@@ -137,6 +172,14 @@ body {
 <div class="bg-glow-2"></div>
 
 <div class="hero">
+  <div class="logo-wrapper">
+    <div class="logo-deco" style="top: 10px; left: 10px;">✨</div>
+    <div class="logo">
+      <img id="shopLogoImg" src="https://images.unsplash.com/photo-1557683316-973673baf926?w=400&q=80" alt="Shop Logo">
+    </div>
+    <div class="logo-deco" style="bottom: 10px; right: 10px;">🛒</div>
+  </div>
+
   <div class="hero-title" onclick="unlockAdmin()">Wanderer_shop</div>
   <div class="hero-sub">ยินดีต้อนรับร้านWanderer_shopรับสินค้าอะไรดีคะ</div>
   
@@ -162,26 +205,51 @@ body {
       <div class="sh"><div class="sh-line"></div><h2>หมวดหมู่สินค้า / บริการ</h2></div>
       <div class="category-grid" id="categoryGrid"></div>
     </div>
+    
     <div id="productsView">
       <button class="back-btn" onclick="showCategories()">กลับไปหน้าหมวดหมู่</button>
-      <div class="sh"><div class="sh-line"></div><h2 id="currentCategoryTitle">ชื่อแอป</h2></div>
+      
+      <div class="sh" style="align-items: flex-start;">
+        <div class="sh-line" style="margin-top: 4px;"></div>
+        <div>
+          <h2 id="currentCategoryTitle" style="line-height: 1.2;">ชื่อแอป</h2>
+          <p id="currentCategoryDesc" style="font-size: 13px; color: var(--text-muted); margin-top: 6px; display: none;"></p>
+        </div>
+      </div>
+      
       <div class="grid-container" id="productGrid"></div>
     </div>
   </div>
 
   <div id="tab-admin" class="tab-content">
+    
+    <div class="admin-card">
+      <h3 style="margin-bottom: 10px; font-size: 15px; color: var(--primary);">✨ เปลี่ยนโลโก้ร้านหลัก</h3>
+      <input type="file" accept="image/*" class="admin-input" onchange="uploadShopLogo(event)" style="padding: 8px;">
+      <p style="font-size: 11px; color: var(--text-muted); margin-top: 5px;">* แนะนำรูปสี่เหลี่ยมจัตุรัส ขนาดไม่เกิน 2MB</p>
+    </div>
+
     <div class="sh"><div class="sh-line"></div><h2>เพิ่ม/แก้ไข สินค้า</h2></div>
     <div class="admin-card">
       <form class="admin-form" id="adminForm" onsubmit="saveProduct(event)">
         <input type="hidden" id="editId">
+        
         <input type="text" id="pCat" class="admin-input" placeholder="หมวดหมู่ (เช่น Netflix 4K)" required>
-        <input type="text" id="pName" class="admin-input" placeholder="ชื่อสินค้า (เช่น 30 วัน จอเสริม)" required>
-        <input type="text" id="pDesc" class="admin-input" placeholder="รายละเอียด (เว้นบรรทัดใช้ <br>)">
+        <input type="text" id="pCatDesc" class="admin-input" placeholder="คำอธิบายหมวดหมู่/แอป (แสดงใต้ชื่อแอปด้านบน)">
+        
+        <input type="text" id="pName" class="admin-input" placeholder="ชื่อแพ็กเกจ (เช่น 30 วัน จอเสริม)" required>
+        <input type="text" id="pDesc" class="admin-input" placeholder="รายละเอียดแพ็กเกจ (เว้นบรรทัดใช้ <br>)">
         <input type="number" id="pPrice" class="admin-input" placeholder="ราคา (บาท)" required>
-        <input type="text" id="pIcon" class="admin-input" placeholder="อิโมจิ (🍿) หรือ ลิงก์รูปภาพ (http...)" required>
+        
+        <div class="upload-btn-wrapper">
+          <input type="text" id="pIcon" class="admin-input" placeholder="อิโมจิ (🍿) หรือ ลิงก์รูป" required>
+          <button type="button" class="admin-btn edit" onclick="document.getElementById('imgUpload').click()" style="white-space: nowrap; padding: 12px;">อัปโหลดรูป</button>
+          <input type="file" id="imgUpload" accept="image/*" style="display: none;" onchange="uploadProductImage(event)">
+        </div>
+
         <button type="submit" class="admin-btn" id="saveBtn">บันทึกสินค้า</button>
       </form>
-      <button class="admin-btn warning" style="width:100%" onclick="resetData()">รีเซ็ตกลับเป็นค่าเริ่มต้น (กรณีข้อมูลรวน)</button>
+      <button class="admin-btn warning" style="width:100%" onclick="resetData()">รีเซ็ตกลับเป็นค่าเริ่มต้น</button>
       <hr style="border-color: #e5e7eb; margin: 20px 0;">
       <div id="adminProductList"></div>
     </div>
@@ -213,7 +281,57 @@ body {
 </div>
 
 <script>
-  // 1. ระบบปลดล็อก Admin
+  // โหลดโลโก้จากที่บันทึกไว้ตอนเปิดหน้าเว็บ
+  window.onload = () => {
+    const savedLogo = localStorage.getItem('wandererShopLogo');
+    if(savedLogo) document.getElementById('shopLogoImg').src = savedLogo;
+  };
+
+  // ฟังก์ชันอัปโหลดโลโก้ร้าน (จำกัดขนาดและดัก Error)
+  function uploadShopLogo(event) {
+    const file = event.target.files[0];
+    if(!file) return;
+
+    if(file.size > 2 * 1024 * 1024) {
+      alert("⚠️ ไฟล์มีขนาดใหญ่เกินไป กรุณาใช้รูปขนาดไม่เกิน 2MB ค่ะ");
+      event.target.value = ""; 
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const base64Image = e.target.result;
+      try {
+        localStorage.setItem('wandererShopLogo', base64Image); 
+        document.getElementById('shopLogoImg').src = base64Image;
+        alert('✨ เปลี่ยนโลโก้ร้านสำเร็จ!');
+      } catch (error) {
+        alert('❌ ไม่สามารถบันทึกรูปได้เนื่องจากหน่วยความจำเบราว์เซอร์เต็ม ลองลดขนาดภาพลงอีกนิดนะคะ');
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // ฟังก์ชันอัปโหลดรูปสินค้า (จำกัดขนาดและดัก Error)
+  function uploadProductImage(event) {
+    const file = event.target.files[0];
+    if(!file) return;
+
+    if(file.size > 1 * 1024 * 1024) {
+      alert("⚠️ รูปสินค้าควรมีขนาดไม่เกิน 1MB เพื่อให้เว็บโหลดไวค่ะ");
+      event.target.value = ""; 
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('pIcon').value = e.target.result;
+      event.target.value = ""; 
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // ระบบปลดล็อก Admin
   let clickCount = 0;
   let clickTimer = null;
   function unlockAdmin() {
@@ -237,33 +355,23 @@ body {
     if(tabId === 'products') showCategories();
   }
 
-  // 2. ข้อมูลตั้งต้น
+  // ข้อมูลตั้งต้น
   const defaultProducts = [
-    { id: 'm1', cat: 'Mono max (Basic)', name: '7 วัน (แอคสต.)', desc: 'ไม่ชน', price: 75, icon: '🍿' },
-    { id: 'm2', cat: 'Mono max (Basic)', name: '30 วัน (แอคสต.)', desc: 'ไม่ชน', price: 125, icon: '🍿' },
-    { id: 'n1', cat: 'Netflix 4K', name: '7 วัน (จอเสริม)', desc: 'ไม่ชน', price: 65, icon: '📱' },
-    { id: 'n2', cat: 'Netflix 4K', name: '30 วัน (จอเสริม)', desc: 'ไม่ชน', price: 200, icon: '📱' },
-    { id: 'd1', cat: 'Disney+', name: '30 วัน (หาร 4)', desc: 'ดูได้ทุกอุปกรณ์', price: 125, icon: '🏰' }
-    // ใส่เพิ่มเองในหน้าแอดมินได้เลยครับ (ลดทอนบรรทัดให้โหลดไวขึ้น โค้ดจะได้ไม่ล้น)
+    { id: 'm1', cat: 'Mono max (Basic)', catDesc: 'รับประกันตลอดอายุการใช้งาน ไม่ทิ้งลูกค้าแน่นอนค่ะ', name: '7 วัน (แอคสต.)', desc: 'ไม่ชน', price: 75, icon: '🍿' },
+    { id: 'n1', cat: 'Netflix 4K', catDesc: 'ความละเอียด 4K ชัดแจ๋ว ดูได้ทุกอุปกรณ์', name: '7 วัน (จอเสริม)', desc: 'ไม่ชน', price: 65, icon: '📱' }
   ];
 
-  // --- 🔥 แก้ไขบั๊กเงื่อนไข Load ข้อมูล ---
-  // ให้ทำสำเนา (Deep Copy) ข้อมูลเสมอ ป้องกันอ้างอิงข้อมูลผิด
   let products = JSON.parse(JSON.stringify(defaultProducts)); 
   try {
     let savedData = localStorage.getItem('wandererProducts');
     if (savedData) {
       let parsed = JSON.parse(savedData);
-      // เปลี่ยนจากเช็ก length > 0 เป็นแค่ตรวจสอบว่าเป็น Array จริงๆ (รองรับการที่ลบสินค้าจนหมดแอป)
-      if (Array.isArray(parsed)) { 
-        products = parsed;
-      }
+      if (Array.isArray(parsed)) products = parsed;
     }
-  } catch(e) { console.error("Data load error"); }
+  } catch(e) {}
 
   let cart = [];
 
-  // 3. Render ระบบ
   function renderCategories() {
     const grid = document.getElementById('categoryGrid');
     let html = '';
@@ -272,8 +380,8 @@ body {
     uniqueCategories.forEach(category => {
       const firstProductInCat = products.find(p => p.cat === category);
       const icon = firstProductInCat ? firstProductInCat.icon : '📦';
-      const isUrl = icon.startsWith('http') || icon.startsWith('data:');
-      const iconDisplay = isUrl ? `<img src="${icon}" alt="cat-icon">` : `<span>${icon}</span>`;
+      const isImage = icon.startsWith('http') || icon.startsWith('data:image');
+      const iconDisplay = isImage ? `<img src="${icon}" alt="cat-icon">` : `<span>${icon}</span>`;
 
       html += `
         <div class="category-card" onclick="openCategory('${category}')">
@@ -294,6 +402,19 @@ body {
     document.getElementById('categoriesView').style.display = 'none';
     document.getElementById('productsView').style.display = 'block';
     document.getElementById('currentCategoryTitle').innerText = categoryName;
+    
+    // ค้นหาและแสดงคำอธิบายหมวดหมู่
+    const catProduct = products.find(p => p.cat === categoryName && p.catDesc);
+    const descEl = document.getElementById('currentCategoryDesc');
+    
+    if (catProduct && catProduct.catDesc) {
+      descEl.innerHTML = catProduct.catDesc; 
+      descEl.style.display = 'block';
+    } else {
+      descEl.innerHTML = '';
+      descEl.style.display = 'none';
+    }
+    
     renderProductsInCategory(categoryName);
   }
 
@@ -349,14 +470,12 @@ body {
     }
   }
 
-  // --- 🔥 แก้ไขบักเงื่อนไขข้อความว่าง ---
   function openSummary() {
     if(cart.length === 0) return;
     const listEl = document.getElementById('modalItemsList');
     let html = '';
     let total = 0;
     cart.forEach(item => {
-      // ดักจับกรณีไม่มี desc (|| "") ป้องกัน error replace()
       let safeDesc = item.desc || ""; 
       let cleanDesc = safeDesc.replace(/<br\s*[\/]?>/gi, " "); 
       html += `<div class="modal-item"><div class="modal-item-name">• ${item.name} <br><span style="font-size:12px; color:var(--text-muted)">${cleanDesc}</span></div><div class="modal-item-price">฿${item.price.toLocaleString()}</div></div>`;
@@ -369,7 +488,6 @@ body {
 
   function closeSummary() { document.getElementById('summaryModal').classList.remove('show'); }
 
-  // --- 🔥 ระบบ Copy แบบ 100% Bulletproof (รองรับ Line Browser) ---
   function checkout() {
     let total = 0;
     let text = "🛒 สรุปรายการสั่งซื้อ\n\n";
@@ -381,7 +499,6 @@ body {
     });
     text += `--------------------\nยอดที่ต้องชำระทั้งหมด: ${total} บาท\n\nขอบคุณที่ไว้วางใจค่ะ 🙏\nกรุณารอแอดมินตอบกลับภายใน 5-10 นาที`;
     
-    // สร้าง Textarea แบบซ่อนและบังคับก๊อปปี้แบบเจาะจง
     const copyArea = document.createElement("textarea");
     copyArea.value = text;
     copyArea.setAttribute('readonly', '');
@@ -396,13 +513,12 @@ body {
     } catch (err) {
       alert("ไม่สามารถคัดลอกอัตโนมัติได้ กรุณาแคปหน้าจอเพื่อสั่งซื้อค่ะ");
     }
-    
     document.body.removeChild(copyArea);
     closeSummary();
-    window.location.href = "https://lin.ee/Vt7DR6S";
+    window.location.href = "https://lin.ee/Vt7DR6S"; // ลิงก์ LINE
   }
 
-  // 4. ระบบ Admin
+  // Admin Functions
   function renderAdminList() {
     const list = document.getElementById('adminProductList');
     list.innerHTML = '';
@@ -414,19 +530,21 @@ body {
   function saveProduct(e) {
     e.preventDefault();
     const id = document.getElementById('editId').value;
-    const cat = document.getElementById('pCat').value;
-    const name = document.getElementById('pName').value;
-    const desc = document.getElementById('pDesc').value; // ถ้าไม่กรอก จะได้ค่าว่าง ("")
+    const cat = document.getElementById('pCat').value.trim();
+    const catDesc = document.getElementById('pCatDesc').value.trim();
+    const name = document.getElementById('pName').value.trim();
+    const desc = document.getElementById('pDesc').value.trim();
     const price = parseInt(document.getElementById('pPrice').value) || 0;
-    const icon = document.getElementById('pIcon').value;
+    const icon = document.getElementById('pIcon').value.trim();
     
-    let updatedProduct = { id: id || ('prod_' + Date.now()), cat, name, desc, price, icon };
+    const backupProducts = JSON.parse(JSON.stringify(products));
+    
+    let updatedProduct = { id: id || ('prod_' + Date.now()), cat, catDesc, name, desc, price, icon };
 
     if (id) {
       const index = products.findIndex(p => p.id === id);
       if(index > -1) {
           products[index] = updatedProduct;
-          // 🔥 อัปเดตตะกร้าด้วย ถ้าสินค้านี้โดนเลือกอยู่
           const cartIndex = cart.findIndex(c => c.id === id);
           if (cartIndex > -1) cart[cartIndex] = updatedProduct;
       }
@@ -434,7 +552,14 @@ body {
       products.push(updatedProduct);
     }
 
-    localStorage.setItem('wandererProducts', JSON.stringify(products));
+    try {
+      localStorage.setItem('wandererProducts', JSON.stringify(products));
+    } catch (error) {
+      alert('❌ พื้นที่จัดเก็บเต็ม! ไม่สามารถบันทึกสินค้าได้ แนะนำให้ลบสินค้าเก่าที่ไม่ใช้ หรือใช้ "ลิงก์รูปภาพ" แทนการอัปโหลดรูปโดยตรงค่ะ');
+      products = backupProducts; 
+      return; 
+    }
+
     document.getElementById('adminForm').reset();
     document.getElementById('editId').value = '';
     document.getElementById('saveBtn').innerText = 'บันทึกสินค้า';
@@ -443,10 +568,10 @@ body {
     if(document.getElementById('categoriesView').style.display !== 'none') {
         renderCategories(); 
     } else {
-        renderProductsInCategory(document.getElementById('currentCategoryTitle').innerText);
+        openCategory(document.getElementById('currentCategoryTitle').innerText);
     }
     renderAdminList();
-    alert('บันทึกข้อมูลสำเร็จ!');
+    alert('✅ บันทึกข้อมูลสำเร็จ!');
   }
 
   function editProduct(id) {
@@ -454,6 +579,7 @@ body {
     if (!p) return;
     document.getElementById('editId').value = p.id;
     document.getElementById('pCat').value = p.cat;
+    document.getElementById('pCatDesc').value = p.catDesc || ''; 
     document.getElementById('pName').value = p.name;
     document.getElementById('pDesc').value = p.desc || '';
     document.getElementById('pPrice').value = p.price;
@@ -466,26 +592,25 @@ body {
     if(!confirm('ต้องการลบสินค้านี้ใช่หรือไม่?')) return;
     products = products.filter(p => p.id !== id);
     localStorage.setItem('wandererProducts', JSON.stringify(products));
-    
-    // เอาออกจากตะกร้าถ้าเผลอเลือกไว้
     cart = cart.filter(c => c.id !== id);
     
     updateBottomBar(); 
     renderCategories(); 
     renderAdminList();
     
-    // ถ้ายืนอยู่ในหมวดหมู่เดียวกับที่ลบ ให้ดึงข้อมูลมาวาดใหม่
     const activeCategory = document.getElementById('currentCategoryTitle').innerText;
     if (document.getElementById('productsView').style.display === 'block') {
-        renderProductsInCategory(activeCategory);
+        openCategory(activeCategory); // ใช้ openCategory แทนเผื่อต้องรีเฟรชคำอธิบายแอปด้วย
     }
   }
 
   function resetData() {
-    if(!confirm('ต้องการล้างข้อมูลทั้งหมด และคืนค่ากลับเป็นสินค้าตั้งต้นใช่หรือไม่? (ลบแล้วกู้คืนไม่ได้)')) return;
+    if(!confirm('ล้างข้อมูลทั้งหมด? (ลบแล้วกู้คืนไม่ได้)')) return;
     localStorage.removeItem('wandererProducts');
+    localStorage.removeItem('wandererShopLogo'); 
     products = JSON.parse(JSON.stringify(defaultProducts));
     cart = [];
+    document.getElementById('shopLogoImg').src = "https://images.unsplash.com/photo-1557683316-973673baf926?w=400&q=80"; 
     updateBottomBar();
     renderCategories();
     showCategories();
@@ -493,7 +618,6 @@ body {
     alert('รีเซ็ตข้อมูลเรียบร้อยแล้ว!');
   }
 
-  // Init
   renderCategories();
   renderAdminList();
 </script>
