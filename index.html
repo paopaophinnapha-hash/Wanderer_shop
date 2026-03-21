@@ -252,7 +252,7 @@ body {
   <button class="bb-btn" onclick="openSummary()">สั่งเลย ✨</button>
 </div>
 
-<div class="modal-overlay" id="summaryModal">
+<div class="modal-overlay" id="summaryModal" style="z-index: 5000;">
   <div class="modal-box">
     <div class="modal-header">
       <div class="modal-title">🛒 สรุปรายการสั่งซื้อ</div>
@@ -282,8 +282,8 @@ body {
 
   // --- ข้อมูลเริ่มต้น ---
   const defaultTabs = [
-    { id: 'products', name: 'สินค้า', type: 'products' },
-    { id: 'info', name: 'ข้อมูลร้าน', type: 'info' }
+    { id: 'info', name: 'ข้อมูลร้าน', type: 'info' }, // กำหนดให้ข้อมูลร้านอยู่คิวแรก
+    { id: 'products', name: 'สินค้า', type: 'products' }
   ];
   const defaultShopInfo = { line: '@997pfoig', facebook: 'Wanderer Shop', hours: '11:00 - 00:00 น.', warranty: 'เคลมไวใน 24 ชม.' };
   const defaultProducts = [
@@ -372,6 +372,10 @@ body {
   // --- Render Tabs ฝั่งผู้ใช้งาน ---
   function renderUserTabs() {
     tabs = JSON.parse(localStorage.getItem('wandererTabs')) || defaultTabs;
+    
+    // บังคับเรียงลำดับให้แท็บ 'info' อยู่ตำแหน่งแรกเสมอ
+    tabs.sort((a, b) => (a.id === 'info' ? -1 : (b.id === 'info' ? 1 : 0)));
+
     const tabContainer = document.getElementById('userTabContainer');
     const contentContainer = document.querySelector('.content');
     tabContainer.innerHTML = ''; contentContainer.innerHTML = '';
@@ -536,6 +540,83 @@ body {
     renderAdminTabList();
   }
 
+  // --- จัดการสินค้า (แอดมิน) ที่เขียนเพิ่มให้ ---
+  function renderAdminProductList() {
+    products = JSON.parse(localStorage.getItem('wandererProducts')) || defaultProducts;
+    const list = document.getElementById('adminProductList');
+    list.innerHTML = '';
+    
+    products.forEach(p => {
+      list.innerHTML += `
+        <div class="admin-list-item">
+          <div>
+            <div style="font-size: 14px; font-weight:bold; color: var(--text-dark);">${p.name}</div>
+            <div style="font-size: 12px; color: var(--text-muted);">${p.cat} | ฿${p.price}</div>
+          </div>
+          <div class="admin-actions">
+            <button class="admin-btn edit" onclick="editProduct('${p.id}')">แก้ไข</button>
+            <button class="admin-btn edit danger" onclick="deleteProduct('${p.id}')">ลบ</button>
+          </div>
+        </div>`;
+    });
+  }
+
+  function saveProduct(e) {
+    e.preventDefault();
+    products = JSON.parse(localStorage.getItem('wandererProducts')) || defaultProducts;
+    
+    const editId = document.getElementById('editId').value;
+    const newProduct = {
+      id: editId || 'p_' + Date.now(),
+      cat: document.getElementById('pCat').value,
+      catDesc: document.getElementById('pCatDesc').value,
+      name: document.getElementById('pName').value,
+      desc: document.getElementById('pDesc').value,
+      price: Number(document.getElementById('pPrice').value),
+      icon: document.getElementById('pIcon').value
+    };
+
+    if (editId) {
+      const index = products.findIndex(p => p.id === editId);
+      if (index > -1) products[index] = newProduct;
+    } else {
+      products.push(newProduct);
+    }
+
+    if(safeSaveLocalStorage('wandererProducts', products)) {
+      document.getElementById('adminForm').reset();
+      document.getElementById('editId').value = '';
+      document.getElementById('saveBtn').innerText = 'บันทึกสินค้า';
+      renderAdminProductList();
+      alert('บันทึกสินค้าเรียบร้อย!');
+    }
+  }
+
+  function editProduct(id) {
+    const p = products.find(x => x.id === id);
+    if (p) {
+      document.getElementById('editId').value = p.id;
+      document.getElementById('pCat').value = p.cat;
+      document.getElementById('pCatDesc').value = p.catDesc || '';
+      document.getElementById('pName').value = p.name;
+      document.getElementById('pDesc').value = p.desc || '';
+      document.getElementById('pPrice').value = p.price;
+      document.getElementById('pIcon').value = p.icon;
+      document.getElementById('saveBtn').innerText = 'อัปเดตสินค้า';
+    }
+  }
+
+  function deleteProduct(id) {
+    if(!confirm('ต้องการลบสินค้านี้ใช่ไหมคะ?')) return;
+    products = JSON.parse(localStorage.getItem('wandererProducts')) || defaultProducts;
+    products = products.filter(p => p.id !== id);
+    safeSaveLocalStorage('wandererProducts', products);
+    renderAdminProductList();
+    // ถ้าสินค้านั้นอยู่ในตะกร้า ให้ลบออกด้วย
+    cart = cart.filter(item => item.id !== id);
+    updateBottomBar();
+  }
+
   // --- สินค้า (ลูกค้า) ---
   function showCategories() {
     document.getElementById('categoriesView').style.display = 'block';
@@ -577,7 +658,6 @@ body {
     renderProductsInCategory(categoryName);
   }
   
-  // โค้ดที่ได้รับการซ่อมแซมและต่อเติมให้สมบูรณ์
   function renderProductsInCategory(categoryName) {
     const grid = document.getElementById('productGrid');
     grid.innerHTML = '';
@@ -600,44 +680,60 @@ body {
     });
   }
 
-  // --- ระบบตะกร้า และเช็คเอาท์ ---
+  // --- ระบบตะกร้าสินค้าและการสั่งซื้อ (ที่เขียนเพิ่มให้) ---
   function toggleItem(id) {
-    const itemIndex = cart.findIndex(item => item.id === id);
-    if(itemIndex > -1) {
-      cart.splice(itemIndex, 1);
-      document.getElementById(`card-${id}`).classList.remove('selected');
+    const product = products.find(p => p.id === id);
+    if (!product) return;
+    
+    const index = cart.findIndex(item => item.id === id);
+    const cardEl = document.getElementById(`card-${id}`);
+
+    if (index > -1) {
+      // ถ้ามีอยู่ในตะกร้าแล้ว ให้ลบออก
+      cart.splice(index, 1);
+      if(cardEl) cardEl.classList.remove('selected');
     } else {
-      const product = products.find(p => p.id === id);
-      if(product) {
-        cart.push(product);
-        document.getElementById(`card-${id}`).classList.add('selected');
-      }
+      // ถ้ายังไม่มี ให้เพิ่มเข้าตะกร้า
+      cart.push({ ...product });
+      if(cardEl) cardEl.classList.add('selected');
     }
     updateBottomBar();
   }
 
   function updateBottomBar() {
-    const bb = document.getElementById('bottomBar');
-    if (cart.length > 0 && currentActiveTabId === 'products') {
-      bb.classList.add('active');
-      document.getElementById('cartCount').innerText = `เลือก ${cart.length} รายการ`;
-      const total = cart.reduce((sum, item) => sum + Number(item.price), 0);
-      document.getElementById('cartTotal').innerText = total;
+    const bottomBar = document.getElementById('bottomBar');
+    const countEl = document.getElementById('cartCount');
+    const totalEl = document.getElementById('cartTotal');
+
+    if (cart.length > 0) {
+      bottomBar.classList.add('active');
+      countEl.innerText = `เลือก ${cart.length} รายการ`;
+      const total = cart.reduce((sum, item) => sum + item.price, 0);
+      totalEl.innerText = total;
     } else {
-      bb.classList.remove('active');
+      bottomBar.classList.remove('active');
     }
   }
 
   function openSummary() {
     const modal = document.getElementById('summaryModal');
     const list = document.getElementById('modalItemsList');
+    const totalEl = document.getElementById('modalTotalPrice');
+
     list.innerHTML = '';
     let total = 0;
+
     cart.forEach(item => {
-      total += Number(item.price);
-      list.innerHTML += `<div class="modal-item"><div class="modal-item-name">${item.cat} - ${item.name}</div><div class="modal-item-price">฿${item.price}</div></div>`;
+      list.innerHTML += `
+        <div class="modal-item">
+          <div class="modal-item-name">${item.name} <br><span style="font-size:12px;color:var(--text-muted)">${item.cat}</span></div>
+          <div class="modal-item-price">฿${item.price}</div>
+        </div>
+      `;
+      total += item.price;
     });
-    document.getElementById('modalTotalPrice').innerText = total;
+
+    totalEl.innerText = total;
     modal.classList.add('show');
   }
 
@@ -646,100 +742,27 @@ body {
   }
 
   function checkout() {
-    if(cart.length === 0) return;
-    let text = `🛒 สั่งซื้อสินค้า\n\n`;
+    if (cart.length === 0) return;
+    
+    let textToCopy = `🛒 *รายการสั่งซื้อ*\n\n`;
     let total = 0;
+    
     cart.forEach((item, index) => {
-      text += `${index+1}. ${item.cat} - ${item.name} [฿${item.price}]\n`;
-      total += Number(item.price);
+      textToCopy += `${index + 1}. ${item.name} (${item.cat})\n   ราคา: ${item.price} บาท\n`;
+      total += item.price;
     });
-    text += `\nยอดรวม: ฿${total}`;
+    
+    textToCopy += `\n💰 *ยอดรวมทั้งหมด: ${total} บาท*\n`;
     
     // คัดลอกข้อความ
-    const dummy = document.createElement('textarea');
-    document.body.appendChild(dummy);
-    dummy.value = text;
-    dummy.select();
-    document.execCommand('copy');
-    document.body.removeChild(dummy);
-    
-    alert('คัดลอกรายการสั่งซื้อแล้ว! กำลังเปิด LINE...');
-    
-    // เด้งไปที่ LINE (คุณสามารถเปลี่ยนเป็นลิงก์ LINE OA ของคุณได้เลย)
-    window.location.href = "https://line.me/R/ti/p/" + shopInfo.line;
-  }
-
-  // --- แอดมิน: จัดการสินค้า ---
-  function renderAdminProductList() {
-    products = JSON.parse(localStorage.getItem('wandererProducts')) || defaultProducts;
-    const list = document.getElementById('adminProductList');
-    list.innerHTML = '';
-    products.forEach(p => {
-      list.innerHTML += `<div class="admin-list-item">
-        <div><strong style="font-size: 14px;">${p.name}</strong> <span style="font-size: 12px; color: var(--text-muted);">(${p.cat})</span><div style="font-size: 12px; color: var(--primary);">฿${p.price}</div></div>
-        <div class="admin-actions">
-          <button class="admin-btn edit" onclick="editProduct('${p.id}')">แก้ไข</button>
-          <button class="admin-btn edit danger" onclick="deleteProduct('${p.id}')">ลบ</button>
-        </div>
-      </div>`;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+       alert('📝 คัดลอกรายการสั่งซื้อเรียบร้อยแล้ว!\n\nคุณสามารถนำไปวางส่งในแชท LINE ได้เลยค่ะ');
+       // หากต้องการให้เปิดลิงก์ไลน์ทันที สามารถเอาเครื่องหมาย // บรรทัดล่างออกได้เลย
+       // window.location.href = `https://line.me/R/ti/p/${shopInfo.line}`;
+    }).catch(err => {
+       alert('⚠️ ไม่สามารถคัดลอกข้อความได้อัตโนมัติ กรุณาแคปหน้าจอเพื่อสั่งซื้อนะคะ');
     });
   }
-
-  function saveProduct(e) {
-    e.preventDefault();
-    products = JSON.parse(localStorage.getItem('wandererProducts')) || defaultProducts;
-    const editId = document.getElementById('editId').value;
-    
-    const newProduct = {
-      id: editId || 'p_' + Date.now(),
-      cat: document.getElementById('pCat').value,
-      catDesc: document.getElementById('pCatDesc').value,
-      name: document.getElementById('pName').value,
-      desc: document.getElementById('pDesc').value,
-      price: Number(document.getElementById('pPrice').value),
-      icon: document.getElementById('pIcon').value
-    };
-
-    if (editId) {
-      const index = products.findIndex(p => p.id === editId);
-      if (index > -1) products[index] = newProduct;
-    } else {
-      products.push(newProduct);
-    }
-
-    if(safeSaveLocalStorage('wandererProducts', products)) {
-      document.getElementById('adminForm').reset();
-      document.getElementById('editId').value = '';
-      document.getElementById('saveBtn').innerText = 'บันทึกสินค้า';
-      renderAdminProductList();
-      alert('บันทึกสินค้าเรียบร้อยแล้ว!');
-    }
-  }
-
-  function editProduct(id) {
-    products = JSON.parse(localStorage.getItem('wandererProducts')) || defaultProducts;
-    const p = products.find(p => p.id === id);
-    if(p) {
-      document.getElementById('editId').value = p.id;
-      document.getElementById('pCat').value = p.cat;
-      document.getElementById('pCatDesc').value = p.catDesc || '';
-      document.getElementById('pName').value = p.name;
-      document.getElementById('pDesc').value = p.desc || '';
-      document.getElementById('pPrice').value = p.price;
-      document.getElementById('pIcon').value = p.icon;
-      document.getElementById('saveBtn').innerText = 'อัปเดตสินค้า';
-      document.getElementById('adminForm').scrollIntoView({ behavior: 'smooth' });
-    }
-  }
-
-  function deleteProduct(id) {
-    if(!confirm('คุณต้องการลบสินค้านี้ใช่หรือไม่?')) return;
-    products = JSON.parse(localStorage.getItem('wandererProducts')) || defaultProducts;
-    products = products.filter(p => p.id !== id);
-    safeSaveLocalStorage('wandererProducts', products);
-    renderAdminProductList();
-  }
-
 </script>
 </body>
 </html>
