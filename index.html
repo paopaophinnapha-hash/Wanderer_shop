@@ -282,7 +282,7 @@ body {
 
   // --- ข้อมูลเริ่มต้น ---
   const defaultTabs = [
-    { id: 'info', name: 'ข้อมูลร้าน', type: 'info' }, // กำหนดให้ข้อมูลร้านอยู่คิวแรก
+    { id: 'info', name: 'ข้อมูลร้าน', type: 'info' },
     { id: 'products', name: 'สินค้า', type: 'products' }
   ];
   const defaultShopInfo = { line: '@997pfoig', facebook: 'Wanderer Shop', hours: '11:00 - 00:00 น.', warranty: 'เคลมไวใน 24 ชม.' };
@@ -290,9 +290,17 @@ body {
     { id: 'm1', cat: 'Netflix 4K', catDesc: 'รับประกัน 4K ตลอดอายุการใช้งาน', name: '7 วัน (จอเสริม)', desc: 'ไม่ชน', price: 65, icon: '🍿' }
   ];
 
-  let tabs = JSON.parse(localStorage.getItem('wandererTabs')) || defaultTabs;
-  let shopInfo = JSON.parse(localStorage.getItem('wandererShopInfo')) || defaultShopInfo;
-  let products = JSON.parse(localStorage.getItem('wandererProducts')) || defaultProducts;
+  // --- Safe Load ---
+  function safeLoadData(key, defaultData) {
+    try {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : defaultData;
+    } catch(e) { return defaultData; }
+  }
+
+  let tabs = safeLoadData('wandererTabs', defaultTabs);
+  let shopInfo = safeLoadData('wandererShopInfo', defaultShopInfo);
+  let products = safeLoadData('wandererProducts', defaultProducts);
   let cart = [];
   let currentActiveTabId = null;
 
@@ -371,9 +379,7 @@ body {
 
   // --- Render Tabs ฝั่งผู้ใช้งาน ---
   function renderUserTabs() {
-    tabs = JSON.parse(localStorage.getItem('wandererTabs')) || defaultTabs;
-    
-    // บังคับเรียงลำดับให้แท็บ 'info' อยู่ตำแหน่งแรกเสมอ
+    tabs = safeLoadData('wandererTabs', defaultTabs);
     tabs.sort((a, b) => (a.id === 'info' ? -1 : (b.id === 'info' ? 1 : 0)));
 
     const tabContainer = document.getElementById('userTabContainer');
@@ -432,9 +438,151 @@ body {
     }
   }
 
+  // --- แสดงหมวดหมู่สินค้า (ลูกค้า) ---
+  function showCategories() {
+    const catView = document.getElementById('categoriesView');
+    const prodView = document.getElementById('productsView');
+    if(!catView || !prodView) return;
+    
+    catView.style.display = 'block';
+    prodView.style.display = 'none';
+    
+    products = safeLoadData('wandererProducts', defaultProducts);
+    const grid = document.getElementById('categoryGrid');
+    grid.innerHTML = '';
+    
+    const cats = [...new Set(products.map(p => p.cat))];
+    cats.forEach(c => {
+        const sample = products.find(p => p.cat === c);
+        const iconHtml = (sample.icon.startsWith('http') || sample.icon.startsWith('data:image')) 
+            ? `<img src="${sample.icon}" alt="${c}">` 
+            : `<span>${sample.icon}</span>`;
+            
+        grid.innerHTML += `
+            <div class="category-card" onclick="showProducts('${c}')">
+                <div class="cat-icon-wrapper">${iconHtml}</div>
+                <div class="cat-title">${c}</div>
+            </div>
+        `;
+    });
+  }
+
+  // --- แสดงรายการสินค้าในหมวดหมู่ (ลูกค้า) ---
+  function showProducts(cat) {
+    document.getElementById('categoriesView').style.display = 'none';
+    document.getElementById('productsView').style.display = 'block';
+    
+    document.getElementById('currentCategoryTitle').innerText = cat;
+    const sample = products.find(p => p.cat === cat);
+    const descEl = document.getElementById('currentCategoryDesc');
+    
+    if (sample && sample.catDesc) {
+        descEl.innerHTML = sample.catDesc;
+        descEl.style.display = 'block';
+    } else {
+        descEl.style.display = 'none';
+    }
+
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = '';
+    
+    const items = products.filter(p => p.cat === cat);
+    items.forEach(p => {
+        const isSelected = cart.find(x => x.id === p.id) ? 'selected' : '';
+        grid.innerHTML += `
+            <div class="item-card ${isSelected}" id="item-${p.id}" onclick="toggleProduct('${p.id}')">
+                <div class="check-circle"></div>
+                <div class="card-title">${p.name}</div>
+                ${p.desc ? `<div class="card-desc-box">${p.desc}</div>` : ''}
+                <div class="card-footer">
+                    <span class="price-label">ราคา</span>
+                    <div><span class="card-price-amount">${p.price}</span><span class="card-price-unit">฿</span></div>
+                </div>
+            </div>
+        `;
+    });
+  }
+
+  // --- ระบบตะกร้าสินค้า ---
+  function toggleProduct(id) {
+    const itemIdx = cart.findIndex(x => x.id === id);
+    const card = document.getElementById(`item-${id}`);
+    if (itemIdx > -1) {
+        cart.splice(itemIdx, 1);
+        card.classList.remove('selected');
+    } else {
+        const p = products.find(x => x.id === id);
+        if (p) {
+            cart.push(p);
+            card.classList.add('selected');
+        }
+    }
+    updateBottomBar();
+  }
+
+  function updateBottomBar() {
+    const bar = document.getElementById('bottomBar');
+    if (!bar) return;
+    
+    if (currentActiveTabId !== 'products') {
+        bar.classList.remove('active');
+        return;
+    }
+    
+    if (cart.length > 0) {
+        document.getElementById('cartCount').innerText = `เลือก ${cart.length} รายการ`;
+        const total = cart.reduce((sum, item) => sum + item.price, 0);
+        document.getElementById('cartTotal').innerText = total;
+        bar.classList.add('active');
+    } else {
+        bar.classList.remove('active');
+    }
+  }
+
+  function openSummary() {
+    document.getElementById('summaryModal').classList.add('show');
+    const list = document.getElementById('modalItemsList');
+    list.innerHTML = '';
+    let total = 0;
+    cart.forEach(item => {
+        total += item.price;
+        list.innerHTML += `
+            <div class="modal-item">
+                <div class="modal-item-name">${item.name}<br><span style="font-size:11px; color:var(--text-muted);">${item.cat}</span></div>
+                <div class="modal-item-price">฿${item.price}</div>
+            </div>
+        `;
+    });
+    document.getElementById('modalTotalPrice').innerText = total;
+  }
+
+  function closeSummary() {
+    document.getElementById('summaryModal').classList.remove('show');
+  }
+
+  function checkout() {
+    let text = `🛒 *สรุปรายการสั่งซื้อ*\n\n`;
+    let total = 0;
+    cart.forEach((item, i) => {
+        text += `${i+1}. ${item.name} (${item.cat})\nราคา: ${item.price} บาท\n`;
+        total += item.price;
+    });
+    text += `\n💰 *ยอดรวมทั้งสิ้น: ${total} บาท*\n`;
+    text += `\nรบกวนแอดมินสรุปยอดให้หน่อยค่ะ ✨`;
+    
+    navigator.clipboard.writeText(text).then(() => {
+        alert('คัดลอกรายการสั่งซื้อแล้ว! ระบบจะพาไปที่ LINE ของร้านค่ะ');
+        shopInfo = safeLoadData('wandererShopInfo', defaultShopInfo);
+        let lineId = shopInfo.line.replace('@', '');
+        window.location.href = `https://line.me/R/ti/p/@${lineId}`;
+    }).catch(err => {
+        alert('ไม่สามารถคัดลอกข้อความได้ กรุณาแคปหน้าจอนี้ส่งให้แอดมินค่ะ');
+    });
+  }
+
   // --- ข้อมูลร้าน ---
   function renderShopInfo() {
-    shopInfo = JSON.parse(localStorage.getItem('wandererShopInfo')) || defaultShopInfo;
+    shopInfo = safeLoadData('wandererShopInfo', defaultShopInfo);
     const container = document.getElementById('shopInfoContent');
     if (container) {
       container.innerHTML = `
@@ -446,7 +594,7 @@ body {
     }
   }
   function loadShopInfoForm() {
-    shopInfo = JSON.parse(localStorage.getItem('wandererShopInfo')) || defaultShopInfo;
+    shopInfo = safeLoadData('wandererShopInfo', defaultShopInfo);
     document.getElementById('infoLine').value = shopInfo.line;
     document.getElementById('infoFacebook').value = shopInfo.facebook;
     document.getElementById('infoHours').value = shopInfo.hours;
@@ -468,7 +616,7 @@ body {
 
   // --- จัดการแท็บ (แอดมิน) ---
   function renderAdminTabList() {
-    tabs = JSON.parse(localStorage.getItem('wandererTabs')) || defaultTabs;
+    tabs = safeLoadData('wandererTabs', defaultTabs);
     const list = document.getElementById('adminTabList');
     list.innerHTML = '';
     tabs.forEach(tab => {
@@ -508,7 +656,7 @@ body {
   function closeTabForm() { document.getElementById('tabFormModal').classList.remove('show'); }
   function saveTab(e) {
     e.preventDefault();
-    tabs = JSON.parse(localStorage.getItem('wandererTabs')) || defaultTabs;
+    tabs = safeLoadData('wandererTabs', defaultTabs);
     let backupTabs = JSON.parse(JSON.stringify(tabs));
     
     const editId = document.getElementById('tabEditId').value;
@@ -534,15 +682,15 @@ body {
   function editTab(id) { openTabForm(id); }
   function deleteTab(id) {
     if(!confirm('ลบแท็บนี้?')) return;
-    tabs = JSON.parse(localStorage.getItem('wandererTabs')) || defaultTabs;
+    tabs = safeLoadData('wandererTabs', defaultTabs);
     tabs = tabs.filter(t => t.id !== id);
     safeSaveLocalStorage('wandererTabs', tabs);
     renderAdminTabList();
   }
 
-  // --- จัดการสินค้า (แอดมิน) ที่เขียนเพิ่มให้ ---
+  // --- จัดการสินค้า (แอดมิน) ---
   function renderAdminProductList() {
-    products = JSON.parse(localStorage.getItem('wandererProducts')) || defaultProducts;
+    products = safeLoadData('wandererProducts', defaultProducts);
     const list = document.getElementById('adminProductList');
     list.innerHTML = '';
     
@@ -563,7 +711,7 @@ body {
 
   function saveProduct(e) {
     e.preventDefault();
-    products = JSON.parse(localStorage.getItem('wandererProducts')) || defaultProducts;
+    products = safeLoadData('wandererProducts', defaultProducts);
     
     const editId = document.getElementById('editId').value;
     const newProduct = {
@@ -603,165 +751,23 @@ body {
       document.getElementById('pPrice').value = p.price;
       document.getElementById('pIcon').value = p.icon;
       document.getElementById('saveBtn').innerText = 'อัปเดตสินค้า';
+      
+      // เลื่อนหน้าจอไปที่ฟอร์มแก้ไข
+      document.getElementById('adminForm').scrollIntoView({ behavior: 'smooth' });
     }
   }
 
   function deleteProduct(id) {
     if(!confirm('ต้องการลบสินค้านี้ใช่ไหมคะ?')) return;
-    products = JSON.parse(localStorage.getItem('wandererProducts')) || defaultProducts;
+    products = safeLoadData('wandererProducts', defaultProducts);
     products = products.filter(p => p.id !== id);
     safeSaveLocalStorage('wandererProducts', products);
+    
+    // เคลียร์ตะกร้าเผื่อสินค้าที่ลบถูกเลือกอยู่
+    cart = cart.filter(c => c.id !== id);
+    updateBottomBar();
+    
     renderAdminProductList();
-    // ถ้าสินค้านั้นอยู่ในตะกร้า ให้ลบออกด้วย
-    cart = cart.filter(item => item.id !== id);
-    updateBottomBar();
-  }
-
-  // --- สินค้า (ลูกค้า) ---
-  function showCategories() {
-    document.getElementById('categoriesView').style.display = 'block';
-    document.getElementById('productsView').style.display = 'none';
-    renderCategories();
-  }
-  function renderCategories() {
-    products = JSON.parse(localStorage.getItem('wandererProducts')) || defaultProducts;
-    const grid = document.getElementById('categoryGrid');
-    grid.innerHTML = '';
-    const uniqueCategories = [...new Set(products.map(item => item.cat))];
-
-    uniqueCategories.forEach(category => {
-      const firstProduct = products.find(p => p.cat === category);
-      const icon = firstProduct ? firstProduct.icon : '📦';
-      const isImg = icon.startsWith('http') || icon.startsWith('data:image');
-      const iconDisplay = isImg ? `<img src="${icon}" alt="icon">` : `<span>${icon}</span>`;
-
-      const card = document.createElement('div');
-      card.className = 'category-card';
-      card.onclick = () => openCategory(category);
-      card.innerHTML = `<div class="cat-icon-wrapper">${iconDisplay}</div><div class="cat-title">${category}</div>`;
-      grid.appendChild(card);
-    });
-  }
-  function openCategory(categoryName) {
-    products = JSON.parse(localStorage.getItem('wandererProducts')) || defaultProducts;
-    document.getElementById('categoriesView').style.display = 'none';
-    document.getElementById('productsView').style.display = 'block';
-    document.getElementById('currentCategoryTitle').innerText = categoryName;
-    
-    const catProduct = products.find(p => p.cat === categoryName && p.catDesc);
-    const descEl = document.getElementById('currentCategoryDesc');
-    if (catProduct && catProduct.catDesc) {
-      descEl.innerHTML = catProduct.catDesc; descEl.style.display = 'block';
-    } else {
-      descEl.innerHTML = ''; descEl.style.display = 'none';
-    }
-    renderProductsInCategory(categoryName);
-  }
-  
-  function renderProductsInCategory(categoryName) {
-    const grid = document.getElementById('productGrid');
-    grid.innerHTML = '';
-    const productsInCat = products.filter(p => p.cat === categoryName);
-
-    productsInCat.forEach(p => {
-      const isSelected = cart.find(item => item.id === p.id) ? 'selected' : '';
-      const card = document.createElement('div');
-      card.className = `item-card ${isSelected}`; card.id = `card-${p.id}`;
-      card.onclick = () => toggleItem(p.id);
-      card.innerHTML = `
-          <div class="check-circle"></div>
-          <div class="card-title">${p.name}</div>
-          <div class="card-desc-box">${p.desc || '-'}</div>
-          <div class="card-footer">
-            <span class="price-label">ราคา</span>
-            <div><span class="card-price-amount">${p.price}</span><span class="card-price-unit">บาท</span></div>
-          </div>`;
-      grid.appendChild(card);
-    });
-  }
-
-  // --- ระบบตะกร้าสินค้าและการสั่งซื้อ (ที่เขียนเพิ่มให้) ---
-  function toggleItem(id) {
-    const product = products.find(p => p.id === id);
-    if (!product) return;
-    
-    const index = cart.findIndex(item => item.id === id);
-    const cardEl = document.getElementById(`card-${id}`);
-
-    if (index > -1) {
-      // ถ้ามีอยู่ในตะกร้าแล้ว ให้ลบออก
-      cart.splice(index, 1);
-      if(cardEl) cardEl.classList.remove('selected');
-    } else {
-      // ถ้ายังไม่มี ให้เพิ่มเข้าตะกร้า
-      cart.push({ ...product });
-      if(cardEl) cardEl.classList.add('selected');
-    }
-    updateBottomBar();
-  }
-
-  function updateBottomBar() {
-    const bottomBar = document.getElementById('bottomBar');
-    const countEl = document.getElementById('cartCount');
-    const totalEl = document.getElementById('cartTotal');
-
-    if (cart.length > 0) {
-      bottomBar.classList.add('active');
-      countEl.innerText = `เลือก ${cart.length} รายการ`;
-      const total = cart.reduce((sum, item) => sum + item.price, 0);
-      totalEl.innerText = total;
-    } else {
-      bottomBar.classList.remove('active');
-    }
-  }
-
-  function openSummary() {
-    const modal = document.getElementById('summaryModal');
-    const list = document.getElementById('modalItemsList');
-    const totalEl = document.getElementById('modalTotalPrice');
-
-    list.innerHTML = '';
-    let total = 0;
-
-    cart.forEach(item => {
-      list.innerHTML += `
-        <div class="modal-item">
-          <div class="modal-item-name">${item.name} <br><span style="font-size:12px;color:var(--text-muted)">${item.cat}</span></div>
-          <div class="modal-item-price">฿${item.price}</div>
-        </div>
-      `;
-      total += item.price;
-    });
-
-    totalEl.innerText = total;
-    modal.classList.add('show');
-  }
-
-  function closeSummary() {
-    document.getElementById('summaryModal').classList.remove('show');
-  }
-
-  function checkout() {
-    if (cart.length === 0) return;
-    
-    let textToCopy = `🛒 *รายการสั่งซื้อ*\n\n`;
-    let total = 0;
-    
-    cart.forEach((item, index) => {
-      textToCopy += `${index + 1}. ${item.name} (${item.cat})\n   ราคา: ${item.price} บาท\n`;
-      total += item.price;
-    });
-    
-    textToCopy += `\n💰 *ยอดรวมทั้งหมด: ${total} บาท*\n`;
-    
-    // คัดลอกข้อความ
-    navigator.clipboard.writeText(textToCopy).then(() => {
-       alert('📝 คัดลอกรายการสั่งซื้อเรียบร้อยแล้ว!\n\nคุณสามารถนำไปวางส่งในแชท LINE ได้เลยค่ะ');
-       // หากต้องการให้เปิดลิงก์ไลน์ทันที สามารถเอาเครื่องหมาย // บรรทัดล่างออกได้เลย
-       // window.location.href = `https://line.me/R/ti/p/${shopInfo.line}`;
-    }).catch(err => {
-       alert('⚠️ ไม่สามารถคัดลอกข้อความได้อัตโนมัติ กรุณาแคปหน้าจอเพื่อสั่งซื้อนะคะ');
-    });
   }
 </script>
 </body>
