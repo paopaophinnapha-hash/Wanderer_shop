@@ -1,311 +1,247 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wanderer Shop 🌌</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #A29BFE; /* ม่วงพาสเทล */
-            --secondary: #81ECEC; /* ฟ้าพาสเทล */
-            --bg: #FFFFFF;
-            --card-bg: #F9F9FF;
-            --text: #2D3436;
-            --shadow: 0 10px 20px rgba(0,0,0,0.05);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Wanderer Shop 🌌</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Mitr:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #a29bfe; /* ม่วงพาสเทล */
+  --secondary: #81ecec; /* ฟ้าพาสเทล */
+  --bg-main: #ffffff; /* พื้นหลังขาว */
+  --bg-card: #f9f9ff; /* การ์ดพาสเทลเทาอ่อน */
+  --text-dark: #2d3436;
+  --text-muted: #636e72;
+  --accent: #6c5ce7;
+}
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Kanit', sans-serif; }
-        body { background-color: var(--bg); color: var(--text); padding-bottom: 100px; }
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: 'Kanit', sans-serif;
+  background: var(--bg-main); color: var(--text-dark);
+  padding-bottom: 110px; overflow-x: hidden;
+}
 
-        /* HEADER */
-        header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            padding: 40px 20px;
-            text-align: center;
-            color: white;
-            border-bottom-left-radius: 40px;
-            border-bottom-right-radius: 40px;
-            position: relative;
-        }
-        .logo-img {
-            width: 90px; height: 90px;
-            background: white; border-radius: 50%;
-            margin: 0 auto 15px; display: flex; align-items: center; justify-content: center;
-            overflow: hidden; border: 4px solid rgba(255,255,255,0.5);
-            object-fit: cover;
-        }
-        header h1 { font-size: 28px; font-weight: 600; }
-        
-        /* ADMIN BUTTON */
-        .admin-trigger {
-            position: absolute; top: 10px; right: 10px;
-            background: rgba(255,255,255,0.2); border: none;
-            padding: 5px 10px; border-radius: 10px; color: white; cursor: pointer; font-size: 12px;
-        }
+/* --- HEADER & LOGO --- */
+.hero {
+  background: linear-gradient(135deg, #efedff 0%, #e0fcff 100%);
+  padding: 50px 20px 60px;
+  text-align: center;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(162, 155, 254, 0.15);
+}
+.logo-container {
+  width: 100px; height: 100px;
+  background: #fff;
+  border-radius: 30px;
+  margin: 0 auto 15px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  overflow: hidden; border: 3px solid #fff;
+  cursor: pointer; /* สำหรับกดเข้า Admin */
+}
+.logo-container img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* TABS */
-        .tabs {
-            display: flex; justify-content: center; gap: 10px; margin: -20px 0 20px;
-        }
-        .tab-btn {
-            background: white; border: none; padding: 10px 25px;
-            border-radius: 20px; box-shadow: var(--shadow);
-            cursor: pointer; font-weight: 500; transition: 0.3s;
-        }
-        .tab-btn.active { background: var(--primary); color: white; }
+.hero-title { font-family: 'Mitr', sans-serif; font-size: 28px; color: var(--accent); margin-bottom: 5px; }
+.hero-sub { font-size: 14px; color: var(--text-muted); }
 
-        .container { max-width: 500px; margin: 0 auto; padding: 0 20px; }
+/* --- TABS --- */
+.tab-container {
+  display: flex; background: #fff; border-radius: 20px;
+  padding: 5px; width: 250px; margin: -25px auto 30px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+.tab-btn {
+  flex: 1; padding: 10px; border-radius: 15px; border: none;
+  font-family: inherit; font-size: 14px; font-weight: 500;
+  background: transparent; color: var(--text-muted); cursor: pointer;
+}
+.tab-btn.active { background: var(--primary); color: #fff; }
 
-        /* PRODUCT GRID */
-        .app-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;
-        }
-        .app-item {
-            text-align: center; cursor: pointer;
-        }
-        .app-icon {
-            width: 70px; height: 70px; background: var(--card-bg);
-            border-radius: 20px; margin: 0 auto 8px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 30px; border: 1px solid #eee; transition: 0.3s;
-            overflow: hidden;
-        }
-        .app-icon img { width: 100%; height: 100%; object-fit: cover; }
-        .app-item:hover .app-icon { transform: translateY(-5px); border-color: var(--primary); }
-        .app-name { font-size: 13px; font-weight: 500; }
+/* --- GRID & ICONS --- */
+.content { max-width: 600px; margin: 0 auto; padding: 0 20px; }
+.app-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+}
+.app-card {
+  text-align: center; cursor: pointer; transition: transform 0.2s;
+}
+.app-card:active { transform: scale(0.9); }
+.app-icon-wrap {
+  width: 75px; height: 75px; background: var(--bg-card);
+  border-radius: 22px; margin: 0 auto 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; border: 2px solid #fff;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+  overflow: hidden;
+}
+.app-icon-wrap img { width: 100%; height: 100%; object-fit: cover; }
+.app-name { font-size: 13px; font-weight: 500; color: var(--text-dark); }
 
-        /* MODAL */
-        .modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-            display: none; align-items: flex-end; z-index: 1000;
-        }
-        .modal-content {
-            background: white; width: 100%; border-top-left-radius: 30px;
-            border-top-right-radius: 30px; padding: 30px 20px;
-            max-height: 85vh; overflow-y: auto;
-        }
+/* --- MODAL (Selection) --- */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  display: none; justify-content: center; align-items: flex-end; z-index: 2000;
+  backdrop-filter: blur(4px);
+}
+.modal-box {
+  background: #fff; width: 100%; max-width: 500px;
+  border-top-left-radius: 30px; border-top-right-radius: 30px;
+  padding: 30px 20px; animation: slideUp 0.3s ease-out;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-        .price-card {
-            border: 2px solid #F0F0F0; border-radius: 15px;
-            padding: 15px; margin-bottom: 10px; display: flex;
-            justify-content: space-between; align-items: center; cursor: pointer;
-        }
-        .price-card:hover { border-color: var(--primary); background: #FAF9FF; }
-        .price-card.selected { border-color: var(--primary); background: #F2F0FF; }
+.modal-title { font-size: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.pkg-list { display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto; }
+.pkg-item {
+  padding: 15px; border: 2px solid #f0f0f5; border-radius: 18px;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: 0.2s; cursor: pointer;
+}
+.pkg-item:hover { border-color: var(--primary); background: #fafdff; }
+.pkg-item.selected { border-color: var(--primary); background: #f6f5ff; }
 
-        /* ADMIN PANEL */
-        #adminPanel { display: none; background: #f4f4f4; padding: 20px; border-radius: 20px; margin-top: 20px; }
-        .form-group { margin-bottom: 15px; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 10px; margin-top: 5px; }
-        .btn-save { background: #00b894; color: white; border: none; padding: 10px; width: 100%; border-radius: 10px; cursor: pointer; }
+/* --- ADMIN PANEL --- */
+.admin-section { display: none; background: #fff; padding: 20px; border-radius: 20px; margin-top: 20px; border: 2px dashed var(--primary); }
+.admin-input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 10px; font-family: inherit; }
+.btn-add { background: var(--accent); color: #fff; border: none; padding: 12px; border-radius: 10px; width: 100%; cursor: pointer; margin-bottom: 20px; }
+.admin-item-row { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; font-size: 14px; }
 
-        /* FOOTER BAR */
-        .footer-bar {
-            position: fixed; bottom: 0; width: 100%; background: white;
-            padding: 20px; border-top: 1px solid #eee; display: none;
-            justify-content: space-between; align-items: center; box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
-        }
-        .btn-order { background: var(--primary); color: white; border: none; padding: 10px 30px; border-radius: 15px; font-weight: 600; cursor: pointer; }
-    </style>
+/* --- BOTTOM BAR --- */
+.bottom-bar {
+  position: fixed; bottom: 20px; left: 20px; right: 20px;
+  background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);
+  border-radius: 25px; padding: 15px 20px;
+  display: flex; justify-content: space-between; align-items: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transform: translateY(150%); transition: 0.3s; z-index: 1000;
+}
+.bottom-bar.active { transform: translateY(0); }
+.bb-btn { background: var(--accent); color: #fff; border: none; padding: 12px 25px; border-radius: 18px; font-weight: 600; cursor: pointer; }
+</style>
 </head>
 <body>
 
-<header>
-    <button class="admin-trigger" onclick="accessAdmin()">จัดการร้านค้า</button>
-    <div class="logo-area">
-        <img id="storeLogo" src="https://via.placeholder.com/100" class="logo-img" alt="Logo">
-    </div>
-    <h1 id="storeName">Wanderer_shop</h1>
-    <p id="storeSub">[ยินดีต้อนรับร้านละมุดรับสินค้าอะไรดีคะ]</p>
-</header>
-
-<div class="tabs">
-    <button class="tab-btn active" onclick="switchPage('shop')">เลือกซื้อสินค้า</button>
-    <button class="tab-btn" onclick="switchPage('info')">ข้อมูลร้าน</button>
+<div class="hero">
+  <div class="logo-container" id="mainLogo" onclick="adminClick()">
+    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=wanderer" alt="Shop Logo" id="logoImg">
+  </div>
+  <div class="hero-title" id="displayShopName">Wanderer_shop</div>
+  <div class="hero-sub" id="displayShopSub">ยินดีต้อนรับร้านละมุดรับสินค้าอะไรดีคะ</div>
 </div>
 
-<div class="container">
-    <div id="shopPage">
-        <div class="app-grid" id="appGrid">
-            </div>
-    </div>
-
-    <div id="infoPage" style="display:none;">
-        <div style="background: var(--card-bg); padding: 20px; border-radius: 20px; text-align: center;">
-            <p>ติดต่อสอบถามเพิ่มเติม</p>
-            <h3 id="contactLine">Line: @997pfoig</h3>
-            <p id="storeTime">เวลาทำการ: 11:00 - 00:00 น.</p>
-        </div>
-    </div>
-
-    <div id="adminPanel">
-        <h3>จัดการหลังบ้าน</h3>
-        <hr><br>
-        <div class="form-group">
-            <label>ชื่อร้าน</label>
-            <input type="text" id="editStoreName">
-        </div>
-        <div class="form-group">
-            <label>URL โลโก้</label>
-            <input type="text" id="editStoreLogo" placeholder="ใส่ลิงก์รูปภาพ">
-        </div>
-        <hr><br>
-        <h4>+ เพิ่มแอปใหม่</h4>
-        <input type="text" id="newAppName" placeholder="ชื่อแอป (เช่น YouTube)">
-        <input type="text" id="newAppIcon" placeholder="อีโมจิ หรือ URL รูป">
-        <textarea id="newAppDetails" placeholder="รายละเอียด (ราคา|วัน|คำอธิบาย) เช่น: 20|30 วัน|เมลร้าน"></textarea>
-        <small>วิธีใส่: ราคา|ระยะเวลา|คำอธิบาย (บรรทัดละ 1 รายการ)</small>
-        <button class="btn-save" onclick="addNewApp()" style="margin-top:10px;">เพิ่มเข้าหน้าร้าน</button>
-        <button onclick="exitAdmin()" style="margin-top:10px; background:#ff7675; color:white; border:none; width:100%; padding:10px; border-radius:10px;">ออกจากระบบหลังบ้าน</button>
-    </div>
+<div class="tab-container">
+  <button class="tab-btn active" onclick="switchTab('shop')">สั่งซื้อสินค้า</button>
+  <button class="tab-btn" onclick="switchTab('info')">ข้อมูลร้าน</button>
 </div>
 
-<div class="modal" id="appModal" onclick="closeModal(event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <h2 id="modalAppName">App Name</h2>
-        <p style="color: #666; margin-bottom: 20px;">เลือกแพ็กเกจที่ต้องการ</p>
-        <div id="packageList">
-            </div>
-        <button class="btn-save" style="margin-top:20px; background: var(--primary);" onclick="confirmOrder()">เพิ่มลงตะกร้า</button>
+<div class="content">
+  <div id="page-shop">
+    <div class="app-grid" id="appGrid">
+      </div>
+  </div>
+
+  <div id="page-info" style="display:none;">
+    <div style="background:var(--bg-card); padding:25px; border-radius:25px; text-align:center;">
+      <p style="color:var(--accent); font-weight:600; margin-bottom:10px;">ช่องทางติดต่อ</p>
+      <p id="infoLine">Line: @997pfoig</p>
+      <p id="infoTime">เวลาทำการ: 11:00 - 00:00 น.</p>
+      <div style="margin-top:15px; font-size:12px; color:var(--text-muted);">ดูแลตลอดการใช้งาน เคลม/แก้ไขภายใน 24ชม.</div>
     </div>
+  </div>
+
+  <div id="adminPanel" class="admin-section">
+    <h3 style="margin-bottom:15px;">ตั้งค่าหลังบ้าน ⚙️</h3>
+    <p style="font-size:12px; margin-bottom:5px;">ชื่อร้าน / สโลแกน</p>
+    <input type="text" id="editName" class="admin-input" placeholder="ชื่อร้าน">
+    <input type="text" id="editSub" class="admin-input" placeholder="สโลแกน">
+    <input type="text" id="editLogo" class="admin-input" placeholder="URL รูปโลโก้">
+    
+    <hr style="margin:20px 0; opacity:0.2;">
+    
+    <h4 style="margin-bottom:10px;">เพิ่ม/แก้ไขแอป</h4>
+    <input type="text" id="newAppName" class="admin-input" placeholder="ชื่อแอป (เช่น Netflix)">
+    <input type="text" id="newAppIcon" class="admin-input" placeholder="URL ไอคอน หรือ Emoji">
+    <textarea id="newAppPkgs" class="admin-input" placeholder="ราคา|วัน|คำอธิบาย (บรรทัดละ 1 ชุด)" rows="4"></textarea>
+    <small style="display:block; margin-bottom:10px; color:red;">ตัวอย่าง: 15|1 วัน|ดูในมือถือเท่านั้น</small>
+    <button class="btn-add" onclick="saveNewApp()">บันทึกแอป</button>
+    
+    <div id="adminItemList"></div>
+    <button onclick="exitAdmin()" style="width:100%; background:#eee; border:none; padding:10px; border-radius:10px;">ปิดโหมดแก้ไข</button>
+  </div>
 </div>
 
-<div class="footer-bar" id="footerBar">
-    <div>
-        <small>ยอดรวม</small>
-        <h3 id="totalDisplay">฿0</h3>
-    </div>
-    <button class="btn-order" onclick="sendToLine()">สั่งซื้อผ่าน LINE</button>
+<div class="modal-overlay" id="purchaseModal" onclick="closeModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-title" id="mAppTitle">📦 เลือกแพ็กเกจ</div>
+    <div class="pkg-list" id="mPkgList"></div>
+    <button class="btn-add" style="margin-top:20px;" onclick="addToCart()">เพิ่มลงตะกร้า</button>
+  </div>
+</div>
+
+<div class="bottom-bar" id="bottomBar">
+  <div id="cartInfo">เลือก 1 รายการ</div>
+  <button class="bb-btn" onclick="sendOrder()">สั่งผ่านไลน์ ✨</button>
 </div>
 
 <script>
-    // ข้อมูลเริ่มต้น
-    let storeData = JSON.parse(localStorage.getItem('wanderer_data')) || {
-        name: "Wanderer_shop",
-        sub: "ยินดีต้อนรับร้านละมุดรับสินค้าอะไรดีคะ",
-        logo: "https://via.placeholder.com/100",
-        apps: [
-            { id: 1, name: "YouTube", icon: "🎬", details: "20|30 วัน|เมลร้าน\n35|30 วัน|เมลส่วนตัว" },
-            { id: 2, name: "Netflix", icon: "🍿", details: "15|1 วัน|จอเคลม\n115|30 วัน|จอไม่เคลม" }
-        ]
-    };
+// --- DATA SYSTEM (LocalStorage) ---
+let shopData = JSON.parse(localStorage.getItem('wanderer_shop_v2')) || {
+  profile: { name: "Wanderer_shop", sub: "ยินดีต้อนรับร้านละมุดรับสินค้าอะไรดีคะ", logo: "https://api.dicebear.com/7.x/bottts/svg?seed=wanderer" },
+  apps: [
+    { name: "Netflix", icon: "🍿", pkgs: [{p: "15", d: "1 วัน", n: "จอเคลม"}, {p: "140", d: "30 วัน", n: "จอเคลม"}] },
+    { name: "YouTube", icon: "🎬", pkgs: [{p: "25", d: "30 วัน", n: "ครอบครัว"}] }
+  ]
+};
 
-    let cart = [];
+let currentCart = null;
+let clickCount = 0;
 
-    function init() {
-        document.getElementById('storeName').innerText = storeData.name;
-        document.getElementById('storeLogo').src = storeData.logo;
-        renderApps();
-    }
+// --- INITIALIZE ---
+function init() {
+  document.getElementById('displayShopName').innerText = shopData.profile.name;
+  document.getElementById('displayShopSub').innerText = shopData.profile.sub;
+  document.getElementById('logoImg').src = shopData.profile.logo;
+  renderShop();
+}
 
-    function renderApps() {
-        const grid = document.getElementById('appGrid');
-        grid.innerHTML = '';
-        storeData.apps.forEach(app => {
-            grid.innerHTML += `
-                <div class="app-item" onclick="openApp(${app.id})">
-                    <div class="app-icon">${app.icon.includes('http') ? `<img src="${app.icon}">` : app.icon}</div>
-                    <div class="app-name">${app.name}</div>
-                </div>
-            `;
-        });
-    }
+function renderShop() {
+  const grid = document.getElementById('appGrid');
+  grid.innerHTML = '';
+  shopData.apps.forEach((app, index) => {
+    grid.innerHTML += `
+      <div class="app-card" onclick="openApp(${index})">
+        <div class="app-icon-wrap">
+          ${app.icon.startsWith('http') ? `<img src="${app.icon}">` : app.icon}
+        </div>
+        <div class="app-name">${app.name}</div>
+      </div>
+    `;
+  });
+}
 
-    function openApp(id) {
-        const app = storeData.apps.find(a => a.id === id);
-        document.getElementById('modalAppName').innerText = app.name;
-        const list = document.getElementById('packageList');
-        list.innerHTML = '';
-        
-        const lines = app.details.split('\n');
-        lines.forEach((line, idx) => {
-            const [price, day, note] = line.split('|');
-            list.innerHTML += `
-                <div class="price-card" onclick="selectPackage('${app.name}', '${price}', '${day}', '${note}', this)">
-                    <div>
-                        <b>${day}</b><br>
-                        <small>${note}</small>
-                    </div>
-                    <div style="color: var(--primary); font-weight: 600;">฿${price}</div>
-                </div>
-            `;
-        });
-        document.getElementById('appModal').style.display = 'flex';
-    }
+// --- NAVIGATION ---
+function switchTab(t) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('page-shop').style.display = t === 'shop' ? 'block' : 'none';
+  document.getElementById('page-info').style.display = t === 'info' ? 'block' : 'none';
+}
 
-    let tempSelection = null;
-    function selectPackage(name, price, day, note, el) {
-        document.querySelectorAll('.price-card').forEach(c => c.classList.remove('selected'));
-        el.classList.add('selected');
-        tempSelection = { name, price, day, note };
-    }
+// --- PURCHASE LOGIC ---
+let selectedAppIndex = -1;
+let selectedPkgIndex = -1;
 
-    function confirmOrder() {
-        if(!tempSelection) return alert('กรุณาเลือกแพ็กเกจ');
-        cart.push(tempSelection);
-        updateCart();
-        closeModal();
-    }
-
-    function updateCart() {
-        const total = cart.reduce((sum, item) => sum + parseInt(item.price), 0);
-        document.getElementById('totalDisplay').innerText = `฿${total}`;
-        document.getElementById('footerBar').style.display = cart.length > 0 ? 'flex' : 'none';
-    }
-
-    function sendToLine() {
-        let text = "🛒 รายการสั่งซื้อใหม่\n";
-        cart.forEach(i => text += `- ${i.name} ${i.day} (${i.note}) ฿${i.price}\n`);
-        text += `💰 รวมทั้งสิ้น: ${document.getElementById('totalDisplay').innerText}`;
-        window.location.href = `https://line.me/R/oaMessage/@997pfoig/?${encodeURIComponent(text)}`;
-    }
-
-    // ฟังก์ชันหลังบ้าน
-    function accessAdmin() {
-        const pass = prompt("กรุณาใส่รหัสผ่านหลังบ้าน:");
-        if(pass === "1234") { // ตั้งรหัสผ่านที่นี่
-            document.getElementById('shopPage').style.display = 'none';
-            document.getElementById('infoPage').style.display = 'none';
-            document.getElementById('adminPanel').style.display = 'block';
-            document.getElementById('editStoreName').value = storeData.name;
-            document.getElementById('editStoreLogo').value = storeData.logo;
-        } else {
-            alert("รหัสผ่านไม่ถูกต้อง");
-        }
-    }
-
-    function addNewApp() {
-        const name = document.getElementById('newAppName').value;
-        const icon = document.getElementById('newAppIcon').value;
-        const details = document.getElementById('newAppDetails').value;
-        
-        if(!name || !details) return alert('กรุณากรอกข้อมูลให้ครบ');
-        
-        storeData.apps.push({ id: Date.now(), name, icon, details });
-        saveData();
-        alert('เพิ่มสำเร็จ!');
-        location.reload();
-    }
-
-    function saveData() {
-        storeData.name = document.getElementById('editStoreName').value;
-        storeData.logo = document.getElementById('editStoreLogo').value;
-        localStorage.setItem('wanderer_data', JSON.stringify(storeData));
-    }
-
-    function exitAdmin() { location.reload(); }
-
-    function switchPage(p) {
-        document.getElementById('shopPage').style.display = p === 'shop' ? 'block' : 'none';
-        document.getElementById('infoPage').style.display = p === 'info' ? 'block' : 'none';
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.innerText.includes(p === 'shop' ? 'เลือกซื้อ' : 'ข้อมูล')));
-    }
-
-    function closeModal() { document.getElementById('appModal').style.display = 'none'; tempSelection = null; }
-
-    init();
-</script>
-
-</body>
-</html>
+function openApp(index) {
+  selectedAppIndex = index;
+  const app = shopData.apps[index];
+  document.getElementById('mAppTitle').innerText = app.name;
+  const list = document.getElementById('mPkgList');
+  list.innerHTML = '';
+  
+  app.pkgs.forEach((pkg, pIdx) => {
+    list.innerHTML += `
+      <div class="pkg-item" id="pkg-${pIdx}" onclick
