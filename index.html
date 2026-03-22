@@ -5,8 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Wanderer Shop</title>
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Mitr:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
 <style>
-/* --- Design System (คงเดิมทั้งหมด) --- */
+/* --- Design System --- */
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 :root { --primary: #b026ff; --secondary: #00d2ff; --bg-main: #f4f5f7; --bg-card: #ffffff; --text-muted: #6b7280; --glow: rgba(176,38,255,0.5); --text-dark: #1f2937; --white: #ffffff; }
 body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(--text-dark); overflow-x: hidden; padding-bottom: 110px; }
@@ -249,44 +250,46 @@ textarea.admin-input { resize: vertical; }
 
 <script>
 /* =========================================================
-   NEW FEATURE: ฟังก์ชัน Sync ข้อมูลออนไลน์เพื่อให้ตรงกันทุกอุปกรณ์
+   ตั้งค่า CLOUD SYNC ตรงนี้ (ใช้บริการ JSONBin.io)
+   * หากยังไม่มี ปล่อยว่างไว้ ระบบจะใช้ Local Storage ทำงานได้ปกติ
    ========================================================= */
+const CLOUD_BIN_ID = ''; // ใส่รหัส BIN ID ตรงนี้
+const CLOUD_API_KEY = ''; // ใส่ API Key (Master Key) ตรงนี้
+
 async function syncToServer() {
-    // 1. นำข้อมูลทั้งหมดแพ็ครวมกัน
-    const allData = { shopInfo, tabs, products };
-    
-    // 2. ส่งขึ้น Cloud (ต้องนำ API ของคุณมาใส่ตรงช่องคอมเมนต์ด้านล่าง)
-    // ตัวอย่างเช่นใช้บริการ JSONBin.io (ฟรี)
-    /*
-    try {
-        await fetch('YOUR_API_URL_HERE', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(allData)
-        });
-        console.log("✅ อัปโหลดข้อมูลล่าสุดขึ้นระบบออนไลน์แล้ว");
-    } catch (e) { console.error("Sync Error:", e); }
-    */
+  if (!CLOUD_BIN_ID || !CLOUD_API_KEY) return; // ถ้าไม่ใส่ Key ระบบจะข้ามการอัปโหลดไป
+  const allData = { shopInfo, tabs, products };
+  try {
+    await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_BIN_ID}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': CLOUD_API_KEY
+      },
+      body: JSON.stringify(allData)
+    });
+    console.log("✅ อัปโหลดข้อมูลล่าสุดขึ้นระบบออนไลน์แล้ว");
+  } catch (e) { console.error("Sync Error:", e); }
 }
 
 async function fetchFromServer() {
-    // ดึงข้อมูลล่าสุดจาก Cloud มาแสดงผลทันทีที่เปิดเว็บ
-    /*
-    try {
-        const res = await fetch('YOUR_API_URL_HERE');
-        const data = await res.json();
-        if(data && data.record) {
-            shopInfo = data.record.shopInfo || shopInfo;
-            tabs = data.record.tabs || tabs;
-            products = data.record.products || products;
-            
-            // อัปเดต localStorage ในเครื่องนี้ให้ตรงกับคลาวด์
-            localStorage.setItem('wandererShopInfo', JSON.stringify(shopInfo));
-            localStorage.setItem('wandererTabs', JSON.stringify(tabs));
-            localStorage.setItem('wandererProducts', JSON.stringify(products));
-        }
-    } catch (e) { console.error("Fetch Error:", e); }
-    */
+  if (!CLOUD_BIN_ID || !CLOUD_API_KEY) return; 
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': CLOUD_API_KEY }
+    });
+    const data = await res.json();
+    if(data && data.record) {
+      shopInfo = data.record.shopInfo || shopInfo;
+      tabs = data.record.tabs || tabs;
+      products = data.record.products || products;
+      
+      // อัปเดต localStorage ในเครื่องให้ตรงกับบนคลาวด์
+      localStorage.setItem('wandererShopInfo', JSON.stringify(shopInfo));
+      localStorage.setItem('wandererTabs', JSON.stringify(tabs));
+      localStorage.setItem('wandererProducts', JSON.stringify(products));
+    }
+  } catch (e) { console.error("Fetch Error:", e); }
 }
 
 /* --- ระบบข้อมูล (Data) --- */
@@ -302,13 +305,12 @@ let cart = [];
 let isAdminLoggedIn = false;
 
 window.onload = async () => {
-    // โหลดข้อมูลจาก Cloud ก่อนโชว์หน้าเว็บ
-    await fetchFromServer(); 
-    renderShopInfo();
-    renderTabs();
-    renderCategories();
-    updateAdminTabUI();
-    renderAdminList();
+  await fetchFromServer(); 
+  renderShopInfo();
+  renderTabs();
+  renderCategories();
+  updateAdminTabUI();
+  renderAdminList();
 };
 
 /* --- จัดการแท็บหลัก (Main Tabs) --- */
@@ -336,7 +338,7 @@ function addTab() {
   if (name && !tabs.includes(name)) {
     tabs.push(name);
     localStorage.setItem('wandererTabs', JSON.stringify(tabs));
-    syncToServer(); // <-- สั่งซิงค์ขึ้นออนไลน์
+    syncToServer();
     renderTabs();
     updateAdminTabUI();
     document.getElementById('newTabInput').value = "";
@@ -368,7 +370,7 @@ function saveShopInfo(e) {
   shopInfo.hours = document.getElementById('shopHoursInput').value.trim();
   shopInfo.warranty = document.getElementById('shopWarrantyInput').value.trim();
   localStorage.setItem('wandererShopInfo', JSON.stringify(shopInfo));
-  syncToServer(); // <-- สั่งซิงค์ขึ้นออนไลน์
+  syncToServer();
   renderShopInfo();
   alert("บันทึกข้อมูลร้านค้าเรียบร้อยแล้ว!");
 }
@@ -413,9 +415,15 @@ function handleAdminTap() {
   tapTimer = setTimeout(() => { tapCount = 0; }, 1500); 
 }
 function closePasswordModal() { document.getElementById('passwordModal').style.display = 'none'; }
+
+// -----------------------------------------------------------------
+// ฟังก์ชันนี้ได้รับการแก้ไขเพื่อเช็คจาก Hash ด้วย bcrypt แล้ว
+// -----------------------------------------------------------------
 function verifyAdmin() {
   const pass = document.getElementById('adminPasswordInput').value;
-  if(pass === "170647") {
+  const hash = "$2a$10$PMIxGvNzIUreq6iY.zlLEuXPaMeYVDiDUIvrAnW2HcwdKhgQUU4da";
+  
+  if(dcodeIO.bcrypt.compareSync(pass, hash)) { 
     isAdminLoggedIn = true;
     closePasswordModal();
     document.getElementById('adminFab').style.display = 'flex'; 
@@ -425,6 +433,8 @@ function verifyAdmin() {
     document.getElementById('adminPasswordInput').value = '';
   }
 }
+// -----------------------------------------------------------------
+
 function openAdminModal() { document.getElementById('adminModal').style.display = 'flex'; }
 function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
 function switchAdminModalTab(tabId, btnElement) {
@@ -494,7 +504,7 @@ function saveProduct(e) {
   } else { products.push(newP); }
 
   localStorage.setItem('wandererProducts', JSON.stringify(products));
-  syncToServer(); // <-- สั่งซิงค์ขึ้นออนไลน์
+  syncToServer();
   cancelEdit();
   renderAdminList();
   renderCategories();
@@ -572,7 +582,7 @@ function deleteTab(i) {
     tabs.splice(i, 1);
     localStorage.setItem('wandererTabs', JSON.stringify(tabs));
     localStorage.setItem('wandererProducts', JSON.stringify(products));
-    syncToServer(); // <-- สั่งซิงค์ขึ้นออนไลน์
+    syncToServer();
     location.reload();
   }
 }
@@ -581,7 +591,7 @@ function deleteProduct(id) {
   if(confirm("ยืนยันการลบสินค้านี้?")) {
     products = products.filter(p => p.id !== id);
     localStorage.setItem('wandererProducts', JSON.stringify(products));
-    syncToServer(); // <-- สั่งซิงค์ขึ้นออนไลน์
+    syncToServer();
     renderAdminList();
     renderCategories();
     if(document.getElementById('productsView').style.display === 'block'){
@@ -612,88 +622,60 @@ function toggleItem(id) {
   }
 }
 
-/* =========================================================
-   ระบบสรุปตะกร้าสินค้าและการสั่งซื้อ (Checkout)
-   ========================================================= */
-
-// เปิดหน้าต่างสรุปการสั่งซื้อ
+/* --- ระบบตะกร้าและการสั่งซื้อ (เพิ่มใหม่ให้สมบูรณ์) --- */
 function openCartSummary() {
-  if(cart.length === 0) return;
+  if (cart.length === 0) return alert("ตะกร้าสินค้าว่างเปล่า กรุณาเลือกสินค้าก่อนครับ");
   
-  const listContainer = document.getElementById('cartSummaryList');
-  let html = '';
-  let total = 0;
-  
-  cart.forEach((item, index) => {
-    html += `
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 14px; border-bottom: 1px dashed #eee; padding-bottom: 8px;">
-        <div style="flex: 1;">
-          <span style="font-weight: 600;">${index + 1}. ${item.cat}</span><br>
-          <span style="font-size: 12px; color: var(--text-muted);">
-            ${item.name} ${item.packDesc ? `(${item.packDesc})` : ''}
-          </span>
-        </div>
-        <div style="font-weight: bold; color: var(--text-dark); margin-left: 10px;">฿${item.price}</div>
-      </div>
-    `;
-    total += item.price;
-  });
-  
-  listContainer.innerHTML = html;
-  document.getElementById('cartSummaryTotal').innerText = total;
   document.getElementById('cartSummaryModal').style.display = 'flex';
+  
+  let cartHtml = cart.map(item => `
+    <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:14px; border-bottom:1px solid #eee; padding-bottom:8px;">
+      <div>
+        <div style="font-weight:600;">${item.name}</div>
+        <div style="font-size:12px; color:var(--text-muted);">${item.cat} ${item.packDesc ? `(${item.packDesc})` : ''}</div>
+      </div>
+      <div style="font-weight:bold; color:var(--primary);">฿${item.price}</div>
+    </div>
+  `).join('');
+  
+  document.getElementById('cartSummaryList').innerHTML = cartHtml;
+  
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  document.getElementById('cartSummaryTotal').innerText = total;
 }
 
-// ปิดหน้าต่างสรุปการสั่งซื้อ
 function closeCartSummary() {
   document.getElementById('cartSummaryModal').style.display = 'none';
 }
 
-// ยืนยันการสั่งซื้อ (คัดลอกข้อความ + เด้งไป Line)
 function confirmCheckout() {
-  if(cart.length === 0) return;
+  if (cart.length === 0) return;
   
-  // 1. จัดรูปแบบข้อความสำหรับส่งให้แอดมิน
-  let text = "🛒 *รายการสั่งซื้อ (Wanderer Shop)*\n";
-  text += "---------------------------\n";
-  let total = 0;
-  
+  // สร้างข้อความสรุปการสั่งซื้อ
+  let text = `🛒 *รายการสั่งซื้อ (Wanderer Shop)*\n\n`;
   cart.forEach((item, index) => {
-    text += `${index + 1}. ${item.cat}\n`;
-    text += `   แพ็กเกจ: ${item.name} ${item.packDesc ? `(${item.packDesc})` : ''}\n`;
-    text += `   ราคา: ${item.price} บาท\n`;
-    total += item.price;
+    text += `${index + 1}. ${item.cat} - ${item.name} ${item.packDesc ? `(${item.packDesc})` : ''} [฿${item.price}]\n`;
   });
   
-  text += "---------------------------\n";
-  text += `💰 *ยอดรวมทั้งสิ้น: ${total} บาท*\n`;
-  text += "---------------------------\n";
-  text += "รบกวนแอดมินสรุปยอดและส่งเลขบัญชีให้ทีครับ/ค่ะ 🙏";
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  text += `\nยอดรวมทั้งสิ้น: *฿${total}*`;
   
-  // 2. คัดลอกลง Clipboard
+  // คัดลอกลง Clipboard และพาไปหน้า Line
   navigator.clipboard.writeText(text).then(() => {
-    alert("✅ คัดลอกรายการสั่งซื้อเรียบร้อยแล้ว!\nระบบกำลังพาคุณไปที่ LINE ของร้าน...");
+    alert("✅ คัดลอกรายการสั่งซื้อเรียบร้อยแล้ว!\nระบบกำลังพาท่านไปที่ Line...");
     
-    // 3. เคลียร์ตะกร้าสินค้า
-    cart = [];
-    document.getElementById('cartCount').innerText = "0";
-    document.getElementById('cartTotal').innerText = "0";
-    document.getElementById('bottomBar').classList.remove('active');
-    
-    // อัปเดต UI หน้าเลือกสินค้า
-    if(document.getElementById('productsView').style.display === 'block'){
-      openCategory(document.getElementById('currentCategoryTitle').innerText); 
+    // จัดการ URL ของ Line
+    let lineUrl = shopInfo.line;
+    if(lineUrl.startsWith('@')) {
+        lineUrl = `https://line.me/ti/p/~${lineUrl}`; 
+    } else if (!lineUrl.startsWith('http')) {
+        lineUrl = `https://line.me/ti/p/~${lineUrl}`;
     }
     
-    closeCartSummary();
-    
-    // 4. พาไปที่แอป Line โดยใช้ ID จากข้อมูลร้าน
-    let lineId = shopInfo.line.replace('@', '%40');
-    window.open(`https://line.me/R/ti/p/~${lineId}`, '_blank');
-    
+    // เปิดหน้า Line
+    window.open(lineUrl, '_blank');
   }).catch(err => {
-    console.error('ไม่สามารถคัดลอกข้อความได้: ', err);
-    alert("❌ ไม่สามารถคัดลอกข้อความอัตโนมัติได้ รบกวนแคปหน้าจอนี้ส่งให้แอดมินทางไลน์นะคะ");
+    alert("เกิดข้อผิดพลาดในการคัดลอก กรุณาแคปหน้าจอนี้แล้วส่งให้แอดมินแทนครับ");
   });
 }
 </script>
