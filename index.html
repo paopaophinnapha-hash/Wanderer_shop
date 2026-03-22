@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Wanderer Shop 🌌</title>
+<title>Wanderer Shop </title>
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Mitr:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 /* --- Design System --- */
@@ -15,8 +15,8 @@ body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(
 .bg-glow-1 { position: fixed; top: -100px; left: -100px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(176,38,255,0.1) 0%, rgba(0,0,0,0) 70%); z-index: -1; pointer-events: none; }
 .bg-glow-2 { position: fixed; bottom: 20%; right: -150px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(0,210,255,0.08) 0%, rgba(0,0,0,0) 70%); z-index: -1; pointer-events: none; }
 
-/* Hero Section */
-.hero { background: linear-gradient(135deg, rgba(176,38,255,0.6) 0%, rgba(0,210,255,0.4) 100%); padding: 30px 20px 55px; text-align: center; position: relative; margin-bottom: 40px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
+/* Hero Section - ปรับให้กึ่งกลางบน PC */
+.hero { max-width: 600px; margin: 0 auto 40px auto; background: linear-gradient(135deg, rgba(176,38,255,0.6) 0%, rgba(0,210,255,0.4) 100%); padding: 30px 20px 55px; text-align: center; position: relative; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
 .logo { width: 130px; height: 130px; border-radius: 50%; overflow: hidden; box-shadow: 0 6px 20px var(--glow); border: 4px solid var(--white); margin: 0 auto 15px; background: #fff; display: flex; align-items: center; justify-content: center; }
 .logo img { width: 100%; height: 100%; object-fit: cover; }
 .hero-title { font-family: 'Mitr', sans-serif; font-size: 32px; font-weight: 700; color: #fff; cursor: pointer; user-select: none; }
@@ -46,12 +46,14 @@ body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(
 .item-card { background: white; border-radius: 15px; padding: 20px; margin-bottom: 12px; position: relative; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.03); cursor: pointer;}
 .item-card.selected { border-color: var(--primary); background: #faf5ff; }
 
-/* Bottom Bar */
-.bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); transform: translateY(100%); transition: 0.3s; z-index: 1000; }
-.bottom-bar.active { transform: translateY(0); }
+/* Bottom Bar - ปรับให้กึ่งกลางบน PC */
+.bottom-bar { position: fixed; bottom: 0; left: 50%; width: 100%; max-width: 600px; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); transform: translate(-50%, 100%); transition: 0.3s; z-index: 1000; }
+.bottom-bar.active { transform: translate(-50%, 0); }
 
 /* --- Admin Additions --- */
-.fab-btn { position: fixed; bottom: 80px; right: 20px; width: 55px; height: 55px; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); cursor: pointer; z-index: 1001; transition: 0.2s; }
+/* กรอบหุ้มปุ่มเพื่อให้ปุ่มอิงตำแหน่งตรงกลางจอ */
+.fab-wrapper { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 600px; pointer-events: none; z-index: 1001; }
+.fab-btn { position: absolute; right: 20px; bottom: 0; width: 55px; height: 55px; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); cursor: pointer; transition: 0.2s; pointer-events: auto; }
 .fab-btn:active { transform: scale(0.9); }
 
 .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; backdrop-filter: blur(5px); }
@@ -73,6 +75,9 @@ body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(
 .admin-label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 5px; font-weight: 600; }
 .admin-btn { width: 100%; padding: 12px; border-radius: 8px; border: none; background: var(--primary); color: white; font-weight: 600; cursor: pointer; font-size: 15px; transition: 0.2s; }
 .btn-upload { background: #4b5563; color: white; padding: 8px; border-radius: 8px; text-align: center; cursor: pointer; font-size: 13px; display: block; margin-bottom: 10px; }
+
+/* สกอร์บาร์สำหรับรายการสรุปตะกร้า */
+.cart-list-scroll { max-height: 40vh; overflow-y: auto; margin-bottom: 15px; border-top: 1px dashed #eee; border-bottom: 1px dashed #eee; padding: 15px 0; }
 </style>
 </head>
 <body>
@@ -80,7 +85,7 @@ body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(
 
 <div class="hero">
   <div class="logo"><img id="shopLogoImg" src=""></div>
-  <div class="hero-title" onclick="handleAdminTap()">Wanderer Shop 🌌</div>
+  <div class="hero-title" onclick="handleAdminTap()">Wanderer Shop </div>
   <div class="hero-sub">ยินดีต้อนรับร้าน <span id="shopTitleText">Wanderer Shop</span> รับสินค้าอะไรดีคะ</div>
   <div class="tab-container" id="tabBar"></div>
 </div>
@@ -113,10 +118,33 @@ body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(
 
 <div class="bottom-bar" id="bottomBar">
   <div>เลือก <span id="cartCount">0</span> รายการ | ฿<span id="cartTotal" style="color:var(--primary); font-weight:bold; font-size:18px;">0</span></div>
-  <button onclick="checkout()" style="padding:10px 25px; border-radius:25px; border:none; background:linear-gradient(135deg, var(--primary), var(--secondary)); color:white; font-weight:700; box-shadow: 0 4px 10px var(--glow);">สั่งซื้อผ่าน LINE</button>
+  <button onclick="openCartSummary()" style="padding:10px 25px; border-radius:25px; border:none; background:linear-gradient(135deg, var(--primary), var(--secondary)); color:white; font-weight:700; box-shadow: 0 4px 10px var(--glow); cursor:pointer;">สั่งซื้อ</button>
 </div>
 
-<div id="adminFab" class="fab-btn" onclick="openAdminModal()">+</div>
+<div id="cartSummaryModal" class="modal-overlay">
+  <div class="modal-content" style="max-width: 400px;">
+    <button class="close-btn" onclick="closeCartSummary()">&times;</button>
+    <h3 class="modal-title" style="text-align: center; margin-bottom: 10px;">🛒 สรุปรายการสั่งซื้อ</h3>
+    <p style="text-align: center; font-size: 13px; color: var(--text-muted); margin-bottom: 5px;">ตรวจสอบความถูกต้องก่อนทักไลน์</p>
+    
+    <div id="cartSummaryList" class="cart-list-scroll">
+      </div>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <span style="font-weight: 600; font-size: 16px;">ยอดรวมทั้งสิ้น:</span>
+      <span style="color: var(--primary); font-weight: bold; font-size: 22px;">฿<span id="cartSummaryTotal">0</span></span>
+    </div>
+    
+    <div style="display: flex; gap: 10px;">
+      <button onclick="closeCartSummary()" class="admin-btn" style="background: #e5e7eb; color: #4b5563; flex: 1;">แก้ไขรายการ</button>
+      <button onclick="confirmCheckout()" class="admin-btn" style="flex: 2; background: linear-gradient(135deg, #10b981, #059669); font-size: 15px;">คัดลอก & ทักไลน์</button>
+    </div>
+  </div>
+</div>
+
+<div class="fab-wrapper">
+  <div id="adminFab" class="fab-btn" onclick="openAdminModal()">+</div>
+</div>
 
 <div id="passwordModal" class="modal-overlay">
   <div class="modal-content" style="max-width: 350px; text-align: center;">
@@ -547,26 +575,61 @@ function toggleItem(id) {
     document.getElementById('cartCount').innerText = cart.length;
     document.getElementById('cartTotal').innerText = cart.reduce((s,i)=>s+i.price,0);
     document.getElementById('bottomBar').classList.toggle('active', cart.length > 0);
-    openCategory(document.getElementById('currentCategoryTitle').innerText);
+    
+    // รีเฟรชหน้าต่างสินค้าย่อยเพื่ออัปเดตกรอบสีม่วง
+    if(document.getElementById('productsView').style.display === 'block'){
+        openCategory(document.getElementById('currentCategoryTitle').innerText);
+    }
 }
 
-function checkout() {
+/* =======================================
+   ฟังก์ชันใหม่: จัดการตะกร้าและสั่งซื้อ (Checkout)
+======================================== */
+
+// เปิดหน้าสรุปตะกร้า
+function openCartSummary() {
+    if(cart.length === 0) return;
+    
+    const listContainer = document.getElementById('cartSummaryList');
+    
+    // สร้างลิสต์ HTML แสดงสินค้าที่เลือก
+    listContainer.innerHTML = cart.map(c => `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 15px;">
+            <div style="flex: 1; padding-right: 10px;">
+                <span style="font-weight: 600;">${c.cat}</span><br>
+                <span style="font-size: 13px; color: var(--text-muted);">${c.name}</span>
+            </div>
+            <div style="font-weight: 600; color: #374151;">฿${c.price}</div>
+        </div>
+    `).join('');
+    
+    // อัปเดตราคารวม
+    const total = cart.reduce((s,i) => s + i.price, 0);
+    document.getElementById('cartSummaryTotal').innerText = total;
+    
+    // แสดง Modal
+    document.getElementById('cartSummaryModal').style.display = 'flex';
+}
+
+// ปิดหน้าสรุปตะกร้า (กลับไปเลือกต่อ)
+function closeCartSummary() {
+    document.getElementById('cartSummaryModal').style.display = 'none';
+}
+
+// กดยืนยันสั่งซื้อ (คัดลอกข้อความ + เด้งไป LINE)
+function confirmCheckout() {
     let lineId = shopInfo.line.replace('@', ''); 
     let lineUrl = `https://line.me/ti/p/~${lineId}`; 
-    const text = `🛒 แจ้งรายการสั่งซื้อ\n-------------------\n${cart.map(c => `- ${c.cat} | ${c.name} (฿${c.price})`).join('\n')}\n-------------------\nรวมทั้งหมด: ${cart.reduce((s,i)=>s+i.price,0)} บาท`;
+    const total = cart.reduce((s,i) => s + i.price, 0);
+    
+    const text = `🛒 แจ้งรายการสั่งซื้อ\n-------------------\n${cart.map(c => `- ${c.cat} | ${c.name} (฿${c.price})`).join('\n')}\n-------------------\nยอดรวมทั้งสิ้น: ${total} บาท`;
+    
     navigator.clipboard.writeText(text).then(() => { 
-        alert("คัดลอกรายการสั่งซื้อเรียบร้อย! กำลังพาคุณไปที่ LINE ของร้าน"); 
+        alert("คัดลอกรายการสั่งซื้อเรียบร้อย! กำลังพาคุณไปที่หน้าแชท LINE ของร้านค่ะ"); 
         window.location.href = lineUrl; 
     }).catch(err => {
-        alert("บันทึกรายการสำเร็จ! กรุณาส่งให้แอดมินใน LINE: " + shopInfo.line);
+        alert("มีข้อผิดพลาดในการคัดลอก กรุณาคัดลอกด้วยตัวเองนะคะ");
     });
-}
-
-function resetData() { 
-    if(confirm("คำเตือน: ข้อมูลสินค้า แท็บ และข้อมูลร้านทั้งหมดจะถูกล้าง ต้องการทำต่อหรือไม่?")) { 
-        localStorage.clear(); 
-        location.reload(); 
-    } 
 }
 </script>
 </body>
