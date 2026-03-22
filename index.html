@@ -6,217 +6,668 @@
 <title>Wanderer Shop</title>
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Mitr:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-/* --- 1. คง CSS เดิมและปรับ Responsive เต็มจอ --- */
+/* --- Design System (คงเดิมทั้งหมด) --- */
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 :root { --primary: #b026ff; --secondary: #00d2ff; --bg-main: #f4f5f7; --bg-card: #ffffff; --text-muted: #6b7280; --glow: rgba(176,38,255,0.5); --text-dark: #1f2937; --white: #ffffff; }
+body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(--text-dark); overflow-x: hidden; padding-bottom: 110px; }
 
-body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(--text-dark); display: flex; flex-direction: column; align-items: center; }
-.app-container { width: 100%; min-height: 100vh; position: relative; padding-bottom: 50px; }
+/* Background Glow */
+.bg-glow-1 { position: fixed; top: -100px; left: -100px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(176,38,255,0.1) 0%, rgba(0,0,0,0) 70%); z-index: -1; pointer-events: none; }
+.bg-glow-2 { position: fixed; bottom: 20%; right: -150px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(0,210,255,0.08) 0%, rgba(0,0,0,0) 70%); z-index: -1; pointer-events: none; }
 
-.hero { background: linear-gradient(135deg, rgba(176,38,255,0.6) 0%, rgba(0,210,255,0.4) 100%); padding: 30px 20px 55px; text-align: center; position: relative; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; z-index: 1; }
-.logo { width: 120px; height: 120px; border-radius: 50%; overflow: hidden; box-shadow: 0 6px 20px var(--glow); border: 4px solid var(--white); margin: 0 auto 15px; background: #fff; }
+/* Hero Section (ปรับให้กว้างขึ้น) */
+.hero { max-width: 1200px; margin: 0 auto 40px auto; background: linear-gradient(135deg, rgba(176,38,255,0.6) 0%, rgba(0,210,255,0.4) 100%); padding: 30px 20px 55px; text-align: center; position: relative; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
+.logo { width: 130px; height: 130px; border-radius: 50%; overflow: hidden; box-shadow: 0 6px 20px var(--glow); border: 4px solid var(--white); margin: 0 auto 15px; background: #fff; display: flex; align-items: center; justify-content: center; }
 .logo img { width: 100%; height: 100%; object-fit: cover; }
-.hero-title { font-family: 'Mitr', sans-serif; font-size: 28px; font-weight: 700; color: #fff; cursor: pointer; user-select: none; }
+.hero-title { font-family: 'Mitr', sans-serif; font-size: 32px; font-weight: 700; color: #fff; cursor: pointer; user-select: none; }
+.hero-sub { font-size: 14px; color: rgba(255,255,255,0.9); }
 
-.tab-container { position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); display: flex; background: var(--bg-card); border-radius: 30px; padding: 5px; z-index: 10; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
-.tab-btn { padding: 10px 18px; border-radius: 25px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; background: transparent; color: var(--text-muted); transition: 0.3s; }
+/* Tab System */
+.tab-container { position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); display: flex; background: var(--bg-card); border-radius: 30px; padding: 5px; z-index: 10; box-shadow: 0 4px 15px rgba(0,0,0,0.08); min-width: 280px; max-width: 90%; overflow-x: auto; scrollbar-width: none; }
+.tab-container::-webkit-scrollbar { display: none; }
+.tab-btn { padding: 10px 20px; border-radius: 25px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.3s; background: transparent; color: var(--text-muted); white-space: nowrap; }
 .tab-btn.active { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; }
 
-.content { padding: 45px 15px 0; max-width: 1000px; margin: 0 auto; width: 100%; }
-.tab-content { display: none; }
-.tab-content.active { display: block; animation: fadeIn 0.3s ease; }
-
-/* หน้าข้อมูลร้าน (รูป 2-3) */
-.info-card { background: white; border-radius: 18px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-.info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed #eee; font-size: 14px; }
-
-/* หน้า Grid ไอคอนแอป (รูป 4) */
-.app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 15px; }
-.app-item { background: white; padding: 15px; border-radius: 18px; text-align: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transition: 0.2s; }
-.app-item img { width: 65px; height: 65px; border-radius: 15px; margin-bottom: 8px; object-fit: cover; border: 1px solid #f0f0f0; }
-.app-item p { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-/* หน้ารายการราคา (รูป 5) */
-.price-card { background: white; padding: 18px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-.buy-btn { background: var(--primary); color: white; border: none; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: bold; }
-
-.fab-btn { position: fixed; right: 20px; bottom: 30px; width: 55px; height: 55px; background: #10b981; color: white; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer; z-index: 1001; }
-.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; backdrop-filter: blur(5px); }
-.modal-content { background: white; width: 100%; max-width: 450px; border-radius: 20px; padding: 25px; max-height: 85vh; overflow-y: auto; }
-.admin-input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
-
+.content { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+.tab-content { display: none; animation: fadeIn 0.3s ease; }
+.tab-content.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Cards & UI */
+.info-card { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 800px; margin: 0 auto; }
+.info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed #eee; font-size: 14px; }
+.info-row:last-child { border-bottom: none; }
+.sh { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+.sh-line { width: 4px; height: 20px; background: var(--primary); border-radius: 2px; }
+
+/* ปรับ Category Grid ให้เป็นไอคอนแอป (Grid View) */
+.category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; justify-content: center; }
+.category-card { background: white; border-radius: 18px; padding: 20px 10px; text-align: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transition: 0.2s; }
+.category-card:active { transform: scale(0.95); }
+.cat-icon-wrapper { width: 70px; height: 70px; margin: 0 auto 10px; border-radius: 15px; overflow: hidden; background: #f8f9fa; display: flex; align-items: center; justify-content: center; border: 1px solid #f0f0f0; }
+.cat-icon-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Item Card (รายการราคา) */
+.item-card { background: white; border-radius: 15px; padding: 18px 20px; margin-bottom: 12px; position: relative; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.03); cursor: pointer; display: flex; justify-content: space-between; align-items: center;}
+.item-card.selected { border-color: var(--primary); background: #faf5ff; }
+
+/* Bottom Bar */
+.bottom-bar { position: fixed; bottom: 0; left: 50%; width: 100%; max-width: 1200px; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); transform: translate(-50%, 100%); transition: 0.3s; z-index: 1000; }
+.bottom-bar.active { transform: translate(-50%, 0); }
+
+/* Admin Additions */
+.fab-wrapper { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 1200px; pointer-events: none; z-index: 1001; }
+.fab-btn { position: absolute; right: 20px; bottom: 0; width: 55px; height: 55px; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); cursor: pointer; transition: 0.2s; pointer-events: auto; }
+.fab-btn:active { transform: scale(0.9); }
+
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; backdrop-filter: blur(5px); }
+.modal-content { background: white; width: 100%; max-width: 500px; border-radius: 20px; padding: 25px; position: relative; max-height: 90vh; overflow-y: auto; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.close-btn { position: absolute; top: 15px; right: 15px; font-size: 24px; color: #999; cursor: pointer; background: none; border: none; }
+.modal-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; color: var(--text-dark); }
+
+/* Admin Inner Tabs */
+.admin-modal-tabs { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+.admin-modal-tabs::-webkit-scrollbar { display: none; }
+.a-tab-btn { padding: 8px 15px; border: none; background: #f3f4f6; border-radius: 20px; font-family: inherit; font-size: 13px; font-weight: 600; color: #6b7280; cursor: pointer; white-space: nowrap; }
+.a-tab-btn.active { background: var(--primary); color: white; }
+.a-tab-content { display: none; }
+.a-tab-content.active { display: block; }
+
+.admin-input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 14px; background: #fafafa; }
+textarea.admin-input { resize: vertical; } 
+.admin-label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 5px; font-weight: 600; }
+.admin-btn { width: 100%; padding: 12px; border-radius: 8px; border: none; background: var(--primary); color: white; font-weight: 600; cursor: pointer; font-size: 15px; transition: 0.2s; }
+.btn-upload { background: #4b5563; color: white; padding: 8px; border-radius: 8px; text-align: center; cursor: pointer; font-size: 13px; display: block; margin-bottom: 10px; }
+
+/* สกอร์บาร์สำหรับรายการสรุปตะกร้า */
+.cart-list-scroll { max-height: 40vh; overflow-y: auto; margin-bottom: 15px; border-top: 1px dashed #eee; border-bottom: 1px dashed #eee; padding: 15px 0; }
 </style>
 </head>
 <body>
+<div class="bg-glow-1"></div><div class="bg-glow-2"></div>
 
-<div class="app-container">
-  <div class="hero">
-    <div class="logo"><img id="shopLogoImg" src=""></div>
-    <div class="hero-title" onclick="handleAdminLogin()">Wanderer Shop</div>
-    <div class="hero-sub" style="color:white; font-size: 14px; margin-top:5px;">รับสินค้าตัวไหนดีคะ</div>
-    <div class="tab-container" id="tabBar"></div>
-  </div>
+<div class="hero">
+  <div class="logo"><img id="shopLogoImg" src=""></div>
+  <div class="hero-title" onclick="handleAdminTap()">Wanderer Shop </div>
+  <div class="hero-sub">ยินดีต้อนรับร้าน <span id="shopTitleText">Wanderer Shop</span> รับสินค้าอะไรดีคะ</div>
+  <div class="tab-container" id="tabBar"></div>
+</div>
 
-  <div class="content">
-    <div id="tab-info" class="tab-content">
-      <div class="info-card">
-        <div class="info-row"><b>Line</b><span id="info-line">-</span></div>
-        <div class="info-row"><b>Facebook</b><span id="info-fb">-</span></div>
-        <div id="customInfoArea"></div>
-      </div>
-    </div>
-
-    <div id="tab-products" class="tab-content active">
-      <div id="appsView">
-        <div class="app-grid" id="appGrid"></div>
-      </div>
-      <div id="pricesView" style="display:none;">
-        <button onclick="showApps()" style="background:none; border:none; color:var(--primary); cursor:pointer; margin-bottom:15px; font-weight:bold;">← กลับ</button>
-        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
-            <img id="detailAppImg" src="" style="width: 70px; height: 70px; border-radius: 15px; object-fit: cover;">
-            <h2 id="detailAppTitle"></h2>
-        </div>
-        <div id="priceList"></div>
-      </div>
+<div class="content">
+  <div id="tab-info" class="tab-content">
+    <div class="info-card">
+      <div class="info-row"><span style="font-weight:600; color:var(--primary);">Line</span><span id="info-line">-</span></div>
+      <div class="info-row"><span style="font-weight:600; color:var(--primary);">Facebook</span><span id="info-fb">-</span></div>
+      <div class="info-row"><span style="font-weight:600; color:var(--primary);">เวลาทำการ</span><span id="info-hours">-</span></div>
+      <div class="info-row"><span style="font-weight:600; color:var(--primary);">การรับประกัน</span><span id="info-warranty">-</span></div>
     </div>
   </div>
 
+  <div id="tab-products" class="tab-content active">
+    <div id="categoriesView">
+      <div class="sh"><div class="sh-line"></div><h2>หมวดหมู่สินค้า</h2></div>
+      <div class="category-grid" id="categoryGrid"></div>
+    </div>
+    <div id="productsView" style="display:none; max-width:800px; margin:0 auto;">
+      <button onclick="showCategories()" style="background:none; border:none; color:var(--primary); cursor:pointer; margin-bottom:15px; font-weight:600;">← กลับไปหน้าหมวดหมู่</button>
+      <div style="margin-bottom:20px;">
+        <h2 id="currentCategoryTitle" style="line-height:1.2;">-</h2>
+        <div id="currentCategoryDesc" style="font-size:13px; color:var(--text-muted); margin-top:8px; line-height:1.5;"></div>
+      </div>
+      <div id="productGrid"></div>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-bar" id="bottomBar">
+  <div>เลือก <span id="cartCount">0</span> รายการ | ฿<span id="cartTotal" style="color:var(--primary); font-weight:bold; font-size:18px;">0</span></div>
+  <button onclick="openCartSummary()" style="padding:10px 25px; border-radius:25px; border:none; background:linear-gradient(135deg, var(--primary), var(--secondary)); color:white; font-weight:700; box-shadow: 0 4px 10px var(--glow); cursor:pointer;">สั่งซื้อ</button>
+</div>
+
+<div id="cartSummaryModal" class="modal-overlay">
+  <div class="modal-content" style="max-width: 400px;">
+    <button class="close-btn" onclick="closeCartSummary()">&times;</button>
+    <h3 class="modal-title" style="text-align: center; margin-bottom: 10px;">🛒 สรุปรายการสั่งซื้อ</h3>
+    <p style="text-align: center; font-size: 13px; color: var(--text-muted); margin-bottom: 5px;">ตรวจสอบความถูกต้องก่อนทักไลน์</p>
+    
+    <div id="cartSummaryList" class="cart-list-scroll"></div>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <span style="font-weight: 600; font-size: 16px;">ยอดรวมทั้งสิ้น:</span>
+      <span style="color: var(--primary); font-weight: bold; font-size: 22px;">฿<span id="cartSummaryTotal">0</span></span>
+    </div>
+    
+    <div style="display: flex; gap: 10px;">
+      <button onclick="closeCartSummary()" class="admin-btn" style="background: #e5e7eb; color: #4b5563; flex: 1;">แก้ไขรายการ</button>
+      <button onclick="confirmCheckout()" class="admin-btn" style="flex: 2; background: linear-gradient(135deg, #10b981, #059669); font-size: 15px;">คัดลอก & ทักไลน์</button>
+    </div>
+  </div>
+</div>
+
+<div id="passwordModal" class="modal-overlay">
+  <div class="modal-content" style="max-width: 350px; text-align: center;">
+    <button class="close-btn" onclick="closePasswordModal()">&times;</button>
+    <div style="font-size: 40px; margin-bottom: 10px;">🔐</div>
+    <h3 class="modal-title" style="margin-bottom: 10px;">ยืนยันตัวตนแอดมิน</h3>
+    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">กรุณาใส่รหัสผ่านเพื่อเข้าสู่โหมดจัดการ</p>
+    <input type="password" id="adminPasswordInput" class="admin-input" placeholder="ใส่รหัสผ่าน..." style="text-align: center; font-size: 20px; letter-spacing: 5px;">
+    <button onclick="verifyAdmin()" class="admin-btn" style="margin-bottom: 10px;">เข้าสู่ระบบ</button>
+  </div>
+</div>
+
+<div class="fab-wrapper">
   <div id="adminFab" class="fab-btn" onclick="openAdminModal()">+</div>
 </div>
 
 <div id="adminModal" class="modal-overlay">
   <div class="modal-content">
-    <h3>⚙️ จัดการสินค้า</h3><br>
-    <label>หมวดหมู่:</label>
-    <select id="addTab" class="admin-input">
-        <option value="สินค้า">สินค้าพรีเมียม</option>
-        <option value="เติมเกม">เติมเกม</option>
-    </select>
-    <label>ชื่อแอป:</label><input id="addAppName" class="admin-input" placeholder="เช่น YouTube">
-    <label>URL ไอคอน:</label><input id="addAppIcon" class="admin-input" placeholder="ลิงก์รูปภาพ">
+    <button class="close-btn" onclick="closeAdminModal()">&times;</button>
+    <h3 class="modal-title">⚙️ โหมดจัดการแอดมิน</h3>
     
-    <div style="margin-top:10px; padding:10px; background:#f9f9f9; border-radius:10px;">
-        <b>รายการราคา (Variant)</b>
-        <div id="variantInputs"></div>
-        <button onclick="addVariantField()" style="width:100%; padding:5px; margin-top:5px; cursor:pointer;">+ เพิ่มแพ็กเกจราคา</button>
+    <div class="admin-modal-tabs">
+      <button class="a-tab-btn active" onclick="switchAdminModalTab('product', this)">📦 สินค้า</button>
+      <button class="a-tab-btn" onclick="switchAdminModalTab('shop', this)">🏬 ร้านค้า</button>
+      <button class="a-tab-btn" onclick="switchAdminModalTab('tab', this)">📑 เมนูแท็บ</button>
     </div>
 
-    <button onclick="saveProduct()" style="width:100%; padding:12px; background:var(--primary); color:white; border:none; border-radius:8px; font-weight:bold; margin-top:15px; cursor:pointer;">บันทึกแอป</button>
-    <button onclick="closeAdminModal()" style="width:100%; background:none; border:none; margin-top:10px; color:#999; cursor:pointer;">ปิด</button>
+    <div id="a-tab-product" class="a-tab-content active">
+      <form id="adminForm" onsubmit="saveProduct(event)">
+        <input type="hidden" id="editId">
+        <label class="admin-label">เลือกแท็บที่จะให้สินค้าแสดง:</label>
+        <select id="pTabTarget" class="admin-input" required></select>
+        
+        <label class="admin-label">ชื่อแอป / หมวดหมู่:</label>
+        <input type="text" id="pCat" class="admin-input" placeholder="เช่น Netflix, Youtube Premium" required>
+        
+        <label class="admin-label">รายละเอียดใต้ชื่อแอป (เคาะ Enter ขึ้นบรรทัดใหม่ได้):</label>
+        <textarea id="pCatDesc" class="admin-input" rows="3" placeholder="เช่น&#10;✅ เปลี่ยนเมลได้&#10;✅ จอส่วนตัว"></textarea>
+
+        <label class="admin-label">ชื่อแพ็กเกจสินค้า:</label>
+        <input type="text" id="pName" class="admin-input" placeholder="เช่น 1 เดือน, 3 เดือน" required>
+
+        <label class="admin-label">รายละเอียดแพ็กเกจ (ข้อความกึ่งกลาง):</label>
+        <input type="text" id="pPackDesc" class="admin-input" placeholder="เช่น ต่อเมลเดิม / สมัครใหม่ (เว้นว่างได้)">
+        
+        <label class="admin-label">ราคา (บาท):</label>
+        <input type="number" id="pPrice" class="admin-input" placeholder="ราคา" required>
+        
+        <label class="admin-label">รูปภาพแอป:</label>
+        <div style="border: 1px dashed #ccc; padding: 10px; border-radius: 8px; margin-bottom: 10px; background: #fff;">
+            <input type="text" id="pIcon" class="admin-input" placeholder="วางลิงก์รูป หรือเลือกไฟล์ด้านล่าง" style="margin-bottom:5px;">
+            <label class="btn-upload" style="margin-bottom:0;">
+                📸 เลือกรูปภาพจากเครื่อง
+                <input type="file" accept="image/*" style="display: none;" onchange="uploadProductImage(this)">
+            </label>
+        </div>
+        
+        <button type="submit" class="admin-btn" id="saveBtn">บันทึกข้อมูลสินค้า</button>
+        <button type="button" onclick="cancelEdit()" id="cancelBtn" style="display:none; background:#9ca3af; margin-top:10px;" class="admin-btn">ยกเลิกการแก้ไข</button>
+      </form>
+      
+      <div class="sh" style="margin-top: 25px;"><div class="sh-line"></div><h4>รายการสินค้าทั้งหมด</h4></div>
+      <div id="adminProductList"></div>
+    </div>
+
+    <div id="a-tab-shop" class="a-tab-content">
+      <form id="shopInfoForm" onsubmit="saveShopInfo(event)">
+        <label class="admin-label">รูปร้าน / โลโก้:</label>
+        <div style="border: 1px dashed #ccc; padding: 10px; border-radius: 8px; margin-bottom: 10px; background: #fff;">
+            <input type="text" id="shopLogoInput" class="admin-input" placeholder="วางลิงก์รูป หรือเลือกไฟล์" style="margin-bottom:5px;">
+            <label class="btn-upload" style="margin-bottom:0;">
+                📸 เลือกรูปภาพโลโก้
+                <input type="file" accept="image/*" style="display: none;" onchange="uploadShopLogo(this)">
+            </label>
+        </div>
+
+        <label class="admin-label">ชื่อ Facebook / เพจ:</label>
+        <input type="text" id="shopFbInput" class="admin-input" required>
+        
+        <label class="admin-label">ไอดี Line (ใส่ @ ด้วย):</label>
+        <input type="text" id="shopLineInput" class="admin-input" required>
+        
+        <label class="admin-label">เวลาทำการ:</label>
+        <input type="text" id="shopHoursInput" class="admin-input" required>
+        
+        <label class="admin-label">รายละเอียดการรับประกัน:</label>
+        <input type="text" id="shopWarrantyInput" class="admin-input" required>
+
+        <button type="submit" class="admin-btn" style="background: #0ea5e9;">💾 บันทึกข้อมูลร้าน</button>
+      </form>
+    </div>
+
+    <div id="a-tab-tab" class="a-tab-content">
+      <div style="display:flex; gap:5px;">
+        <input type="text" id="newTabInput" class="admin-input" placeholder="ชื่อแท็บใหม่ (เช่น แอปพรีเมี่ยม)" style="margin-bottom:0;">
+        <button onclick="addTab()" class="admin-btn" style="width:80px; margin-bottom:0; background:#10b981;">เพิ่ม</button>
+      </div>
+      <div id="adminTabList" style="margin-top:15px;"></div>
+      
+      <div style="margin-top:40px; padding-top:20px; border-top:1px dashed #ccc;">
+        <button onclick="resetData()" style="background:#ef4444;" class="admin-btn">⚠️ ล้างข้อมูลระบบทั้งหมด</button>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <script>
-// --- ส่วน Logic ควบคุมแอป ---
-let shop = JSON.parse(localStorage.getItem('w_shop')) || { logo: '', line: '@wanderer', fb: 'Wanderer Shop', fields: [] };
-let apps = JSON.parse(localStorage.getItem('w_apps')) || []; // เก็บข้อมูลแอปและราคา
+/* =========================================================
+   NEW FEATURE: ฟังก์ชัน Sync ข้อมูลออนไลน์เพื่อให้ตรงกันทุกอุปกรณ์
+   ========================================================= */
+async function syncToServer() {
+    const allData = { shopInfo, tabs, products };
+}
+async function fetchFromServer() { }
+
+/* --- ระบบข้อมูล (Data) --- */
+const DEFAULT_LOGO = 'https://images.unsplash.com/photo-1557683316-973673baf926?w=400&q=80';
+let shopInfo = JSON.parse(localStorage.getItem('wandererShopInfo')) || { 
+  line: '@997pfoig', facebook: 'Wanderer Shop', hours: '11:00 - 00:00 น.', warranty: 'ประกันตลอดชีพ', logo: DEFAULT_LOGO
+};
+let tabs = JSON.parse(localStorage.getItem('wandererTabs')) || ["สินค้า"];
+tabs = tabs.filter(t => t !== "จัดการ"); 
+let products = JSON.parse(localStorage.getItem('wandererProducts')) || [];
 let currentTab = "สินค้า";
-let clickCount = 0;
+let cart = [];
+let isAdminLoggedIn = false;
 
-function handleAdminLogin() {
-    clickCount++;
-    if (clickCount >= 5) {
-        if (prompt("รหัสผ่านแอดมิน:") === "170647") {
-            document.getElementById('adminFab').style.display = 'flex';
-            alert("ยินดีต้อนรับแอดมิน!");
-        }
-        clickCount = 0;
-    }
-    setTimeout(() => { clickCount = 0; }, 2000);
+window.onload = async () => {
+    await fetchFromServer(); 
+    renderShopInfo();
+    renderTabs();
+    renderCategories();
+    updateAdminTabUI();
+    renderAdminList();
+};
+
+/* --- จัดการแท็บหลัก (Main Tabs) --- */
+function renderTabs() {
+  const container = document.getElementById('tabBar');
+  let html = `<button class="tab-btn ${currentTab === 'info' ? 'active' : ''}" onclick="switchTab('info')">ข้อมูลร้าน</button>`;
+  tabs.forEach(t => { html += `<button class="tab-btn ${currentTab === t ? 'active' : ''}" onclick="switchTab('${t}')">${t}</button>`; });
+  container.innerHTML = html;
 }
 
-function addVariantField(n='', p='') {
-    const div = document.createElement('div');
-    div.className = 'v-row';
-    div.style = "display: flex; gap: 5px; margin-bottom: 5px;";
-    div.innerHTML = `<input class="v-n admin-input" value="${n}" placeholder="รุ่น/เวลา" style="margin:0; flex:2;"><input class="v-p admin-input" type="number" value="${p}" placeholder="ราคา" style="margin:0; flex:1;"><button onclick="this.parentElement.remove()" style="color:red; border:none; background:none;">✕</button>`;
-    document.getElementById('variantInputs').appendChild(div);
+function switchTab(id) {
+  currentTab = id;
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  if (id === 'info') { document.getElementById('tab-info').classList.add('active'); } 
+  else {
+    document.getElementById('tab-products').classList.add('active');
+    showCategories();
+    renderCategories(id);
+  }
+  renderTabs();
 }
 
-function saveProduct() {
-    const app = {
-        id: Date.now(),
-        tab: document.getElementById('addTab').value,
-        name: document.getElementById('addAppName').value,
-        icon: document.getElementById('addAppIcon').value,
-        variants: []
+function addTab() {
+  const name = document.getElementById('newTabInput').value.trim();
+  if (name && !tabs.includes(name)) {
+    tabs.push(name);
+    localStorage.setItem('wandererTabs', JSON.stringify(tabs));
+    syncToServer(); 
+    renderTabs();
+    updateAdminTabUI();
+    document.getElementById('newTabInput').value = "";
+  }
+}
+
+/* --- จัดการข้อมูลร้าน (Shop Info) --- */
+function renderShopInfo() {
+  document.getElementById('info-line').innerText = shopInfo.line;
+  document.getElementById('info-fb').innerText = shopInfo.facebook;
+  document.getElementById('info-hours').innerText = shopInfo.hours;
+  document.getElementById('info-warranty').innerText = shopInfo.warranty;
+  document.getElementById('shopTitleText').innerText = shopInfo.facebook;
+  const logoImg = shopInfo.logo ? shopInfo.logo : DEFAULT_LOGO;
+  document.getElementById('shopLogoImg').src = logoImg;
+  
+  document.getElementById('shopLineInput').value = shopInfo.line;
+  document.getElementById('shopFbInput').value = shopInfo.facebook;
+  document.getElementById('shopHoursInput').value = shopInfo.hours;
+  document.getElementById('shopWarrantyInput').value = shopInfo.warranty;
+  document.getElementById('shopLogoInput').value = shopInfo.logo || '';
+}
+
+function saveShopInfo(e) {
+  e.preventDefault();
+  shopInfo.logo = document.getElementById('shopLogoInput').value.trim();
+  shopInfo.line = document.getElementById('shopLineInput').value.trim();
+  shopInfo.facebook = document.getElementById('shopFbInput').value.trim();
+  shopInfo.hours = document.getElementById('shopHoursInput').value.trim();
+  shopInfo.warranty = document.getElementById('shopWarrantyInput').value.trim();
+  localStorage.setItem('wandererShopInfo', JSON.stringify(shopInfo));
+  syncToServer(); 
+  renderShopInfo();
+  alert("บันทึกข้อมูลร้านค้าเรียบร้อยแล้ว!");
+}
+
+/* --- อัปโหลดรูป --- */
+function uploadShopLogo(input) {
+  const file = input.files[0];
+  if (file) {
+    if (file.size > 1.5 * 1024 * 1024) return alert("ไฟล์ใหญ่เกินไป! กรุณาใช้รูปไม่เกิน 1.5MB");
+    const reader = new FileReader();
+    reader.onload = e => {
+      document.getElementById('shopLogoInput').value = e.target.result;
+      document.getElementById('shopLogoImg').src = e.target.result;
     };
-    document.querySelectorAll('.v-row').forEach(row => {
-        const vn = row.querySelector('.v-n').value;
-        const vp = row.querySelector('.v-p').value;
-        if(vn && vp) app.variants.push({ name: vn, price: vp });
-    });
-    apps.push(app);
-    localStorage.setItem('w_apps', JSON.stringify(apps));
-    closeAdminModal();
-    renderApp();
+    reader.readAsDataURL(file);
+  }
+}
+function uploadProductImage(input) {
+  const file = input.files[0];
+  if (file) {
+    if (file.size > 1.5 * 1024 * 1024) return alert("ไฟล์ใหญ่เกินไป! กรุณาใช้รูปไม่เกิน 1.5MB");
+    const reader = new FileReader();
+    reader.onload = e => { document.getElementById('pIcon').value = e.target.result; };
+    reader.readAsDataURL(file);
+  }
 }
 
-function renderApp() {
-    document.getElementById('shopLogoImg').src = shop.logo || 'https://via.placeholder.com/120';
-    document.getElementById('info-line').innerText = shop.line;
-    document.getElementById('info-fb').innerText = shop.fb;
-    
-    const tb = document.getElementById('tabBar');
-    tb.innerHTML = `
-        <button class="tab-btn ${currentTab==='info'?'active':''}" onclick="setTab('info')">ข้อมูลร้าน</button>
-        <button class="tab-btn ${currentTab==='สินค้า'?'active':''}" onclick="setTab('สินค้า')">สินค้า</button>
-        <button class="tab-btn ${currentTab==='เติมเกม'?'active':''}" onclick="setTab('เติมเกม')">เติมเกม</button>
-    `;
-    
-    // แสดง Grid ไอคอน (รูป 4)
-    const filtered = apps.filter(a => a.tab === currentTab);
-    document.getElementById('appGrid').innerHTML = filtered.map(a => `
-        <div class="app-item" onclick="openAppDetails(${a.id})">
-            <img src="${a.icon || 'https://via.placeholder.com/65'}">
-            <p>${a.name}</p>
-        </div>
-    `).join('');
+/* --- ระบบแอดมิน --- */
+let tapCount = 0;
+let tapTimer;
+function handleAdminTap() {
+  tapCount++;
+  clearTimeout(tapTimer);
+  if(tapCount >= 5) {
+    tapCount = 0;
+    if(!isAdminLoggedIn) {
+      document.getElementById('passwordModal').style.display = 'flex';
+      document.getElementById('adminPasswordInput').value = '';
+      document.getElementById('adminPasswordInput').focus();
+    } else { openAdminModal(); }
+  }
+  tapTimer = setTimeout(() => { tapCount = 0; }, 1500); 
 }
-
-function openAppDetails(id) {
-    const app = apps.find(a => a.id === id);
-    document.getElementById('appsView').style.display = 'none';
-    document.getElementById('pricesView').style.display = 'block';
-    document.getElementById('detailAppTitle').innerText = app.name;
-    document.getElementById('detailAppImg').src = app.icon;
-    
-    // แสดงรายการราคา (รูป 5)
-    document.getElementById('priceList').innerHTML = app.variants.map(v => `
-        <div class="price-card">
-            <div>
-                <div style="font-weight:600;">${v.name}</div>
-                <div style="color:var(--primary); font-weight:bold;">฿${v.price}</div>
-            </div>
-            <button class="buy-btn" onclick="checkout('${app.name}', '${v.name}', ${v.price}, '${app.tab}')">สั่งซื้อ</button>
-        </div>
-    `).join('');
+function closePasswordModal() { document.getElementById('passwordModal').style.display = 'none'; }
+function verifyAdmin() {
+  const pass = document.getElementById('adminPasswordInput').value;
+  if(pass === "170647") {  /* อัปเดตรหัสผ่านใหม่เป็น 170647 */
+    isAdminLoggedIn = true;
+    closePasswordModal();
+    document.getElementById('adminFab').style.display = 'flex'; 
+    openAdminModal(); 
+  } else {
+    alert("รหัสผ่านไม่ถูกต้อง!");
+    document.getElementById('adminPasswordInput').value = '';
+  }
 }
-
-function checkout(appName, variant, price, tab) {
-    let text = `🛒 *สั่งซื้อสินค้า Wanderer Shop*\n\nแอป: ${appName}\nแพ็กเกจ: ${variant}\nราคา: ฿${price}\n`;
-    if(tab === "เติมเกม") text += `\n📌 *แจ้งไอดีได้เลยค่ะ*\n`;
-    
-    navigator.clipboard.writeText(text).then(() => {
-        alert("คัดลอกรายการสั่งซื้อแล้ว!");
-        window.open(`https://line.me/ti/p/~${shop.line.replace('@','')}`, '_blank');
-    });
-}
-
-function setTab(t) {
-    currentTab = t;
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    if(t === 'info') document.getElementById('tab-info').classList.add('active');
-    else { document.getElementById('tab-products').classList.add('active'); showApps(); }
-    renderApp();
-}
-
-function showApps() { document.getElementById('appsView').style.display='block'; document.getElementById('pricesView').style.display='none'; }
-function openAdminModal() { document.getElementById('adminModal').style.display = 'flex'; document.getElementById('variantInputs').innerHTML = ''; addVariantField(); }
+function openAdminModal() { document.getElementById('adminModal').style.display = 'flex'; }
 function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
+function switchAdminModalTab(tabId, btnElement) {
+  document.querySelectorAll('.a-tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.a-tab-content').forEach(content => content.classList.remove('active'));
+  btnElement.classList.add('active');
+  document.getElementById('a-tab-' + tabId).classList.add('active');
+}
 
-window.onload = renderApp;
+/* --- จัดการสินค้า (Products) --- */
+function renderCategories(tabName = currentTab) {
+  const grid = document.getElementById('categoryGrid');
+  const filtered = products.filter(p => p.tab === tabName);
+  const uniqueCats = [...new Set(filtered.map(p => p.cat))];
+  
+  grid.innerHTML = uniqueCats.map(cat => {
+    const p = filtered.find(x => x.cat === cat);
+    const icon = p.icon || '📦';
+    const catDesc = p.catDesc || ''; 
+    const iconHtml = icon.startsWith('data:image') || icon.startsWith('http') 
+      ? `<img src="${icon}">` : `<span style="font-size:30px;">${icon}</span>`;
+    const formattedDesc = catDesc.replace(/\n/g, '<br>');
+    return `<div class="category-card" onclick="openCategory('${cat}')">
+      <div class="cat-icon-wrapper">${iconHtml}</div>
+      <div style="font-weight:600; font-size:15px; line-height:1.2;">${cat}</div>
+      ${catDesc ? `<div style="font-size:11px; color:var(--text-muted); margin-top:6px; line-height:1.4;">${formattedDesc}</div>` : ''}
+    </div>`;
+  }).join('') || '<p style="grid-column:span 2; text-align:center; padding:40px; color:#999;">ยังไม่มีสินค้าในแท็บนี้</p>';
+}
+
+function openCategory(catName) {
+  document.getElementById('categoriesView').style.display = 'none';
+  document.getElementById('productsView').style.display = 'block';
+  const items = products.filter(p => p.cat === catName && p.tab === currentTab);
+  const firstItem = items[0];
+  document.getElementById('currentCategoryTitle').innerText = catName;
+  let displayDesc = firstItem && firstItem.catDesc ? firstItem.catDesc.replace(/\n/g, '<br>') : '';
+  document.getElementById('currentCategoryDesc').innerHTML = displayDesc;
+  
+  // ปรับการแสดงผลหน้าใน (3 คอลัมน์ ซ้าย กลาง ขวา)
+  document.getElementById('productGrid').innerHTML = items.map(p => {
+    const isSelected = cart.find(c => c.id === p.id) ? 'selected' : '';
+    return `<div class="item-card ${isSelected}" onclick="toggleItem('${p.id}')">
+      <div style="flex:1; font-weight:600; font-size:15px;">${p.name}</div>
+      ${p.packDesc ? `<div style="flex:1.5; font-size:12px; color:var(--text-muted); text-align:center;">${p.packDesc}</div>` : '<div style="flex:1.5;"></div>'}
+      <div style="flex:1; text-align:right; color:var(--primary); font-weight:bold; font-size:16px;">฿${p.price}</div>
+    </div>`;
+  }).join('');
+}
+
+function saveProduct(e) {
+  e.preventDefault();
+  const id = document.getElementById('editId').value;
+  const newP = {
+    id: id || 'p' + Date.now(),
+    tab: document.getElementById('pTabTarget').value,
+    cat: document.getElementById('pCat').value.trim(),
+    catDesc: document.getElementById('pCatDesc').value.trim(), 
+    name: document.getElementById('pName').value.trim(),
+    packDesc: document.getElementById('pPackDesc').value.trim(),
+    price: parseInt(document.getElementById('pPrice').value),
+    icon: document.getElementById('pIcon').value.trim()
+  };
+
+  if(id) {
+    const idx = products.findIndex(p => p.id === id);
+    products[idx] = newP;
+  } else { products.push(newP); }
+
+  localStorage.setItem('wandererProducts', JSON.stringify(products));
+  syncToServer(); 
+  cancelEdit();
+  renderAdminList();
+  renderCategories();
+  if(document.getElementById('productsView').style.display === 'block'){
+    openCategory(document.getElementById('currentCategoryTitle').innerText);
+  }
+  alert("บันทึกสินค้าเรียบร้อย!");
+}
+
+function editProduct(id) {
+  const p = products.find(item => item.id === id);
+  if(p) {
+    document.getElementById('editId').value = p.id;
+    document.getElementById('pTabTarget').value = p.tab;
+    document.getElementById('pCat').value = p.cat;
+    document.getElementById('pCatDesc').value = p.catDesc || '';
+    document.getElementById('pName').value = p.name;
+    document.getElementById('pPackDesc').value = p.packDesc || '';
+    document.getElementById('pPrice').value = p.price;
+    document.getElementById('pIcon').value = p.icon;
+    
+    document.getElementById('saveBtn').innerText = "อัปเดตสินค้า";
+    document.getElementById('saveBtn').style.background = "#059669";
+    document.getElementById('cancelBtn').style.display = "block";
+    document.querySelector('.modal-content').scrollTop = 0;
+  }
+}
+
+function cancelEdit() {
+  document.getElementById('adminForm').reset();
+  document.getElementById('editId').value = "";
+  document.getElementById('saveBtn').innerText = "บันทึกข้อมูลสินค้า";
+  document.getElementById('saveBtn').style.background = "var(--primary)";
+  document.getElementById('cancelBtn').style.display = "none";
+}
+
+function renderAdminList() {
+  document.getElementById('adminProductList').innerHTML = products.map(p => `
+    <div style="font-size:13px; border-bottom:1px solid #eee; padding:12px 5px; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <span style="background:#f3f4f6; padding:2px 6px; border-radius:4px; font-size:11px; color:#555;">${p.tab}</span> 
+        <span style="font-weight:600;">${p.name}</span> 
+        ${p.packDesc ? `<span style="font-size:11px; color:#888;">(${p.packDesc})</span>` : ''} <br>
+        <small style="color:#666;">แอป: ${p.cat} | ฿${p.price}</small>
+      </div>
+      <div style="display:flex; gap:12px;">
+        <button type="button" onclick="editProduct('${p.id}')" style="color:#2563eb; border:none; background:none; font-weight:600; cursor:pointer;">แก้ไข</button>
+        <button type="button" onclick="deleteProduct('${p.id}')" style="color:#ef4444; border:none; background:none; font-weight:600; cursor:pointer;">ลบ</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function updateAdminTabUI() {
+  document.getElementById('adminTabList').innerHTML = tabs.map((t, i) => `
+    <div style="display:flex; justify-content:space-between; background:#f8f9fa; padding:10px 15px; border-radius:8px; margin-top:5px; border:1px solid #eee;">
+      <span style="font-weight:500;">${t}</span>
+      <button onclick="deleteTab(${i})" style="color:#ef4444; border:none; background:none; font-weight:bold; cursor:pointer;">ลบแท็บ</button>
+    </div>
+  `).join('');
+  document.getElementById('pTabTarget').innerHTML = tabs.map(t => `<option value="${t}">${t}</option>`).join('');
+}
+
+function resetData() {
+  if(confirm("คำเตือน: ข้อมูลร้านค้าและสินค้าทั้งหมดจะถูกลบถาวร ยืนยันหรือไม่?")) {
+    localStorage.clear();
+    location.reload();
+  }
+}
+
+function deleteTab(i) {
+  if(confirm("ลบแท็บนี้สินค้าด้านในจะหายทั้งหมด ยืนยันไหม?")) {
+    const name = tabs[i];
+    products = products.filter(p => p.tab !== name);
+    tabs.splice(i, 1);
+    localStorage.setItem('wandererTabs', JSON.stringify(tabs));
+    localStorage.setItem('wandererProducts', JSON.stringify(products));
+    syncToServer(); 
+    location.reload();
+  }
+}
+
+function deleteProduct(id) {
+  if(confirm("ยืนยันการลบสินค้านี้?")) {
+    products = products.filter(p => p.id !== id);
+    localStorage.setItem('wandererProducts', JSON.stringify(products));
+    syncToServer(); 
+    renderAdminList();
+    renderCategories();
+    if(document.getElementById('productsView').style.display === 'block'){
+      const currentCat = document.getElementById('currentCategoryTitle').innerText;
+      const stillHasItems = products.some(p => p.cat === currentCat && p.tab === currentTab);
+      if (stillHasItems) openCategory(currentCat);
+      else showCategories();
+    }
+  }
+}
+
+function showCategories() { 
+  document.getElementById('categoriesView').style.display='block'; 
+  document.getElementById('productsView').style.display='none'; 
+}
+
+function toggleItem(id) {
+  const idx = cart.findIndex(c => c.id === id);
+  if(idx > -1) cart.splice(idx, 1);
+  else cart.push(products.find(p => p.id === id));
+  
+  document.getElementById('cartCount').innerText = cart.length;
+  document.getElementById('cartTotal').innerText = cart.reduce((s,i)=>s+i.price,0);
+  document.getElementById('bottomBar').classList.toggle('active', cart.length > 0);
+  
+  if(document.getElementById('productsView').style.display === 'block'){
+    openCategory(document.getElementById('currentCategoryTitle').innerText);
+  }
+}
+
+/* =========================================================
+   ระบบสรุปตะกร้าสินค้าและการสั่งซื้อ (Checkout)
+   ========================================================= */
+
+function openCartSummary() {
+  if(cart.length === 0) return;
+  
+  const listContainer = document.getElementById('cartSummaryList');
+  let html = '';
+  let total = 0;
+  
+  cart.forEach((item, index) => {
+    html += `
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 14px; border-bottom: 1px dashed #eee; padding-bottom: 8px;">
+        <div style="flex: 1;">
+          <span style="font-weight: 600;">${index + 1}. ${item.cat}</span><br>
+          <span style="font-size: 12px; color: var(--text-muted);">
+            ${item.name} ${item.packDesc ? `(${item.packDesc})` : ''}
+          </span>
+        </div>
+        <div style="font-weight: bold; color: var(--text-dark); margin-left: 10px;">฿${item.price}</div>
+      </div>
+    `;
+    total += item.price;
+  });
+  
+  listContainer.innerHTML = html;
+  document.getElementById('cartSummaryTotal').innerText = total;
+  document.getElementById('cartSummaryModal').style.display = 'flex';
+}
+
+function closeCartSummary() {
+  document.getElementById('cartSummaryModal').style.display = 'none';
+}
+
+function confirmCheckout() {
+  if(cart.length === 0) return;
+  
+  let text = "🛒 *รายการสั่งซื้อ (Wanderer Shop)*\n";
+  text += "---------------------------\n";
+  let total = 0;
+  let isGameTopup = false; // สำหรับเช็คแท็บเติมเกม
+  
+  cart.forEach((item, index) => {
+    text += `${index + 1}. ${item.cat}\n`;
+    text += `   แพ็กเกจ: ${item.name} ${item.packDesc ? `(${item.packDesc})` : ''}\n`;
+    text += `   ราคา: ${item.price} บาท\n`;
+    total += item.price;
+    
+    // เช็คว่ามีสินค้าเติมเกมหรือไม่
+    if (item.tab === "เติมเกม") isGameTopup = true;
+  });
+  
+  text += "---------------------------\n";
+  text += `💰 *ยอดรวมทั้งสิ้น: ${total} บาท*\n`;
+  text += "---------------------------\n";
+  
+  // เพิ่มเงื่อนไขแจ้งไอดี หากมีสินค้าแท็บ "เติมเกม"
+  if (isGameTopup) {
+      text += "📌 *แจ้งไอดี ได้เลยค่ะ*\n";
+  } else {
+      text += "รบกวนแอดมินสรุปยอดและส่งเลขบัญชีให้ทีครับ/ค่ะ 🙏";
+  }
+  
+  navigator.clipboard.writeText(text).then(() => {
+    alert("✅ คัดลอกรายการสั่งซื้อเรียบร้อยแล้ว!\nระบบกำลังพาคุณไปที่ LINE ของร้าน...");
+    
+    cart = [];
+    document.getElementById('cartCount').innerText = "0";
+    document.getElementById('cartTotal').innerText = "0";
+    document.getElementById('bottomBar').classList.remove('active');
+    
+    if(document.getElementById('productsView').style.display === 'block'){
+      openCategory(document.getElementById('currentCategoryTitle').innerText); 
+    }
+    closeCartSummary();
+    
+    let lineId = shopInfo.line.replace('@', '%40');
+    window.open(`https://line.me/R/ti/p/~${lineId}`, '_blank');
+  }).catch(err => {
+    console.error('ไม่สามารถคัดลอกข้อความได้: ', err);
+    alert("❌ ไม่สามารถคัดลอกข้อความอัตโนมัติได้ รบกวนแคปหน้าจอนี้ส่งให้แอดมินทางไลน์นะคะ");
+  });
+}
 </script>
 </body>
 </html>
