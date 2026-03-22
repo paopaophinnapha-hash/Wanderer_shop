@@ -15,7 +15,7 @@ body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(
 .bg-glow-1 { position: fixed; top: -100px; left: -100px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(176,38,255,0.1) 0%, rgba(0,0,0,0) 70%); z-index: -1; pointer-events: none; }
 .bg-glow-2 { position: fixed; bottom: 20%; right: -150px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(0,210,255,0.08) 0%, rgba(0,0,0,0) 70%); z-index: -1; pointer-events: none; }
 
-/* Hero Section (ปรับให้กว้างขึ้น) */
+/* Hero Section */
 .hero { max-width: 1200px; margin: 0 auto 40px auto; background: linear-gradient(135deg, rgba(176,38,255,0.6) 0%, rgba(0,210,255,0.4) 100%); padding: 30px 20px 55px; text-align: center; position: relative; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
 .logo { width: 130px; height: 130px; border-radius: 50%; overflow: hidden; box-shadow: 0 6px 20px var(--glow); border: 4px solid var(--white); margin: 0 auto 15px; background: #fff; display: flex; align-items: center; justify-content: center; }
 .logo img { width: 100%; height: 100%; object-fit: cover; }
@@ -40,14 +40,14 @@ body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(
 .sh { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
 .sh-line { width: 4px; height: 20px; background: var(--primary); border-radius: 2px; }
 
-/* ปรับ Category Grid ให้เป็นไอคอนแอป (Grid View) */
+/* Category Grid */
 .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; justify-content: center; }
 .category-card { background: white; border-radius: 18px; padding: 20px 10px; text-align: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transition: 0.2s; }
 .category-card:active { transform: scale(0.95); }
 .cat-icon-wrapper { width: 70px; height: 70px; margin: 0 auto 10px; border-radius: 15px; overflow: hidden; background: #f8f9fa; display: flex; align-items: center; justify-content: center; border: 1px solid #f0f0f0; }
 .cat-icon-wrapper img { width: 100%; height: 100%; object-fit: cover; }
 
-/* Item Card (รายการราคา) */
+/* Item Card */
 .item-card { background: white; border-radius: 15px; padding: 18px 20px; margin-bottom: 12px; position: relative; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.03); cursor: pointer; display: flex; justify-content: space-between; align-items: center;}
 .item-card.selected { border-color: var(--primary); background: #faf5ff; }
 
@@ -61,7 +61,7 @@ body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(
 .fab-btn:active { transform: scale(0.9); }
 
 .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; backdrop-filter: blur(5px); }
-/* เพิ่ม scroll-behavior: smooth เข้าไป */
+/* เพิ่ม scroll-behavior: smooth เพื่อให้เวลาเลื่อนเด้งขึ้นบนสมูท */
 .modal-content { scroll-behavior: smooth; background: white; width: 100%; max-width: 500px; border-radius: 20px; padding: 25px; position: relative; max-height: 90vh; overflow-y: auto; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
@@ -255,17 +255,62 @@ textarea.admin-input { resize: vertical; }
 
 <script>
 /* =========================================================
-   NEW FEATURE: ฟังก์ชัน Sync ข้อมูลออนไลน์เพื่อให้ตรงกันทุกอุปกรณ์
+   NEW FEATURE: ฟังก์ชัน Sync ข้อมูลออนไลน์เพื่อให้ตรงกันทุกอุปกรณ์ (JSONBin)
    ========================================================= */
+const BIN_ID = '69bf96fbc3097a1dd549f01f';
+const MASTER_KEY = '$2a$10$PMIxGvNzIUreq6iY.zlLEuXPaMeYVDiDUIvrAnW2HcwdKhgQUU4da';
+const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+// ฟังก์ชันอัปโหลดข้อมูลขึ้นเซิร์ฟเวอร์
 async function syncToServer() {
-    const allData = { shopInfo, tabs, products };
+    try {
+        const allData = { shopInfo, tabs, products };
+        const response = await fetch(BIN_URL, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': MASTER_KEY
+            },
+            body: JSON.stringify(allData)
+        });
+        
+        if (!response.ok) throw new Error('อัปเดตข้อมูลออนไลน์ไม่สำเร็จ');
+        console.log('✅ ซิงค์ข้อมูลขึ้นเซิร์ฟเวอร์เรียบร้อย');
+    } catch (error) {
+        console.error('Error Sync:', error);
+    }
 }
-async function fetchFromServer() { }
+
+// ฟังก์ชันดึงข้อมูลจากเซิร์ฟเวอร์
+async function fetchFromServer() {
+    try {
+        const response = await fetch(BIN_URL, {
+            method: 'GET',
+            headers: { 'X-Master-Key': MASTER_KEY }
+        });
+        
+        if (!response.ok) throw new Error('ดึงข้อมูลออนไลน์ไม่สำเร็จ');
+        const data = await response.json();
+        
+        if (data && data.record) {
+            if (data.record.shopInfo) shopInfo = data.record.shopInfo;
+            if (data.record.tabs) tabs = data.record.tabs;
+            if (data.record.products) products = data.record.products;
+            
+            localStorage.setItem('wandererShopInfo', JSON.stringify(shopInfo));
+            localStorage.setItem('wandererTabs', JSON.stringify(tabs));
+            localStorage.setItem('wandererProducts', JSON.stringify(products));
+            console.log('✅ โหลดข้อมูลจากเซิร์ฟเวอร์เรียบร้อย');
+        }
+    } catch (error) {
+        console.error('Error Fetch:', error);
+    }
+}
 
 /* --- ระบบข้อมูล (Data) --- */
 const DEFAULT_LOGO = 'https://images.unsplash.com/photo-1557683316-973673baf926?w=400&q=80';
 let shopInfo = JSON.parse(localStorage.getItem('wandererShopInfo')) || { 
-  line: '@997pfoig', facebook: 'Wanderer_Shop', hours: '10:30 - 00:30 น.', warranty: 'ยินดีต้อนรับร้าน Wanderer Shop รับสินค้าอะไรดีคะ', logo: DEFAULT_LOGO
+  line: '@997pfoig', facebook: 'Wanderer Shop', hours: '11:00 - 00:00 น.', warranty: 'ประกันตลอดชีพ', logo: DEFAULT_LOGO
 };
 let tabs = JSON.parse(localStorage.getItem('wandererTabs')) || ["สินค้า"];
 tabs = tabs.filter(t => t !== "จัดการ"); 
@@ -387,7 +432,7 @@ function handleAdminTap() {
 function closePasswordModal() { document.getElementById('passwordModal').style.display = 'none'; }
 function verifyAdmin() {
   const pass = document.getElementById('adminPasswordInput').value;
-  if(pass === "170647") {  /* อัปเดตรหัสผ่านใหม่เป็น 170647 */
+  if(pass === "170647") {  
     isAdminLoggedIn = true;
     closePasswordModal();
     document.getElementById('adminFab').style.display = 'flex'; 
@@ -436,7 +481,6 @@ function openCategory(catName) {
   let displayDesc = firstItem && firstItem.catDesc ? firstItem.catDesc.replace(/\n/g, '<br>') : '';
   document.getElementById('currentCategoryDesc').innerHTML = displayDesc;
   
-  // ปรับการแสดงผลหน้าใน (3 คอลัมน์ ซ้าย กลาง ขวา)
   document.getElementById('productGrid').innerHTML = items.map(p => {
     const isSelected = cart.find(c => c.id === p.id) ? 'selected' : '';
     return `<div class="item-card ${isSelected}" onclick="toggleItem('${p.id}')">
@@ -477,9 +521,7 @@ function saveProduct(e) {
   alert("บันทึกสินค้าเรียบร้อย!");
 }
 
-/* =========================================================
-   แก้ไขแล้ว: ฟังก์ชันแก้ไขสินค้า พร้อม Smooth Scroll 
-   ========================================================= */
+/* --- อัปเดตฟังก์ชันแก้ไข (เลื่อนจอขึ้นบนสุดอัตโนมัติ) --- */
 function editProduct(id) {
   const p = products.find(item => item.id === id);
   if(p) {
@@ -496,7 +538,7 @@ function editProduct(id) {
     document.getElementById('saveBtn').style.background = "#059669";
     document.getElementById('cancelBtn').style.display = "block";
     
-    // เด้งหน้าจอขึ้นบนสุดอย่างสมูท
+    // เด้งหน้าจอขึ้นไปที่ฟอร์มบนสุดอย่างนุ่มนวล
     document.querySelector('.modal-content').scrollTo({
       top: 0,
       behavior: 'smooth'
@@ -512,14 +554,12 @@ function cancelEdit() {
   document.getElementById('cancelBtn').style.display = "none";
 }
 
-/* =========================================================
-   แก้ไขแล้ว: ฟังก์ชันแสดงรายการแอดมิน (จัดกลุ่ม + เรียง A-Z)
-   ========================================================= */
+/* --- อัปเดตรายการแอดมิน (จัดกลุ่มตามชื่อแอป + เรียง A-Z) --- */
 function renderAdminList() {
-  // 1. เรียงลำดับชื่อแอป ก-ฮ หรือ A-Z
+  // 1. เรียงลำดับตามชื่อแอป (cat)
   const sortedProducts = [...products].sort((a, b) => a.cat.localeCompare(b.cat));
   
-  // 2. จัดกลุ่มแอปที่ชื่อเหมือนกัน
+  // 2. จัดกลุ่มข้อมูล
   const grouped = {};
   sortedProducts.forEach(p => {
     if (!grouped[p.cat]) grouped[p.cat] = [];
@@ -528,7 +568,7 @@ function renderAdminList() {
 
   let html = '';
   for (const cat in grouped) {
-    // โชว์หัวข้อชื่อแอป
+    // หัวข้อกลุ่มแอป
     html += `
       <div style="background:#f0f2f5; padding:8px 12px; margin-top:15px; border-radius:8px 8px 0 0; border:1px solid #e5e7eb; border-bottom:none; font-weight:bold; color:var(--text-dark); display:flex; align-items:center; gap:8px;">
         <span style="font-size:16px;">📱</span> <span style="font-size:14px;">${cat}</span>
@@ -536,7 +576,7 @@ function renderAdminList() {
       <div style="border:1px solid #e5e7eb; border-radius:0 0 8px 8px; margin-bottom:10px; background:#fff; padding:0 10px;">
     `;
     
-    // วนลูปโชว์รายการย่อยในแอปนั้น
+    // รายการแพ็กเกจย่อยในแอปนั้นๆ
     html += grouped[cat].map(p => `
       <div style="font-size:13px; border-bottom:1px solid #f3f4f6; padding:12px 5px; display:flex; justify-content:space-between; align-items:center;">
         <div>
@@ -552,7 +592,7 @@ function renderAdminList() {
       </div>
     `).join('');
     
-    html += `</div>`;
+    html += `</div>`; // ปิดกล่องกลุ่มแอป
   }
 
   document.getElementById('adminProductList').innerHTML = html || '<div style="text-align:center; padding:30px; color:#9ca3af;">ยังไม่มีสินค้าในระบบ</div>';
@@ -635,7 +675,7 @@ function openCartSummary() {
   
   cart.forEach((item, index) => {
     html += `
-      <div style="display: flex; justify-content: space-between; align-items: center; margin margin-bottom: 12px; font-size: 14px; border-bottom: 1px dashed #eee; padding-bottom: 8px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 14px; border-bottom: 1px dashed #eee; padding-bottom: 8px;">
         <div style="flex: 1;">
           <span style="font-weight: 600;">${index + 1}. ${item.cat}</span><br>
           <span style="font-size: 12px; color: var(--text-muted);">
@@ -663,7 +703,7 @@ function confirmCheckout() {
   let text = "🛒 *รายการสั่งซื้อ (Wanderer Shop)*\n";
   text += "---------------------------\n";
   let total = 0;
-  let isGameTopup = false; // สำหรับเช็คแท็บเติมเกม
+  let isGameTopup = false; 
   
   cart.forEach((item, index) => {
     text += `${index + 1}. ${item.cat}\n`;
@@ -671,7 +711,6 @@ function confirmCheckout() {
     text += `   ราคา: ${item.price} บาท\n`;
     total += item.price;
     
-    // เช็คว่ามีสินค้าเติมเกมหรือไม่
     if (item.tab === "เติมเกม") isGameTopup = true;
   });
   
@@ -679,11 +718,10 @@ function confirmCheckout() {
   text += `💰 *ยอดรวมทั้งสิ้น: ${total} บาท*\n`;
   text += "---------------------------\n";
   
-  // เพิ่มเงื่อนไขแจ้งไอดี หากมีสินค้าแท็บ "เติมเกม"
   if (isGameTopup) {
       text += "📌 *แจ้งไอดี ได้เลยค่ะ*\n";
   } else {
-      text += "รบกวนแอดมินเช็คยอดและส่งเลขบัญชีให้ทีครับ/ค่ะ 🙏";
+      text += "รบกวนรอแอดมินตอบก่อนค่อยโอนนะคะ";
   }
   
   navigator.clipboard.writeText(text).then(() => {
