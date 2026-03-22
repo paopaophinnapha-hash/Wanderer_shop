@@ -6,7 +6,7 @@
 <title>Wanderer Shop</title>
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Mitr:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-/* --- 1. ปรับ Responsive ให้กว้างเต็มจอ --- */
+/* --- 1. ปรับ Responsive ให้กว้างเต็มจอ (ลบ max-width 500px) --- */
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 :root { --primary: #b026ff; --secondary: #00d2ff; --bg-main: #f4f5f7; --bg-card: #ffffff; --text-muted: #6b7280; --glow: rgba(176,38,255,0.5); --text-dark: #1f2937; --white: #ffffff; }
 
@@ -18,10 +18,8 @@ body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(
   background: var(--bg-main); 
   position: relative; 
   padding-bottom: 110px; 
-  overflow-x: hidden; 
 }
 
-/* ส่วนหัวและดีไซน์อื่นๆ คงเดิมแต่ปรับให้ยืดหยุ่น */
 .hero { background: linear-gradient(135deg, rgba(176,38,255,0.6) 0%, rgba(0,210,255,0.4) 100%); padding: 30px 20px 55px; text-align: center; position: relative; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; z-index: 1; }
 .logo { width: 130px; height: 130px; border-radius: 50%; overflow: hidden; box-shadow: 0 6px 20px var(--glow); border: 4px solid var(--white); margin: 0 auto 15px; background: #fff; display: flex; align-items: center; justify-content: center; }
 .logo img { width: 100%; height: 100%; object-fit: cover; }
@@ -36,15 +34,12 @@ body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(
 .tab-content.active { display: block; }
 
 .info-card { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-.info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed #eee; font-size: 14px; flex-wrap: wrap; gap: 5px; }
-.category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
-.category-card { background: white; border-radius: 15px; padding: 20px 10px; text-align: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+.info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed #eee; font-size: 14px; flex-wrap: wrap; }
 
 .bottom-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); transform: translateY(100%); transition: 0.3s; z-index: 1000; }
 .bottom-bar.active { transform: translateY(0); }
 
 .fab-btn { position: fixed; right: 20px; bottom: 90px; width: 55px; height: 55px; background: #10b981; color: white; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer; z-index: 1001; }
-
 .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; backdrop-filter: blur(5px); }
 .modal-content { background: white; width: 100%; max-width: 450px; border-radius: 20px; padding: 25px; position: relative; max-height: 90vh; overflow-y: auto; }
 .admin-input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
@@ -55,28 +50,28 @@ body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(
 
 <div class="app-container">
   <div class="hero">
-    <div class="logo"><img id="shopLogoImg" src="https://via.placeholder.com/130"></div>
+    <div class="logo"><img id="shopLogoImg" src=""></div>
     <div class="hero-title" onclick="handleAdminTap()">Wanderer Shop</div>
-    <div class="hero-sub">ยินดีต้อนรับร้าน Wanderer Shop</div>
+    <div class="hero-sub">รับสินค้าอะไรดีคะ</div>
     <div class="tab-container" id="tabBar"></div>
   </div>
 
   <div class="content">
     <div id="tab-info" class="tab-content">
       <div class="info-card">
-        <div class="info-row"><b>Line</b><span id="info-line">@997pfoig</span></div>
-        <div class="info-row"><b>Facebook</b><span id="info-fb">Wanderer Shop</span></div>
+        <div class="info-row"><b>Line</b><span id="info-line">-</span></div>
+        <div class="info-row"><b>Facebook</b><span id="info-fb">-</span></div>
         <div id="customInfoArea"></div>
       </div>
     </div>
 
     <div id="tab-products" class="tab-content active">
-      <div id="categoriesView"><div class="category-grid" id="categoryGrid"></div></div>
-      <div id="productsView" style="display:none;">
-        <button onclick="showCategories()" style="background:none; border:none; color:var(--primary); cursor:pointer; margin-bottom:15px; font-weight:bold;">← กลับ</button>
-        <h2 id="currentCategoryTitle"></h2>
-        <div id="productGrid" style="margin-top:15px;"></div>
-      </div>
+        <div id="categoriesView"><div class="category-grid" id="categoryGrid"></div></div>
+        <div id="productsView" style="display:none;">
+            <button onclick="showCategories()" style="background:none; border:none; color:var(--primary); cursor:pointer; margin-bottom:15px; font-weight:bold;">← กลับ</button>
+            <h2 id="currentCategoryTitle"></h2>
+            <div id="productGrid" style="margin-top:15px;"></div>
+        </div>
     </div>
   </div>
 
@@ -91,17 +86,18 @@ body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(
 <div id="adminModal" class="modal-overlay">
   <div class="modal-content">
     <h3 style="margin-bottom:15px;">⚙️ ตั้งค่าร้านค้า</h3>
+    <label>URL โลโก้:</label><input id="editLogo" class="admin-input">
     <label>Line:</label><input id="editLine" class="admin-input">
     <label>Facebook:</label><input id="editFb" class="admin-input">
     
     <div style="margin: 15px 0; padding: 10px; border: 1px dashed #ccc; border-radius: 10px;">
-        <p style="font-size: 14px; font-weight: bold; margin-bottom: 5px;">กล่องข้อความหน้าข้อมูลร้าน</p>
+        <p style="font-size: 14px; font-weight: bold;">กล่องข้อความหน้าข้อมูลร้าน</p>
         <div id="editCustomFields"></div>
-        <button onclick="addCustomFieldForm()" class="admin-btn" style="background:#6b7280; font-size:12px; margin-top:5px;">+ เพิ่มกล่องข้อความใหม่</button>
+        <button onclick="addCustomFieldForm()" class="admin-btn" style="background:#6b7280; font-size:12px; margin-top:5px;">+ เพิ่มหัวข้อใหม่</button>
     </div>
 
-    <button onclick="saveShop()" class="admin-btn" style="background:#0ea5e9;">บันทึกข้อมูลและปิด</button>
-    <button onclick="document.getElementById('adminModal').style.display='none'" style="width:100%; background:none; border:none; margin-top:10px; color:#999; cursor:pointer;">ยกเลิก</button>
+    <button onclick="saveShop()" class="admin-btn" style="background:#10b981;">บันทึกข้อมูล</button>
+    <button onclick="document.getElementById('adminModal').style.display='none'" style="width:100%; background:none; border:none; margin-top:10px; color:#999; cursor:pointer;">ปิด</button>
   </div>
 </div>
 
@@ -113,112 +109,84 @@ body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(
       <span>ยอดรวม:</span><span>฿<span id="cartSum">0</span></span>
     </div><br>
     <button onclick="confirmCheckout()" class="admin-btn" style="background:#10b981;">คัดลอกรายการ & ทักไลน์</button>
-    <button onclick="document.getElementById('cartModal').style.display='none'" style="width:100%; background:none; border:none; margin-top:10px; color:#999; cursor:pointer;">แก้ไขรายการ</button>
+    <button onclick="document.getElementById('cartModal').style.display='none'" style="width:100%; background:none; border:none; margin-top:10px; color:#999; cursor:pointer;">แก้ไข</button>
   </div>
 </div>
 
 <script>
-/* ข้อมูลเบื้องต้น */
-let shop = JSON.parse(localStorage.getItem('w_shop')) || { line: '@997pfoig', fb: 'Wanderer Shop', fields: [] };
-let products = JSON.parse(localStorage.getItem('w_products')) || [
-    { id: 1, tab: "สินค้า", cat: "Netflix", name: "1 เดือน", price: 150, desc: "จอส่วนตัว" },
-    { id: 2, tab: "เติมเกม", cat: "Free Fire", name: "100 เพชร", price: 35, desc: "" }
-];
-let tabs = ["สินค้า", "เติมเกม"];
+// ข้อมูลจำลอง (ในระบบจริงจะโหลดจาก JSONBin)
+let shop = JSON.parse(localStorage.getItem('w_shop')) || { logo: '', line: '@997pfoig', fb: 'Wanderer Shop', fields: [] };
+let products = JSON.parse(localStorage.getItem('w_products')) || [];
 let cart = [];
 let currentTab = "สินค้า";
 let clickCount = 0;
 
-/* --- 4. ระบบแยกบิลตามเงื่อนไขแท็บ --- */
+// 4. ระบบแยกบิลตามแท็บ "เติมเกม"
 function confirmCheckout() {
   if (cart.length === 0) return;
-  let text = `สรุปรายการสั่งซื้อ Wanderer_shop\n\n`;
-  let hasGameTab = false;
+  let text = `🛒 *รายการสั่งซื้อ Wanderer Shop*\n\n`;
+  let isGameTopup = false;
 
-  cart.forEach(item => {
-    text += `สินค้า: ${item.cat} - ${item.name}\n`;
-    if (item.tab === "เติมเกม") {
-      hasGameTab = true;
-    } else {
-      text += `รายละเอียด: ${item.desc || '-'}\n`;
-    }
-    text += `ราคา: ${item.price} บาท\n\n`;
+  cart.forEach((item, index) => {
+    text += `${index + 1}. ${item.cat} - ${item.name} [฿${item.price}]\n`;
+    if (item.tab === "เติมเกม") isGameTopup = true;
   });
 
-  if (hasGameTab) text += `แจ้งไอดีได้เลยค่ะ\n\n`;
+  if (isGameTopup) text += `\n📌 *แจ้งไอดีได้เลยค่ะ*\n`;
 
   let total = cart.reduce((s, i) => s + i.price, 0);
-  text += `--------------------\n`;
-  text += `ยอดที่ต้องชำระทั้งหมด: ${total} บาท\n\n`;
-  text += `ขอบคุณที่ใช้บริการร้านค่ะ\nกรุณารอแอดมินตอบกลับภายใน 5-15 นาทีก่อนค่อยโอนนะคะ`;
+  text += `\nยอดรวม: *฿${total}*\n\nคัดลอกแล้วทักไลน์ได้เลยครับ`;
 
   navigator.clipboard.writeText(text).then(() => {
-    alert("คัดลอกรายการแล้ว! ระบบกำลังพาไปที่ Line");
+    alert("คัดลอกรายการแล้ว! ระบบจะพาไปที่ Line");
     window.open(`https://line.me/ti/p/~${shop.line.replace('@','')}`, '_blank');
   });
 }
 
-/* --- 2. ระบบ Admin Login (กด 5 ครั้ง + รหัส 170647) --- */
+// 1. ระบบรหัสผ่านใหม่ 170647
 function handleAdminTap() {
   clickCount++;
-  setTimeout(() => { clickCount = 0; }, 2000); // รีเซ็ตถ้ากดช้าเกิน 2 วิ
+  setTimeout(() => { clickCount = 0; }, 2000);
   if(clickCount >= 5) {
-    if(prompt("กรุณาใส่รหัสผ่านแอดมิน:") === "170647") {
+    if(prompt("รหัสผ่านแอดมิน:") === "170647") {
       document.getElementById('adminFab').style.display = 'flex';
-      alert("โหมดแอดมินเปิดใช้งานแล้ว ปุ่มบวก (+) จะปรากฏขึ้น");
-    } else {
-      alert("รหัสผ่านไม่ถูกต้อง");
+      alert("เปิดโหมดแก้ไขแล้ว");
     }
     clickCount = 0;
   }
 }
 
-/* --- 3. ระบบจัดการกล่องข้อความอิสระ --- */
 function addCustomFieldForm(t='', d='') {
   const div = document.createElement('div');
   div.className = 'custom-field-box';
-  div.style = "background:#f4f4f4; padding:10px; border-radius:8px; margin-bottom:10px; position:relative;";
-  div.innerHTML = `
-    <input class="f-title admin-input" value="${t}" placeholder="หัวข้อ (เช่น เวลาทำการ)">
-    <textarea class="f-desc admin-input" placeholder="รายละเอียด (พิมพ์ Enter ขึ้นบรรทัดใหม่ได้)">${d}</textarea>
-    <button onclick="this.parentElement.remove()" style="color:red; font-size:12px; background:none; border:none; cursor:pointer;">[ลบกล่องนี้]</button>
-  `;
+  div.style = "margin-bottom:10px; background:#f9f9f9; padding:5px; border-radius:5px;";
+  div.innerHTML = `<input class="f-title admin-input" value="${t}" placeholder="หัวข้อ"><textarea class="f-desc admin-input" placeholder="รายละเอียด">${d}</textarea><button onclick="this.parentElement.remove()" style="color:red; border:none; background:none; cursor:pointer; font-size:10px;">[ลบ]</button>`;
   document.getElementById('editCustomFields').appendChild(div);
 }
 
 function saveShop() {
+  shop.logo = document.getElementById('editLogo').value;
   shop.line = document.getElementById('editLine').value;
   shop.fb = document.getElementById('editFb').value;
   shop.fields = [];
-  document.querySelectorAll('#editCustomFields .custom-field-box').forEach(box => {
-    const t = box.querySelector('.f-title').value;
-    const d = box.querySelector('.f-desc').value;
-    if(t) shop.fields.push({ title: t, desc: d });
+  document.querySelectorAll('.custom-field-box').forEach(box => {
+    shop.fields.push({ title: box.querySelector('.f-title').value, desc: box.querySelector('.f-desc').value });
   });
   localStorage.setItem('w_shop', JSON.stringify(shop));
   renderApp();
   document.getElementById('adminModal').style.display='none';
 }
 
-/* --- การแสดงผลหลัก (Render) --- */
 function renderApp() {
+  document.getElementById('shopLogoImg').src = shop.logo || 'https://via.placeholder.com/130';
   document.getElementById('info-line').innerText = shop.line;
   document.getElementById('info-fb').innerText = shop.fb;
+  document.getElementById('customInfoArea').innerHTML = shop.fields.map(f => `<div class="info-row"><b>${f.title}</b><span style="white-space:pre-line; text-align:right;">${f.desc}</span></div>`).join('');
   
-  // แสดงกล่องข้อความอิสระในหน้าข้อมูลร้าน
-  document.getElementById('customInfoArea').innerHTML = (shop.fields || []).map(f => `
-    <div class="info-row" style="flex-direction:column; align-items:flex-start;">
-      <b>${f.title}</b>
-      <div style="white-space:pre-wrap; margin-top:5px; color:#555;">${f.desc}</div>
-    </div>`).join('');
-
-  // Render Tabs
   const tb = document.getElementById('tabBar');
-  tb.innerHTML = `<button class="tab-btn ${currentTab==='info'?'active':''}" onclick="setTab('info')">ข้อมูลร้าน</button>`;
-  tabs.forEach(t => tb.innerHTML += `<button class="tab-btn ${currentTab===t?'active':''}" onclick="setTab('${t}')">${t}</button>`);
-  
-  // Render Categories
-  renderCategories();
+  tb.innerHTML = `<button class="tab-btn ${currentTab==='info'?'active':''}" onclick="setTab('info')">ข้อมูลร้าน</button>
+                  <button class="tab-btn ${currentTab==='สินค้า'?'active':''}" onclick="setTab('สินค้า')">สินค้า</button>
+                  <button class="tab-btn ${currentTab==='เติมเกม'?'active':''}" onclick="setTab('เติมเกม')">เติมเกม</button>`;
 }
 
 function setTab(t) {
@@ -229,39 +197,9 @@ function setTab(t) {
   renderApp();
 }
 
-function renderCategories() {
-  const catGrid = document.getElementById('categoryGrid');
-  const filtered = products.filter(p => p.tab === currentTab);
-  const uniqueCats = [...new Set(filtered.map(p => p.cat))];
-  catGrid.innerHTML = uniqueCats.map(c => `<div class="category-card" onclick="openCat('${c}')"><b>${c}</b></div>`).join('');
-}
-
-function openCat(c) {
-  document.getElementById('categoriesView').style.display='none';
-  document.getElementById('productsView').style.display='block';
-  document.getElementById('currentCategoryTitle').innerText = c;
-  const filtered = products.filter(p => p.cat === c && p.tab === currentTab);
-  document.getElementById('productGrid').innerHTML = filtered.map(p => {
-    const isSel = cart.find(i => i.id === p.id) ? 'selected' : '';
-    return `<div class="category-card ${isSel}" style="display:flex; justify-content:space-between; margin-bottom:10px; width:100%; text-align:left;" onclick="toggleCart(${p.id})">
-      <div><b>${p.name}</b><br><small>${p.desc||''}</small></div>
-      <b style="color:var(--primary)">฿${p.price}</b>
-    </div>`;
-  }).join('');
-}
-
-function toggleCart(id) {
-  const idx = cart.findIndex(i => i.id === id);
-  if(idx > -1) cart.splice(idx, 1);
-  else cart.push(products.find(p => p.id === id));
-  document.getElementById('cartCount').innerText = cart.length;
-  document.getElementById('cartTotal').innerText = cart.reduce((s,i)=>s+i.price,0);
-  document.getElementById('bottomBar').classList.toggle('active', cart.length > 0);
-  openCat(document.getElementById('currentCategoryTitle').innerText);
-}
-
 function openAdminModal() { 
-  document.getElementById('adminModal').style.display='flex'; 
+  document.getElementById('adminModal').style.display='flex';
+  document.getElementById('editLogo').value = shop.logo;
   document.getElementById('editLine').value = shop.line;
   document.getElementById('editFb').value = shop.fb;
   document.getElementById('editCustomFields').innerHTML = '';
