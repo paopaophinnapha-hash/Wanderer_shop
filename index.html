@@ -6,14 +6,13 @@
 <title>Wanderer Shop</title>
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Mitr:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-/* --- Design System --- */
+/* --- 1. คง CSS เดิมและปรับ Responsive เต็มจอ --- */
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 :root { --primary: #b026ff; --secondary: #00d2ff; --bg-main: #f4f5f7; --bg-card: #ffffff; --text-muted: #6b7280; --glow: rgba(176,38,255,0.5); --text-dark: #1f2937; --white: #ffffff; }
 
 body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(--text-dark); display: flex; flex-direction: column; align-items: center; }
 .app-container { width: 100%; min-height: 100vh; position: relative; padding-bottom: 50px; }
 
-/* Hero & Tabs */
 .hero { background: linear-gradient(135deg, rgba(176,38,255,0.6) 0%, rgba(0,210,255,0.4) 100%); padding: 30px 20px 55px; text-align: center; position: relative; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; z-index: 1; }
 .logo { width: 120px; height: 120px; border-radius: 50%; overflow: hidden; box-shadow: 0 6px 20px var(--glow); border: 4px solid var(--white); margin: 0 auto 15px; background: #fff; }
 .logo img { width: 100%; height: 100%; object-fit: cover; }
@@ -23,27 +22,24 @@ body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(
 .tab-btn { padding: 10px 18px; border-radius: 25px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; background: transparent; color: var(--text-muted); transition: 0.3s; }
 .tab-btn.active { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; }
 
-/* Content Areas */
 .content { padding: 45px 15px 0; max-width: 1000px; margin: 0 auto; width: 100%; }
 .tab-content { display: none; }
 .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
 
-/* Info Card (รูป 2-3) */
+/* หน้าข้อมูลร้าน (รูป 2-3) */
 .info-card { background: white; border-radius: 18px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed #eee; font-size: 14px; }
 
-/* App Grid (รูป 4) */
+/* หน้า Grid ไอคอนแอป (รูป 4) */
 .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 15px; }
 .app-item { background: white; padding: 15px; border-radius: 18px; text-align: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transition: 0.2s; }
-.app-item:active { transform: scale(0.95); }
 .app-item img { width: 65px; height: 65px; border-radius: 15px; margin-bottom: 8px; object-fit: cover; border: 1px solid #f0f0f0; }
-.app-item p { font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.app-item p { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* Price List (รูป 5) */
-.price-card { background: white; padding: 18px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border: 1px solid #f9f9f9; }
+/* หน้ารายการราคา (รูป 5) */
+.price-card { background: white; padding: 18px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
 .buy-btn { background: var(--primary); color: white; border: none; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: bold; }
 
-/* Admin */
 .fab-btn { position: fixed; right: 20px; bottom: 30px; width: 55px; height: 55px; background: #10b981; color: white; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer; z-index: 1001; }
 .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; backdrop-filter: blur(5px); }
 .modal-content { background: white; width: 100%; max-width: 450px; border-radius: 20px; padding: 25px; max-height: 85vh; overflow-y: auto; }
@@ -58,7 +54,7 @@ body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(
   <div class="hero">
     <div class="logo"><img id="shopLogoImg" src=""></div>
     <div class="hero-title" onclick="handleAdminLogin()">Wanderer Shop</div>
-    <div class="hero-sub" style="color:white; font-size: 14px; margin-top:5px;">รับชมผ่านแอปไหนดีคะ</div>
+    <div class="hero-sub" style="color:white; font-size: 14px; margin-top:5px;">รับสินค้าตัวไหนดีคะ</div>
     <div class="tab-container" id="tabBar"></div>
   </div>
 
@@ -76,10 +72,10 @@ body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(
         <div class="app-grid" id="appGrid"></div>
       </div>
       <div id="pricesView" style="display:none;">
-        <button onclick="showApps()" style="background:none; border:none; color:var(--primary); cursor:pointer; margin-bottom:15px; font-weight:bold; display: flex; align-items: center; gap: 5px;">← ย้อนกลับ</button>
-        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px; background: white; padding: 15px; border-radius: 15px;">
+        <button onclick="showApps()" style="background:none; border:none; color:var(--primary); cursor:pointer; margin-bottom:15px; font-weight:bold;">← กลับ</button>
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
             <img id="detailAppImg" src="" style="width: 70px; height: 70px; border-radius: 15px; object-fit: cover;">
-            <h2 id="detailAppTitle" style="font-size: 20px;"></h2>
+            <h2 id="detailAppTitle"></h2>
         </div>
         <div id="priceList"></div>
       </div>
@@ -97,30 +93,31 @@ body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(
         <option value="สินค้า">สินค้าพรีเมียม</option>
         <option value="เติมเกม">เติมเกม</option>
     </select>
-    <label>ชื่อแอป/เกม:</label><input id="addAppName" class="admin-input" placeholder="เช่น Netflix">
-    <label>URL ไอคอน (รูป):</label><input id="addAppIcon" class="admin-input" placeholder="ใส่ลิงก์รูปภาพ">
+    <label>ชื่อแอป:</label><input id="addAppName" class="admin-input" placeholder="เช่น YouTube">
+    <label>URL ไอคอน:</label><input id="addAppIcon" class="admin-input" placeholder="ลิงก์รูปภาพ">
     
-    <div style="margin-top:15px; padding:10px; background:#f8f9fa; border-radius:10px;">
-        <b style="font-size: 14px;">รายการราคา (เพิ่มได้หลายตัว)</b>
-        <div id="variantInputs" style="margin-top:10px;"></div>
-        <button onclick="addVariantField()" style="width:100%; padding:8px; background:#fff; border:1px dashed #bbb; border-radius:8px; cursor:pointer; font-size:12px;">+ เพิ่มตัวเลือกราคา</button>
+    <div style="margin-top:10px; padding:10px; background:#f9f9f9; border-radius:10px;">
+        <b>รายการราคา (Variant)</b>
+        <div id="variantInputs"></div>
+        <button onclick="addVariantField()" style="width:100%; padding:5px; margin-top:5px; cursor:pointer;">+ เพิ่มแพ็กเกจราคา</button>
     </div>
 
-    <button onclick="saveProduct()" style="width:100%; padding:12px; background:var(--primary); color:white; border:none; border-radius:8px; font-weight:bold; margin-top:15px;">บันทึกข้อมูล</button>
-    <button onclick="closeAdminModal()" style="width:100%; background:none; border:none; margin-top:10px; color:#999; cursor:pointer;">ยกเลิก</button>
+    <button onclick="saveProduct()" style="width:100%; padding:12px; background:var(--primary); color:white; border:none; border-radius:8px; font-weight:bold; margin-top:15px; cursor:pointer;">บันทึกแอป</button>
+    <button onclick="closeAdminModal()" style="width:100%; background:none; border:none; margin-top:10px; color:#999; cursor:pointer;">ปิด</button>
   </div>
 </div>
 
 <script>
-let shop = JSON.parse(localStorage.getItem('w_shop')) || { logo: 'https://cdn-icons-png.flaticon.com/512/3081/3081559.png', line: '@wanderer', fb: 'Wanderer Shop', fields: [] };
-let apps = JSON.parse(localStorage.getItem('w_apps')) || [];
+// --- ส่วน Logic ควบคุมแอป ---
+let shop = JSON.parse(localStorage.getItem('w_shop')) || { logo: '', line: '@wanderer', fb: 'Wanderer Shop', fields: [] };
+let apps = JSON.parse(localStorage.getItem('w_apps')) || []; // เก็บข้อมูลแอปและราคา
 let currentTab = "สินค้า";
 let clickCount = 0;
 
 function handleAdminLogin() {
     clickCount++;
     if (clickCount >= 5) {
-        if (prompt("กรุณาใส่รหัสผ่านแอดมิน:") === "170647") {
+        if (prompt("รหัสผ่านแอดมิน:") === "170647") {
             document.getElementById('adminFab').style.display = 'flex';
             alert("ยินดีต้อนรับแอดมิน!");
         }
@@ -132,17 +129,13 @@ function handleAdminLogin() {
 function addVariantField(n='', p='') {
     const div = document.createElement('div');
     div.className = 'v-row';
-    div.style = "display: flex; gap: 5px; margin-bottom: 8px;";
-    div.innerHTML = `
-        <input class="v-name admin-input" value="${n}" placeholder="ระยะเวลา" style="margin:0; flex:2; font-size:12px;">
-        <input class="v-price admin-input" type="number" value="${p}" placeholder="ราคา" style="margin:0; flex:1; font-size:12px;">
-        <button onclick="this.parentElement.remove()" style="background:none; border:none; color:red; font-weight:bold;">✕</button>
-    `;
+    div.style = "display: flex; gap: 5px; margin-bottom: 5px;";
+    div.innerHTML = `<input class="v-n admin-input" value="${n}" placeholder="รุ่น/เวลา" style="margin:0; flex:2;"><input class="v-p admin-input" type="number" value="${p}" placeholder="ราคา" style="margin:0; flex:1;"><button onclick="this.parentElement.remove()" style="color:red; border:none; background:none;">✕</button>`;
     document.getElementById('variantInputs').appendChild(div);
 }
 
 function saveProduct() {
-    const appData = {
+    const app = {
         id: Date.now(),
         tab: document.getElementById('addTab').value,
         name: document.getElementById('addAppName').value,
@@ -150,38 +143,34 @@ function saveProduct() {
         variants: []
     };
     document.querySelectorAll('.v-row').forEach(row => {
-        const vName = row.querySelector('.v-name').value;
-        const vPrice = row.querySelector('.v-price').value;
-        if(vName && vPrice) appData.variants.push({ name: vName, price: parseInt(vPrice) });
+        const vn = row.querySelector('.v-n').value;
+        const vp = row.querySelector('.v-p').value;
+        if(vn && vp) app.variants.push({ name: vn, price: vp });
     });
-    
-    if(!appData.name || appData.variants.length === 0) return alert("กรุณากรอกชื่อและราคาให้ครบ");
-    apps.push(appData);
+    apps.push(app);
     localStorage.setItem('w_apps', JSON.stringify(apps));
     closeAdminModal();
     renderApp();
 }
 
 function renderApp() {
-    document.getElementById('shopLogoImg').src = shop.logo;
+    document.getElementById('shopLogoImg').src = shop.logo || 'https://via.placeholder.com/120';
     document.getElementById('info-line').innerText = shop.line;
     document.getElementById('info-fb').innerText = shop.fb;
-    document.getElementById('customInfoArea').innerHTML = (shop.fields || []).map(f => `
-        <div class="info-row"><b>${f.title}</b><span>${f.desc}</span></div>
-    `).join('');
     
     const tb = document.getElementById('tabBar');
     tb.innerHTML = `
         <button class="tab-btn ${currentTab==='info'?'active':''}" onclick="setTab('info')">ข้อมูลร้าน</button>
-        <button class="tab-btn ${currentTab==='สินค้า'?'active':''}" onclick="setTab('สินค้า')">สินค้าพรีเมียม</button>
+        <button class="tab-btn ${currentTab==='สินค้า'?'active':''}" onclick="setTab('สินค้า')">สินค้า</button>
         <button class="tab-btn ${currentTab==='เติมเกม'?'active':''}" onclick="setTab('เติมเกม')">เติมเกม</button>
     `;
     
-    const filteredApps = apps.filter(a => a.tab === currentTab);
-    document.getElementById('appGrid').innerHTML = filteredApps.map(app => `
-        <div class="app-item" onclick="openAppDetails(${app.id})">
-            <img src="${app.icon || 'https://via.placeholder.com/65'}">
-            <p>${app.name}</p>
+    // แสดง Grid ไอคอน (รูป 4)
+    const filtered = apps.filter(a => a.tab === currentTab);
+    document.getElementById('appGrid').innerHTML = filtered.map(a => `
+        <div class="app-item" onclick="openAppDetails(${a.id})">
+            <img src="${a.icon || 'https://via.placeholder.com/65'}">
+            <p>${a.name}</p>
         </div>
     `).join('');
 }
@@ -193,24 +182,21 @@ function openAppDetails(id) {
     document.getElementById('detailAppTitle').innerText = app.name;
     document.getElementById('detailAppImg').src = app.icon;
     
+    // แสดงรายการราคา (รูป 5)
     document.getElementById('priceList').innerHTML = app.variants.map(v => `
         <div class="price-card">
             <div>
-                <div style="font-weight:600; font-size:15px;">${v.name}</div>
-                <div style="color:var(--primary); font-size:16px; font-weight:bold;">฿${v.price}</div>
+                <div style="font-weight:600;">${v.name}</div>
+                <div style="color:var(--primary); font-weight:bold;">฿${v.price}</div>
             </div>
             <button class="buy-btn" onclick="checkout('${app.name}', '${v.name}', ${v.price}, '${app.tab}')">สั่งซื้อ</button>
         </div>
     `).join('');
 }
 
-function checkout(appName, variantName, price, tab) {
-    let text = `🛒 *สรุปรายการสั่งซื้อ Wanderer Shop*\n\n`;
-    text += `รายการ: ${appName}\n`;
-    text += `รุ่น/แพ็กเกจ: ${variantName}\n`;
-    text += `ยอดชำระ: ฿${price}\n`;
-    
-    if (tab === "เติมเกม") text += `\n📌 *แจ้งไอดีได้เลยค่ะ*\n`;
+function checkout(appName, variant, price, tab) {
+    let text = `🛒 *สั่งซื้อสินค้า Wanderer Shop*\n\nแอป: ${appName}\nแพ็กเกจ: ${variant}\nราคา: ฿${price}\n`;
+    if(tab === "เติมเกม") text += `\n📌 *แจ้งไอดีได้เลยค่ะ*\n`;
     
     navigator.clipboard.writeText(text).then(() => {
         alert("คัดลอกรายการสั่งซื้อแล้ว!");
