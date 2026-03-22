@@ -61,7 +61,8 @@ body { font-family: 'Kanit', sans-serif; background: var(--bg-main); color: var(
 .fab-btn:active { transform: scale(0.9); }
 
 .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; backdrop-filter: blur(5px); }
-.modal-content { background: white; width: 100%; max-width: 500px; border-radius: 20px; padding: 25px; position: relative; max-height: 90vh; overflow-y: auto; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+/* เพิ่ม scroll-behavior: smooth เข้าไป */
+.modal-content { scroll-behavior: smooth; background: white; width: 100%; max-width: 500px; border-radius: 20px; padding: 25px; position: relative; max-height: 90vh; overflow-y: auto; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
 .close-btn { position: absolute; top: 15px; right: 15px; font-size: 24px; color: #999; cursor: pointer; background: none; border: none; }
@@ -264,7 +265,7 @@ async function fetchFromServer() { }
 /* --- ระบบข้อมูล (Data) --- */
 const DEFAULT_LOGO = 'https://images.unsplash.com/photo-1557683316-973673baf926?w=400&q=80';
 let shopInfo = JSON.parse(localStorage.getItem('wandererShopInfo')) || { 
-  line: '@997pfoig', facebook: 'Wanderer Shop', hours: '11:00 - 00:00 น.', warranty: 'ประกันตลอดชีพ', logo: DEFAULT_LOGO
+  line: '@997pfoig', facebook: 'Wanderer_Shop', hours: '10:30 - 00:30 น.', warranty: 'ยินดีต้อนรับร้าน Wanderer Shop รับสินค้าอะไรดีคะ', logo: DEFAULT_LOGO
 };
 let tabs = JSON.parse(localStorage.getItem('wandererTabs')) || ["สินค้า"];
 tabs = tabs.filter(t => t !== "จัดการ"); 
@@ -476,6 +477,9 @@ function saveProduct(e) {
   alert("บันทึกสินค้าเรียบร้อย!");
 }
 
+/* =========================================================
+   แก้ไขแล้ว: ฟังก์ชันแก้ไขสินค้า พร้อม Smooth Scroll 
+   ========================================================= */
 function editProduct(id) {
   const p = products.find(item => item.id === id);
   if(p) {
@@ -486,12 +490,17 @@ function editProduct(id) {
     document.getElementById('pName').value = p.name;
     document.getElementById('pPackDesc').value = p.packDesc || '';
     document.getElementById('pPrice').value = p.price;
-    document.getElementById('pIcon').value = p.icon;
+    document.getElementById('pIcon').value = p.icon || '';
     
     document.getElementById('saveBtn').innerText = "อัปเดตสินค้า";
     document.getElementById('saveBtn').style.background = "#059669";
     document.getElementById('cancelBtn').style.display = "block";
-    document.querySelector('.modal-content').scrollTop = 0;
+    
+    // เด้งหน้าจอขึ้นบนสุดอย่างสมูท
+    document.querySelector('.modal-content').scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }
 }
 
@@ -503,21 +512,50 @@ function cancelEdit() {
   document.getElementById('cancelBtn').style.display = "none";
 }
 
+/* =========================================================
+   แก้ไขแล้ว: ฟังก์ชันแสดงรายการแอดมิน (จัดกลุ่ม + เรียง A-Z)
+   ========================================================= */
 function renderAdminList() {
-  document.getElementById('adminProductList').innerHTML = products.map(p => `
-    <div style="font-size:13px; border-bottom:1px solid #eee; padding:12px 5px; display:flex; justify-content:space-between; align-items:center;">
-      <div>
-        <span style="background:#f3f4f6; padding:2px 6px; border-radius:4px; font-size:11px; color:#555;">${p.tab}</span> 
-        <span style="font-weight:600;">${p.name}</span> 
-        ${p.packDesc ? `<span style="font-size:11px; color:#888;">(${p.packDesc})</span>` : ''} <br>
-        <small style="color:#666;">แอป: ${p.cat} | ฿${p.price}</small>
+  // 1. เรียงลำดับชื่อแอป ก-ฮ หรือ A-Z
+  const sortedProducts = [...products].sort((a, b) => a.cat.localeCompare(b.cat));
+  
+  // 2. จัดกลุ่มแอปที่ชื่อเหมือนกัน
+  const grouped = {};
+  sortedProducts.forEach(p => {
+    if (!grouped[p.cat]) grouped[p.cat] = [];
+    grouped[p.cat].push(p);
+  });
+
+  let html = '';
+  for (const cat in grouped) {
+    // โชว์หัวข้อชื่อแอป
+    html += `
+      <div style="background:#f0f2f5; padding:8px 12px; margin-top:15px; border-radius:8px 8px 0 0; border:1px solid #e5e7eb; border-bottom:none; font-weight:bold; color:var(--text-dark); display:flex; align-items:center; gap:8px;">
+        <span style="font-size:16px;">📱</span> <span style="font-size:14px;">${cat}</span>
       </div>
-      <div style="display:flex; gap:12px;">
-        <button type="button" onclick="editProduct('${p.id}')" style="color:#2563eb; border:none; background:none; font-weight:600; cursor:pointer;">แก้ไข</button>
-        <button type="button" onclick="deleteProduct('${p.id}')" style="color:#ef4444; border:none; background:none; font-weight:600; cursor:pointer;">ลบ</button>
+      <div style="border:1px solid #e5e7eb; border-radius:0 0 8px 8px; margin-bottom:10px; background:#fff; padding:0 10px;">
+    `;
+    
+    // วนลูปโชว์รายการย่อยในแอปนั้น
+    html += grouped[cat].map(p => `
+      <div style="font-size:13px; border-bottom:1px solid #f3f4f6; padding:12px 5px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <span style="background:#e5e7eb; padding:2px 6px; border-radius:4px; font-size:11px; color:#4b5563;">${p.tab}</span> 
+          <span style="font-weight:600; color:var(--primary);">${p.name}</span> 
+          ${p.packDesc ? `<span style="font-size:11px; color:#6b7280;">(${p.packDesc})</span>` : ''} <br>
+          <small style="color:#374151; font-weight:600;">฿${p.price}</small>
+        </div>
+        <div style="display:flex; gap:12px;">
+          <button type="button" onclick="editProduct('${p.id}')" style="color:#2563eb; border:none; background:none; font-weight:600; cursor:pointer;">แก้ไข</button>
+          <button type="button" onclick="deleteProduct('${p.id}')" style="color:#ef4444; border:none; background:none; font-weight:600; cursor:pointer;">ลบ</button>
+        </div>
       </div>
-    </div>
-  `).join('');
+    `).join('');
+    
+    html += `</div>`;
+  }
+
+  document.getElementById('adminProductList').innerHTML = html || '<div style="text-align:center; padding:30px; color:#9ca3af;">ยังไม่มีสินค้าในระบบ</div>';
 }
 
 function updateAdminTabUI() {
@@ -597,7 +635,7 @@ function openCartSummary() {
   
   cart.forEach((item, index) => {
     html += `
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 14px; border-bottom: 1px dashed #eee; padding-bottom: 8px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin margin-bottom: 12px; font-size: 14px; border-bottom: 1px dashed #eee; padding-bottom: 8px;">
         <div style="flex: 1;">
           <span style="font-weight: 600;">${index + 1}. ${item.cat}</span><br>
           <span style="font-size: 12px; color: var(--text-muted);">
@@ -645,7 +683,7 @@ function confirmCheckout() {
   if (isGameTopup) {
       text += "📌 *แจ้งไอดี ได้เลยค่ะ*\n";
   } else {
-      text += "รบกวนแอดมินสรุปยอดและส่งเลขบัญชีให้ทีครับ/ค่ะ 🙏";
+      text += "รบกวนแอดมินเช็คยอดและส่งเลขบัญชีให้ทีครับ/ค่ะ 🙏";
   }
   
   navigator.clipboard.writeText(text).then(() => {
